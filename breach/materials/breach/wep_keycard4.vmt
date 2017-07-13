@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "breach/wep_keycard4"
+	"$translucent" 1
+}

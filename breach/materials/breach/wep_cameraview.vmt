@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "breach/wep_cameraview"
+	"$translucent" 1
+}
