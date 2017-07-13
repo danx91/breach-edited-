@@ -54,9 +54,9 @@ english.starttexts = {
 	ROLE_SCP682 = {
 		"You are the SCP-682",
 		{"Your objective is to escape the facility",
-		"You are Hard-to-Destroy Reptile",
-		"You kill people instantly, but you are very slow",
-		"You have special ability on RMB"}
+		"You are a hard to kill Reptile",
+		"You kill people instantly, although you are very slow",
+		"You have a special ability on RMB"}
 	},
 	ROLE_SCP457 = {
 		"You are the SCP-457",
@@ -67,40 +67,40 @@ english.starttexts = {
 	ROLE_SCP049 = {
 		"You are the SCP-049",
 		{"Your objective is to escape the facility",
-		"If you touch someone, they will become SCP-049-2"}
+		"If you use your special ability on someone, they will become SCP-049-2"}
 	},
 	ROLE_SCP689 = {
 		"You are the SCP-689",
 		{"Your objective is to escape the facility",
 		"You are extremly slow, but also deadly",
-		"You can kill everyone who have saw you",
-		"After kill you appear on body and more peoples can see you",
-		"LMB - attack, RMB - you can destroy windows"}
+		"You can kill anyone who look at you",
+		"After you kill someone, you appear on the body",
+		"LMB - attack, RMB - destroy windows"}
 	},
 	ROLE_SCP939 = {
 		"You are the SCP-939",
 		{"Your objective is to escape the facility",
 		"Your are fast and strong",
-		"You can deceive your targets by voice chat",
+		"You can deceive your targets by talking in their voice chat",
 		"LMB - attack, RMB - change voice chat"}
 	},
 	ROLE_SCP999 = {
 		"You are the SCP-999",
 		{"Your objective is to escape the facility",
-		"You can heal everybody you want",
-		"You have to cooperate with other personnel or SCPs"}
+		"You can heal anybody you want",
+		"You have to co-operate with other personnel or SCPs"}
 	},
 	ROLE_SCP082 = {
 		"You are the SCP-082",
 		{"Your objective is to escape the facility",
 		"You are a cannibal with a machete",
 		"Your attacks reduces your target's stamina",
-		"When you kill somebody you will gain some health"}
+		"When you kill somebody you will gain health"}
 	},
 	ROLE_SCP023 = {
 		"You are the SCP-023",
 		{"Your objective is to escape the facility",
-		"You are a wolf which ignite everyone who go through you",
+		"You are a wolf and you ignite everyone who goes through you",
 		"Igniting others regenerate your health",
 		"LMB - attack, RMB - you gain speed but you lose heath"}
 	},
@@ -108,7 +108,7 @@ english.starttexts = {
 		"You are the SCP-1048-A",
 		{"Your objective is to escape the facility",
 		"You look like SCP-1048, but you are made entirely out of human ears",
-		"You emit wery loud sream"}
+		"You emit a very loud scream"}
 	},
 	ROLE_SCP1048B = {
 		"You are the SCP-1048-B",
@@ -123,7 +123,7 @@ english.starttexts = {
 	ROLE_SCP0082 = {
 		"You are the SCP-008-2",
 		{"Your objective is to infect every MTF and D",
-		"If you kill someone, he will become 008-2 aswell"}
+		"If you kill someone, they will become 008-2 aswell"}
 	},
 	ROLE_RES = {
 		"You are a Researcher",
@@ -143,7 +143,7 @@ english.starttexts = {
 		{"Your objective is to escape from the facility",
 		"You know this place as nobody else",
 		"Be on the look out of Class Ds as they might try to kill you",
-		"You can communicate with security by radio"}
+		"You can communicate with security using the radio"}
 	},
 	ROLE_CLASSD = {
 		"You are a Class D",
