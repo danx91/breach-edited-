@@ -54,7 +54,7 @@ english.starttexts = {
 	ROLE_SCP682 = {
 		"You are the SCP-682",
 		{"Your objective is to escape the facility",
-		"You are a hard to kill Reptile",
+		"You are a Hard-to-Destroy Reptile",
 		"You kill people instantly, although you are very slow",
 		"You have a special ability on RMB"}
 	},
