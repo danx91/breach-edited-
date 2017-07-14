@@ -100,6 +100,8 @@ net.Receive( "RequestEscorting", function( len, ply )
 end)
 
 net.Receive( "ClearData", function( len, ply )
+	if not(ply:IsSuperAdmin()) then return end
+	
 	local com = net.ReadString()
 	if com == "&ALL" then
 		for k, v in pairs( player:GetAll() ) do
@@ -130,16 +132,18 @@ end
 --end)
 
 net.Receive( "NTFRequest" , function( len )
-	SpawnNTFS()
+	if ply:IsSuperAdmin() then
+		SpawnNTFS()
+	end
 end )
 
 net.Receive( "ExplodeRequest", function( len, ply )
 	explodeGateA( ply )
 end )
 
-net.Receive( "ForcePlayerSpeed", function( len, ply )
+net.Receive( "ForcePlayerSpeed", function( len, ply ) -- Honestly, this shouldnt even be a thing . . .
 	local newSpeed = tonumber(net.ReadString())
-	ply:SetRunSpeed( newSpeed )
+	ply:SetRunSpeed( math.Clamp(newSpeed, ply:GetWalkSpeed(), 240) )
 end )
 
 net.Receive( "DropWeapon", function( len, ply )
