@@ -138,12 +138,9 @@ net.Receive( "NTFRequest" , function( len )
 end )
 
 net.Receive( "ExplodeRequest", function( len, ply )
-	explodeGateA( ply )
-end )
-
-net.Receive( "ForcePlayerSpeed", function( len, ply ) -- Honestly, this shouldnt even be a thing . . .
-	local newSpeed = tonumber(net.ReadString())
-	ply:SetRunSpeed( math.Clamp(newSpeed, ply:GetWalkSpeed(), 240) )
+	if ply:GetNClass() == ROLES.ROLE_MTFNTF or ply:GetNClass() == ROLES.ROLE_CHAOS then
+		explodeGateA( ply )
+	end
 end )
 
 net.Receive( "DropWeapon", function( len, ply )

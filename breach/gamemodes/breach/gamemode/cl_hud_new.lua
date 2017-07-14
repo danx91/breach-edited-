@@ -62,6 +62,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		local bd = GetConVar("br_time_blinkdelay"):GetFloat()
 		if !LocalPlayer().Stamina then LocalPlayer().Stamina = 100 end
 		local stamina = math.Round(LocalPlayer().Stamina)
+		local exhausted = LocalPlayer().exhausted
 		local color = gteams.GetColor(ply:GTeam())
 		if ply:GTeam() == TEAM_CHAOS then
 			color = Color(29, 81, 56)

@@ -60,3 +60,64 @@ function mply:GetLevel()
 	end
 end
 
+function Sprint( ply )
+	if not ply.RunSpeed then ply.RunSpeed = 0 end
+	if not ply.lTime then ply.lTime = 0 end
+	if !ply.GetRunSpeed then return end
+	if ply:GetRunSpeed() == ply:GetWalkSpeed() or GetConVar("br_stamina_enable"):GetInt() == 0 then
+		ply.Stamina = 100
+	else
+		if !ply.Stamina then ply.Stamina = 100 end
+		if ply.exhausted then
+			if ply.Stamina >= 30 then
+				ply.exhausted = false
+				ply:SetRunSpeed( ply.RunSpeed ) --SetRunSpeed doesnt work clientside
+			end
+			if ply.lTime < CurTime() then
+				ply.lTime = CurTime() + 0.1
+				ply.Stamina = ply.Stamina + sR
+			end
+		else
+			if ply.Stamina <= 0 then
+				ply.Stamina = 0
+				ply.exhausted = true
+				ply.RunSpeed = ply:GetRunSpeed()
+				ply:SetRunSpeed( ply:GetWalkSpeed() + 1 ) --again not effect on clientside
+			end
+			if ply.lTime < CurTime() then
+				ply.lTime = CurTime() + 0.1
+				if ply.sprintEnabled then
+					ply.Stamina = ply.Stamina - sL
+				else
+					ply.Stamina = ply.Stamina + sR
+				end
+			end
+		end
+		if ply.Stamina > 100 then ply.Stamina = 100 end
+		if ply.Using714 and ply.Stamina > 30 then ply.Stamina = 30 end
+	end
+end
+
+function OnTick()
+	if CLIENT then
+		Sprint( LocalPlayer() )
+	elseif SERVER then
+		for k, v in pairs( player.GetAll() ) do
+			Sprint( v )
+		end
+	end
+end
+
+hook.Add( "Tick", "Stamina", OnTick )
+
+local n = GetConVar("br_stamina_scale"):GetString()
+sR = tonumber( string.sub( n, 1, string.find( n, "," ) - 1 ) )
+sL = tonumber( string.sub( n, string.find( n, "," ), string.len( n ) ) ) or tonumber( string.sub( n, string.find( n, "," ) + 1, string.len( n ) ) )
+
+hook.Add("PlayerButtonDown", "stm_dwn", function( ply, button )
+	if button == KEY_LSHIFT then ply.sprintEnabled = true end
+end )
+
+hook.Add("PlayerButtonUp", "stm_up", function( ply, button )
+	if button == KEY_LSHIFT then ply.sprintEnabled = false end
+end )

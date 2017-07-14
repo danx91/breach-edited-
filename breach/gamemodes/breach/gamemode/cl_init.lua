@@ -463,65 +463,8 @@ function CLTick()
 		blinkHUDTime = btime - CurTime()
 	end
 	if blinkHUDTime < 0 then blinkHUDTime = 0 end
-	if !LocalPlayer().GetRunSpeed then return end
-	if LocalPlayer():GetRunSpeed() == LocalPlayer():GetWalkSpeed() or GetConVar("br_stamina_enable"):GetInt() == 0 then
-		LocalPlayer().Stamina = 100
-	else
-		if !LocalPlayer().Stamina then LocalPlayer().Stamina = 100 end
-		if exhausted then
-			if LocalPlayer().Stamina >= 30 then
-				exhausted = false
-				SetRunSpeed( RunSpeed )
-			end
-			if lTime < CurTime() then
-				lTime = CurTime() + 0.1
-				LocalPlayer().Stamina = LocalPlayer().Stamina + sR
-			end
-		else
-			if LocalPlayer().Stamina <= 0 then
-				LocalPlayer().Stamina = 0
-				exhausted = true
-				RunSpeed = LocalPlayer():GetRunSpeed()
-				SetRunSpeed( LocalPlayer():GetWalkSpeed() + 1 )
-			end
-			if lTime < CurTime() then
-				lTime = CurTime() + 0.1
-				if sprintEnabled then
-					LocalPlayer().Stamina = LocalPlayer().Stamina - sL
-				else
-					LocalPlayer().Stamina = LocalPlayer().Stamina + sR
-				end
-			end
-		end
-		if LocalPlayer().Stamina > 100 then LocalPlayer().Stamina = 100 end
-		if LocalPlayer().Using714 and LocalPlayer().Stamina > 30 then LocalPlayer().Stamina = 30 end
-	end
 end
 hook.Add( "Tick", "client_tick_hook", CLTick )
-
-local n = GetConVar("br_stamina_scale"):GetString()
-sR = tonumber( string.sub( n, 1, string.find( n, "," ) - 1 ) )
-sL = tonumber( string.sub( n, string.find( n, "," ), string.len( n ) ) ) or tonumber( string.sub( n, string.find( n, "," ) + 1, string.len( n ) ) )
-
-//stamina = 100
-RunSpeed = 0
-lTime = 0
-sprintEnabled = false
-exhausted = false
-
-hook.Add("PlayerButtonDown", "stm_dwn", function( ply, button )
-	if ply == LocalPlayer() and button == KEY_LSHIFT then sprintEnabled = true end
-end )
-
-hook.Add("PlayerButtonUp", "stm_up", function( ply, button )
-	if ply == LocalPlayer() and button == KEY_LSHIFT then sprintEnabled = false end
-end )
-
-function SetRunSpeed( nspeed )
-	net.Start("ForcePlayerSpeed")
-		net.WriteString( tostring(nspeed) )
-	net.SendToServer()
-end
 
 net.Receive("PlayerBlink", function(len)
 	local time = net.ReadFloat()
