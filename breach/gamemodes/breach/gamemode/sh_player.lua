@@ -86,7 +86,7 @@ function Sprint( ply )
 			end
 			if ply.lTime < CurTime() then
 				ply.lTime = CurTime() + 0.1
-				if ply.sprintEnabled then
+				if ply.sprintEnabled and !( ply:GetMoveType() == MOVETYPE_NOCLIP or ply:GetMoveType() == MOVETYPE_LADDER or ply:GetMoveType() == MOVETYPE_OBSERVER  or ply:InVehicle() ) then
 					ply.Stamina = ply.Stamina - sL
 				else
 					ply.Stamina = ply.Stamina + sR
@@ -114,10 +114,10 @@ local n = GetConVar("br_stamina_scale"):GetString()
 sR = tonumber( string.sub( n, 1, string.find( n, "," ) - 1 ) )
 sL = tonumber( string.sub( n, string.find( n, "," ), string.len( n ) ) ) or tonumber( string.sub( n, string.find( n, "," ) + 1, string.len( n ) ) )
 
-hook.Add("PlayerButtonDown", "stm_dwn", function( ply, button )
-	if button == KEY_LSHIFT then ply.sprintEnabled = true end
+hook.Add("KeyPress", "stm_on", function( ply, button )
+	if button == IN_SPEED then ply.sprintEnabled = true end
 end )
 
-hook.Add("PlayerButtonUp", "stm_up", function( ply, button )
-	if button == KEY_LSHIFT then ply.sprintEnabled = false end
+hook.Add("KeyRelease", "stm_off", function( ply, button )
+	if button == IN_SPEED then ply.sprintEnabled = false end
 end )
