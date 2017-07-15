@@ -681,4 +681,3 @@ concommand.Add( "br_dropweapon", function( ply )
 end )
 
 print("cl_init loads")
-

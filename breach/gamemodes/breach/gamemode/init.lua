@@ -136,16 +136,17 @@ SPCS = {
 	{name = "SCP 1048-B",
 	func = function(pl)
 		pl:SetSCP1048B()
+	end},
+	{name = "SCP 860-2",
+	func = function(pl)
+		pl:SetSCP8602()
 	end}
 }
 
---	SPCS = {	{name = "SCP 023",
---	func = function(pl)
---	pl:SetSCP1048A()
---	end},{name = "SCP 024",
---	func = function(pl)
---	pl:SetSCP1048B()
---end},}
+	SPCS = {	{name = "SCP 860-2",
+	func = function(pl)
+	pl:SetSCP8602()
+	end} }
 	
 // Variables
 gamestarted = false

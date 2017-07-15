@@ -118,6 +118,13 @@ lang.SCP_714 = {
 	},
 }
 
+lang.SCP_8602 = {
+	author = "danx91",
+	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
+	purpose = "Zabijaj",
+	instructions = "LPM aby atakować",
+}
+
 lang.SCP_939 = {
 	author = "danx91",
 	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",

@@ -8,7 +8,7 @@ SWEP.AdminOnly 			= false
 
 SWEP.Primary.ClipSize		= -1
 SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Delay       	=  15
+SWEP.Primary.Delay       	=  12
 SWEP.Primary.Automatic	= false
 SWEP.Primary.Ammo			= "None"
 SWEP.Sound					= "scp/689/689Attack.ogg"

@@ -115,6 +115,12 @@ english.starttexts = {
 		{"Your objective is to escape the facility",
 		"Kill'em all"}
 	},
+	ROLE_SCP8602 = {
+		"You are the SCP-860-2",
+		{"Your objective is to escape the facility",
+		"You are forest monster",
+		"When you attack somebody near wall you charging on him"}
+	},
 	ROLE_SCP0492 = {
 		"You are the SCP-049-2",
 		{"Your objective is to escape the facility",
@@ -323,6 +329,7 @@ english.ROLES.ROLE_SCP082 = "SCP-082"
 english.ROLES.ROLE_SCP939 = "SCP-939"
 english.ROLES.ROLE_SCP999 = "SCP-999"
 english.ROLES.ROLE_SCP023 = "SCP-023"
+english.ROLES.ROLE_SCP8602 = "SCP-860-2"
 english.ROLES.ROLE_SCP1048A = "SCP-1048-A"
 english.ROLES.ROLE_SCP1048B = "SCP-1048-B"
 english.ROLES.ROLE_SCP0492 = "SCP-049-2"

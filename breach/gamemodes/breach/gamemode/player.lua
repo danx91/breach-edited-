@@ -447,7 +447,7 @@ function GM:PlayerUse( ply, ent )
 		if v["pos"] == ent:GetPos() then
 			//print("Found a button: " .. v["name"])
 			if v.clevel != nil then
-				if ply:CLevel() >= v.clevel then
+				if ply:CLevel() >= v.clevel or ( v.levelOverride and v.levelOverride( ply ) ) then
 					if v.usesounds == true then
 						ply:EmitSound("KeycardUse1.ogg")
 					end

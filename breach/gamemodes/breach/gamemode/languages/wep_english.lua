@@ -118,6 +118,13 @@ lang.SCP_714 = {
 	},
 }
 
+lang.SCP_8602 = {
+	author = "danx91",
+	contact = "Look at this gamemode in workshop and search for creators",
+	purpose = "Kill",
+	instructions = "LMB to attack",
+}
+
 lang.SCP_939 = {
 	author = "danx91",
 	contact = "Look at this gamemode in workshop and search for creators",

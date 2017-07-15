@@ -473,7 +473,7 @@ function mply:SetSCP689()
 	self:SetGTeam(TEAM_SCP)
 	self:SetNClass(ROLES.ROLE_SCP689)
 	self:SetModel("models/dwdarksouls/models/darkwraith.mdl")
-	self:SetHealth(2000)
+	self:SetHealth(2500)
 	self:SetMaxHealth(2000)
 	self:SetArmor(0)
 	self:SetWalkSpeed(50)
@@ -656,6 +656,39 @@ function mply:SetSCP1048B()
 	self:SetNoTarget( true )
 	self:Give("weapon_scp_1048B")
 	self:SelectWeapon("weapon_scp_1048B")
+	self.BaseStats = nil
+	self.UsingArmor = nil
+end
+
+function mply:SetSCP8602()
+	self:Flashlight( false )
+	self.handsmodel = nil
+	self:UnSpectate()
+	self:GodDisable()
+	self:Spawn()
+	self:SetPos(SPAWN_8602)
+	self:StripWeapons()
+	self:RemoveAllAmmo()
+	self:SetGTeam(TEAM_SCP)
+	self:SetNClass(ROLES.ROLE_SCP8602)
+	self:SetModel("models/props/forest_monster/forest_monster2.mdl")
+	self:SetHealth(2400)
+	self:SetMaxHealth(2400)
+	self:SetArmor(0)
+	self:SetWalkSpeed(190)
+	self:SetRunSpeed(190)
+	self:SetMaxSpeed(190)
+	self:SetJumpPower(200)
+	self:SetNoDraw(false)
+	self.Active = true
+	self:SetupHands()
+	self.canblink = false
+	self.noragdoll = false
+	self:AllowFlashlight( false )
+	self.WasTeam = TEAM_SCP
+	self:SetNoTarget( true )
+	self:Give("weapon_scp_8602")
+	self:SelectWeapon("weapon_scp_8602")
 	self.BaseStats = nil
 	self.UsingArmor = nil
 end

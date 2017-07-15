@@ -110,6 +110,12 @@ polski.starttexts = {
 		{"Twoim celem jest ucieczka z placówki",
 		"Zabij wszystkich"}
 	},
+	ROLE_SCP8602 = {
+		"Jesteś SCP-860-2",
+		{"Twoim celem jest ucieczka z placówki",
+		"Jesteś leśnym potworem",
+		"Jeżeli zaatakujesz kogoś blisko sciany to szarżujesz na niego"}
+	},
 	ROLE_SCP049 = {
 		"Jesteś SCP - 049",
 		{"Twoim celem jest ucieczka z placówki",
@@ -327,6 +333,7 @@ polski.ROLES.ROLE_SCP966 = "SCP-966"
 polski.ROLES.ROLE_SCP023 = "SCP-023"
 polski.ROLES.ROLE_SCP1048A = "SCP-1048-A"
 polski.ROLES.ROLE_SCP1048B = "SCP-1048-B"
+polski.ROLES.ROLE_SCP8602 = "SCP-860-2"
 
 polski.ROLES.ROLE_RES = "Naukowiec"
 polski.ROLES.ROLE_MEDIC = "Medyk"

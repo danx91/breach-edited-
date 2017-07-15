@@ -68,6 +68,7 @@ SPAWN_082 = Vector(-1447.897461, 319.761749, -54.50270)
 SPAWN_082 = Vector(-1447.897461, 319.761749, -54.50270)
 SPAWN_1048A = Vector(1732.884521, 3500.440674, 50.865131)
 SPAWN_1048B = Vector(5531.479492, -113.018181, 64.043182)
+SPAWN_8602 = Vector( 7284.303711, 5608.904785, -1041.298706 )
 
 
 SPAWN_023 = {
@@ -593,13 +594,23 @@ BUTTONS = {
 		name = "Portal",
 		pos = Vector(1289.000000, 2216.000000, 53.000000),
 		usesounds = true,
-		clevel = 3
+		clevel = 3,
+		levelOverride = function( ply )
+			if ply:GetNClass() == ROLES.ROLE_SCP8602 then
+				return true
+			end
+		end
 	},
 	{
 		name = "Portal",
 		pos = Vector(1673.000000, 2216.000000, 53.000000),
 		usesounds = true,
-		clevel = 3
+		clevel = 3,
+		levelOverride = function( ply )
+			if ply:GetNClass() == ROLES.ROLE_SCP8602 then
+				return true
+			end
+		end
 	},
 	{
 		name = "Melon room",
