@@ -143,10 +143,10 @@ SPCS = {
 	end}
 }
 
-	SPCS = {	{name = "SCP 860-2",
-	func = function(pl)
-	pl:SetSCP8602()
-	end} }
+--	SPCS = {	{name = "SCP 860-2",
+--	func = function(pl)
+--	pl:SetSCP8602()
+--	end} }
 	
 // Variables
 gamestarted = false
