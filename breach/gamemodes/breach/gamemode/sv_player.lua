@@ -704,12 +704,14 @@ function mply:DropWep(class, clip)
 	end
 end
 
-function mply:SetSCP0082( hp, speed )
+function mply:SetSCP0082( hp, speed, spawn )
 	self:Flashlight( false )
 	self.handsmodel = nil
 	self:UnSpectate()
 	self:GodDisable()
-	self:Spawn()
+	if spawn then
+		self:Spawn()
+	end
 	self:SetGTeam(TEAM_SCP)
 	self:SetModel("models/player/zombie_classic.mdl")
 	self:SetHealth(hp)
@@ -745,9 +747,6 @@ function mply:SetSCP0082( hp, speed )
 		end
 	end
 	self:Give("weapon_br_zombie_infect")
-	for k, v in pairs( self:GetWeapons() ) do
-		print( v )
-	end
 	self:SelectWeapon("weapon_br_zombie_infect")
 	self.BaseStats = nil
 	self.UsingArmor = nil

@@ -16,7 +16,7 @@ function SetupInfect( ply )
 	for i = 1, roles[1] do
 		ply = table.remove( players, math.random( 1, #players ) )
 		spawn = table.remove( spawns, math.random( 1, #spawns ) )
-		ply:SetSCP0082( 750, 250 )
+		ply:SetSCP0082( 750, 250, true )
 		ply:SetPos( spawn )
 	end
 	spawns = table.Copy( SPAWN_CLASSD )
