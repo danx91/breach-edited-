@@ -84,6 +84,13 @@ lang.SCP_457 = {
 	instructions = "",
 }
 
+lang.SCP_500 = {
+	author = "danx91",
+	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
+	purpose = "Ulecz siebie",
+	instructions = "LPM aby użyć, lub zostanie użyte samo gdy powinieneś otrzymać śmiertelny cios",
+}
+
 lang.SCP_682 = {
 	author = "danx91",
 	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",

@@ -228,18 +228,26 @@ hook.Add( "HUDPaint", "Breach_DrawHUD", function()
 				yalign = TEXT_ALIGN_CENTER,
 			}, 2, 255 )
 		end
-		/*
 		if roundtype != nil then
 			draw.TextShadow( {
 				text = string.Replace( clang.roundtype,  "{type}", roundtype ),
-				pos = { ScrW() / 2, ScrH() - 25 },
+				pos = { ScrW() / 2, ScrH() - 75 },
 				font = "ImpactSmall",
 				color = Color(255, 130, 0),
 				xalign = TEXT_ALIGN_CENTER,
 				yalign = TEXT_ALIGN_CENTER,
 			}, 2, 255 )
+			if roundtype != "Containment Breach" then
+				draw.TextShadow( {
+					text = clang.specialround,
+					pos = { ScrW() / 2, ScrH() - 100 },
+					font = "ImpactSmall",
+					color = Color(255, 255, 255),
+					xalign = TEXT_ALIGN_CENTER,
+					yalign = TEXT_ALIGN_CENTER,
+				}, 2, 255 )
+			end
 		end
-		*/
 	end
 	if isnumber(drawendmsg) then
 		local ndtext = clang.lang_end2
@@ -445,3 +453,25 @@ hook.Add( "HUDPaint", "Breach_DrawHUD", function()
 	*/
 end )
 
+net.Receive( "ShowText", function( len )
+	local com = net.ReadString()
+	if com == "vote_fail" then
+		LocalPlayer():PrintMessage( HUD_PRINTTALK, clang.votefail )
+	elseif	com == "text_punish" then
+		local name = net.ReadString()
+		LocalPlayer():PrintMessage( HUD_PRINTTALK, string.format( clang.votepunish, name ) )
+		LocalPlayer():PrintMessage( HUD_PRINTTALK, clang.voterules )
+	elseif	com == "text_punish_end" then
+		local data = net.ReadTable()
+		local result
+		if data.punish then 
+			result = clang.punish
+		else 
+			result = clang.forgive
+		end
+		local vp, vf = data.punishvotes, data.forgivevotes
+		print( vp, vf )
+		LocalPlayer():PrintMessage( HUD_PRINTTALK, string.format( clang.voteresult, data.punished, result ) )
+		LocalPlayer():PrintMessage( HUD_PRINTTALK, string.format( clang.votes, vp + vf, vp, vf ) )
+	end
+end)

@@ -133,25 +133,25 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 			if attacker:GTeam() == TEAM_GUARD then
 				victim:PrintMessage(HUD_PRINTTALK, "You were killed by an MTF Guard: " .. attacker:Nick())
 				if victim:GTeam() == TEAM_SCP then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 10 points for killng an SCP!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 10 points for killing an SCP!")
 					attacker:AddFrags(10)
 				elseif victim:GTeam() == TEAM_CHAOS then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 5 points for killng a Chaos Insurgency member!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 5 points for killing a Chaos Insurgency member!")
 					attacker:AddFrags(5)
 				elseif victim:GTeam() == TEAM_CLASSD then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killng a Class D Personell!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killing a Class D Personell!")
 					attacker:AddFrags(2)
 				end
 			elseif attacker:GTeam() == TEAM_CHAOS then
 				victim:PrintMessage(HUD_PRINTTALK, "You were killed by a Chaos Insurgency Soldier: " .. attacker:Nick())
 				if victim:GTeam() == TEAM_GUARD then 
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killng an MTF Guard!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killing an MTF Guard!")
 					attacker:AddFrags(2)
 				elseif victim:GTeam() == TEAM_SCI then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killng a Researcher!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killing a Researcher!")
 					attacker:AddFrags(2)
 				elseif victim:GTeam() == TEAM_SCP then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 10 points for killng an SCP!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 10 points for killing an SCP!")
 					attacker:AddFrags(10)
 				elseif victim:GTeam() == TEAM_CLASSD then
 					attacker:PrintMessage(HUD_PRINTTALK, "Don't kill Class D Personell, you can capture them to get bonus points!")
@@ -159,30 +159,30 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 				end
 			elseif attacker:GTeam() == TEAM_SCP then
 				victim:PrintMessage(HUD_PRINTTALK, "You were killed by an SCP: " .. attacker:Nick())
-				attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killng " .. victim:Nick())
+				attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killing " .. victim:Nick())
 				attacker:AddFrags(2)
 			elseif attacker:GTeam() == TEAM_CLASSD then
 				victim:PrintMessage(HUD_PRINTTALK, "You were killed by a Class D: " .. attacker:Nick())
 				if victim:GTeam() == TEAM_GUARD then 
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 4 points for killng an MTF Guard!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 4 points for killing an MTF Guard!")
 					attacker:AddFrags(4)
 				elseif victim:GTeam() == TEAM_SCI then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killng a Researcher!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killing a Researcher!")
 					attacker:AddFrags(2)
 				elseif victim:GTeam() == TEAM_SCP then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 10 points for killng an SCP!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 10 points for killing an SCP!")
 					attacker:AddFrags(10)
 				elseif victim:GTeam() == TEAM_CHAOS then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killng a Chaos Insurgency member!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killing a Chaos Insurgency member!")
 					attacker:AddFrags(2)
 				end
 			elseif attacker:GTeam() == TEAM_SCI then
 				victim:PrintMessage(HUD_PRINTTALK, "You were killed by a Researcher: " .. attacker:Nick())
 				if victim:GTeam() == TEAM_SCP then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 10 points for killng an SCP!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 10 points for killing an SCP!")
 					attacker:AddFrags(10)
 				elseif victim:GTeam() == TEAM_CHAOS then
-					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 5 points for killng a Chaos Insurgency member!")
+					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 5 points for killing a Chaos Insurgency member!")
 					attacker:AddFrags(5)
 				elseif victim:GTeam() == TEAM_CLASSD then
 					attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 2 points for killing a Class D Personell!")
@@ -192,6 +192,7 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 		end
 	end
 	roundstats.deaths = roundstats.deaths + 1
+	local wasteam = victim:GTeam()
 	victim:SetTeam(TEAM_SPEC)
 	victim:SetGTeam(TEAM_SPEC)
 	//victim:UnUseArmor()
@@ -218,6 +219,28 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 		end
 	end
 	WinCheck()
+	if !postround then
+		if !IsValid( attacker ) then return end
+		if attacker:GTeam() == wasteam then
+			PunishVote( attacker, victim )
+		elseif attacker:GTeam() == TEAM_GUARD then
+			if wasteam == TEAM_SCI then
+				PunishVote( attacker, victim )
+			end
+		elseif attacker:GTeam() == TEAM_SCI then
+			if wasteam == TEAM_GUARD then
+				PunishVote( attacker, victim )
+			end
+		elseif attacker:GTeam() == TEAM_CLASSD then
+			if wasteam == TEAM_CHAOS then
+				PunishVote( attacker, victim )
+			end
+		elseif attacker:GTeam() == TEAM_CHAOS then
+			if wasteam == TEAM_CLASSD then
+				PunishVote( attacker, victim )
+			end
+		end
+	end
 end
 
 function GM:PlayerDisconnected( ply )
@@ -291,6 +314,47 @@ function GM:PlayerCanHearPlayersVoice( listener, talker )
 end
 
 function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, talker )
+	if activevote then
+		local votemsg = false
+		if talker.voted == true or talker:SteamID64() == activesuspect then
+			if !talker.timeout then talker.timeout = 0 end
+			if talker.timeout < CurTime() then
+				talker.timeout = CurTime() + 0.5
+				net.Start( "ShowText" )
+					net.WriteString( "vote_fail" )
+				net.Send( talker )
+			end
+			return
+		end
+		if text == "!forgive" then
+			if talker:SteamID64() == activevictim then
+				voteforgive = voteforgive + 5
+			elseif talker:GTeam() == TEAM_SPEC then
+				specforgive = specforgive + 1
+			else
+				voteforgive = voteforgive + 1
+			end
+			talker.voted = true
+			votemsg = true
+		elseif text == "!punish" then
+			if talker:SteamID64() == activevictim then
+				votepunish = votepunish + 5
+			elseif talker:GTeam() == TEAM_SPEC then
+				specpunish = specpunish + 1
+			else
+				votepunish = votepunish + 1
+			end
+			talker.voted = true
+			votemsg = true
+		end
+		if votemsg then
+			if IsSuperAdmin( listener ) then
+				return true
+			else
+				return false
+			end
+		end
+	end
 	if talker:GetNClass() == ROLES.ADMIN or listener:GetNClass() == ROLES.ADMIN then return true end
 	if talker:Alive() == false then return false end
 	if listener:Alive() == false then return false end

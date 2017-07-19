@@ -84,6 +84,13 @@ lang.SCP_457 = {
 	instructions = "",
 }
 
+lang.SCP_500 = {
+	author = "danx91",
+	contact = "Look at this gamemode in workshop and search for creators",
+	purpose = "Heal yourself",
+	instructions = "LMB to use, or it will be triggered automatically when you should receive deadly hit",
+}
+
 lang.SCP_682 = {
 	author = "danx91",
 	contact = "Look at this gamemode in workshop and search for creators",

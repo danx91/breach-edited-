@@ -28,6 +28,7 @@ util.AddNetworkString("ForcePlayerSpeed")
 util.AddNetworkString("ClearData")
 util.AddNetworkString("Restart")
 util.AddNetworkString("AdminMode")
+util.AddNetworkString("ShowText")
 
 net.Receive( "SpectateMode", function( len, ply )
 	/*
@@ -396,4 +397,83 @@ function SetupAdmins( players )
 			--v:SetPos()
 		end
 	end
+end
+
+function GiveExp()
+	for k, v in pairs( player.GetAll() ) do
+		local exptogive = v:Frags() * 50
+		v:SetFrags( 0 )
+		if exptogive > 0 then
+			v:AddExp( exptogive, true )
+		end
+	end
+end
+
+activevote = false
+suspectname = ""
+activesuspect = nil
+activevictim = nil
+votepunish = 0
+voteforgive = 0
+specpunish = 0
+specforgive = 0
+
+function PunishVote( ply, victim )
+	print( "okok", ply, victim )
+	if ply == victim then return end
+	if activevote then
+		EndPunishVote()
+		timer.Destroy( "PunishEnd" )
+	end
+	net.Start( "ShowText" )
+		net.WriteString( "text_punish" )
+		net.WriteString( ply:GetName() )
+	net.Broadcast()
+	activevote = true
+	votepunish = 0
+	voteforgive = 0
+	specpunish = 0
+	specforgive = 0
+	suspectname = ply:GetName()
+	activesuspect = ply:SteamID64()
+	activevictim = victim:SteamID64()
+	timer.Create( "PunishEnd", GetConVar( "br_punishvote_time" ):GetInt(), 1, function()
+		EndPunishVote()
+	end )
+end
+
+function EndPunishVote()
+	local specvotedforgive = math.Round( 3 * specforgive / ( specpunish + specforgive ) )
+	if tostring( specvotedforgive ) != "nan" then
+		voteforgive = voteforgive + specvotedforgive
+		votepunish = votepunish + ( 3 - specvotedforgive )
+	end
+	print( "Player: "..suspectname, " Forgive: "..voteforgive, "Punish: "..votepunish )
+	activevote = false
+	for k,v in pairs( player.GetAll() ) do
+		v.voted = false
+	end
+	local result = {
+		punish = votepunish > voteforgive,
+		punishvotes = votepunish,
+		forgivevotes = voteforgive,
+		punished = suspectname
+	}
+	net.Start( "ShowText" )
+		net.WriteString( "text_punish_end" )
+		net.WriteTable( result )
+	net.Broadcast()
+	if votepunish > voteforgive then
+		timer.Simple( 1, function()
+			for k,v in pairs( player.GetAll() ) do
+				if v:SteamID64() == activesuspect then
+					activesuspect:Kill()
+					break
+				end
+			end
+		end )
+	end
+	suspectname = ""
+	activesuspect = nil
+	activevictim = nil
 end

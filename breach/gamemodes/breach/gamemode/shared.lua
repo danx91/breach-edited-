@@ -133,6 +133,7 @@ if !ConVarExists("br_min_players") then CreateConVar("br_min_players", "2", {FCV
 if !ConVarExists("br_firstround_debug") then CreateConVar("br_firstround_debug", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Skip first round" ) end
 if !ConVarExists("br_force_specialround") then CreateConVar("br_force_specialround", "", {FCVAR_SERVER_CAN_EXECUTE}, "Skip first round" ) end
 if !ConVarExists("br_specialround_pct") then CreateConVar("br_specialround_pct", "10", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Skip first round" ) end
+if !ConVarExists("br_punishvote_time") then CreateConVar("br_punishvote_time", "30", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "How much time players have to vote" ) end
 
 MINPLAYERS = GetConVar("br_min_players"):GetInt()
 
@@ -216,6 +217,12 @@ end
 */
 
 function GM:EntityTakeDamage( target, dmginfo )
+	if target:IsPlayer() and target:HasWeapon( "item_scp_500" ) then
+		if target:Health() <= dmginfo:GetDamage() then
+			target:GetWeapon( "item_scp_500" ):OnUse()
+			target:PrintMessage( HUD_PRINTTALK, "Using SCP 500" )
+		end
+	end
 	local at = dmginfo:GetAttacker()
 	if at:IsVehicle() or ( at:IsPlayer() and at:InVehicle() ) then
 		dmginfo:SetDamage( 0 )

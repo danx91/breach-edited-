@@ -139,4 +139,72 @@ ROUNDS = {
 			end		
 		end,
 	},
+	multi = {
+		name = "MultiBreach",
+		setup = function()
+			MAPBUTTONS = table.Copy(BUTTONS)
+			SetupMultiBreach( GetRoleTable( #GetActivePlayers() ) )
+			disableNTF = false
+		end,
+		init = function()
+			SpawnAllItems()
+			timer.Create( "NTFEnterTime", GetNTFEnterTime(), 0, function()
+				SpawnNTFS()
+			end )
+			timer.Create("MTFDebug", 2, 1, function()
+				local fent = ents.FindInSphere(MTF_DEBUG, 750)
+				for k, v in pairs( player.GetAll() ) do
+					if v:GTeam() == TEAM_GUARD then
+						local found = false
+						for k0, v0 in pairs(fent) do
+							if v == v0 then
+								found = true
+								break
+							end
+						end
+						if !found then
+							v:SetPos(MTF_DEBUG)
+						end
+					end
+				end
+			end )	
+		end,
+		roundstart = function()
+			OpenSCPDoors()
+		end,
+		postround = function() end,
+		endcheck = function()
+			if #player.GetAll() < 2 then return end	
+			endround = false
+			local ds = gteams.NumPlayers(TEAM_CLASSD)
+			local mtfs = gteams.NumPlayers(TEAM_GUARD)
+			local res = gteams.NumPlayers(TEAM_SCI)
+			local scps = gteams.NumPlayers(TEAM_SCP)
+			local chaos = gteams.NumPlayers(TEAM_CHAOS)
+			local all = #GetAlivePlayers()		
+			why = "idk man"
+			if scps == all then
+				endround = true
+				why = "there are only scps"
+			elseif mtfs == all then
+				endround = true
+				why = "there are only mtfs"
+			elseif res == all then
+				endround = true
+				why = "there are only researchers"
+			elseif ds == all then
+				endround = true
+				why = "there are only class ds"
+			elseif chaos == all then
+				endround = true
+				why = "there are only chaos insurgency members"
+			elseif (mtfs + res) == all then
+				endround = true
+				why = "there are only mtfs and researchers"
+			elseif (chaos + ds) == all then
+				endround = true
+				why = "there are only chaos insurgency members and class ds"
+			end
+		end,
+	},
 }

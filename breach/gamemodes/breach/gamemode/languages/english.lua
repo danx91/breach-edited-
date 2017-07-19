@@ -3,6 +3,7 @@ english = {}
 english.roundtype = "Round type: {type}"
 english.preparing = "Prepare, round will start in {num} seconds"
 english.round = "Game is live, good luck!"
+english.specialround = "This is special round"
 
 english.lang_pldied = "{num} player(s) died"
 english.lang_descaped = "{num} Class D(s) escaped"
@@ -17,6 +18,20 @@ english.lang_secret_found = "Secret has been found"
 english.lang_secret_nfound = "Secret has not been found"
 
 english.class_unknown = "Unknown"
+
+english.votefail = "You already voted or you are not allowed to vote!"
+english.votepunish = "Vote for punish or forgive %s"
+english.voterules = [[
+	Write !punish to punish player or !forgive to forgive him
+	The victim vote = 5 votes
+	Normal player vote = 1 vote
+	Additional 3 votes are calculated from spectators average votes
+	Remember you can vote only once!
+]]
+english.punish = "PUNISH"
+english.forgive = "FORGIVE"
+english.voteresult = "Voting result against %s is... %s"
+english.votes = "From %s players %s voted for punish and %s for forgive"
 
 english.starttexts = {
 	ROLE_SCP173 = {

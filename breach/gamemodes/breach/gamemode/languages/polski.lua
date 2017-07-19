@@ -3,6 +3,7 @@ polski = {}
 polski.roundtype = "Typ rundy: {type}"
 polski.preparing = "Przygotuj się, runda zacznie się za {num} sekund"
 polski.round = "Gra się rozpoczeła, powodzenia"
+polski.specialround = "To jest runda specialna"
 
 polski.lang_pldied = "{num} graczy zginęło"
 polski.lang_descaped = "{num} personel(u) Klasy D uciekło"
@@ -17,6 +18,20 @@ polski.lang_secret_found = "Sekret został odnaleziony"
 polski.lang_secret_nfound = "Sekret nie został odnaleziony"
 
 polski.class_unknown = "Niezidentyfikowany"
+
+polski.votefail = "Już głosowałeś albo nie możesz głosować"
+polski.votepunish = "Zagłosuj czy gracz %s ma zostać ukarany"
+polski.voterules = [[
+	Wpisz !punish aby ukarać lub !forgive aby przebaczyć
+	Głos ofiary = 5 głosów
+	Głos normalnego gracza = 1 głos
+	Dodatkowe 3 głosy zostaną wyliczone ze średniej głosów obserwatorów
+	Pamiętaj możesz głosować tylko raz!
+]]
+polski.punish = "KARA"
+polski.forgive = "PRZEBACZENIE"
+polski.voteresult = "Wynik głosowania przeciwko %s... %s"
+polski.votes = "Z %s graczy %s zagłosowało nad karą, a %s nad przebaczeniem"
 
 polski.starttexts = {
 	ROLE_SCP173 = {
