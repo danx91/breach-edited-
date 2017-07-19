@@ -261,7 +261,7 @@ timefromround = 0
 -----------------------------CREDITS--------------------------------
 
 timer.Create( "Credits", 180, 0, function() 
-	print("Breach(edited) by danx91 [ZGFueDkx] update 0.15 [patch 11/07/2017]")
+	print("Breach(edited) by danx91 [ZGFueDkx] update 0.17 [patch 19/07/2017]")
 end )
 
 --------------------------------------------------------------------
