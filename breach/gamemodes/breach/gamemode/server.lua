@@ -467,7 +467,7 @@ function EndPunishVote()
 		timer.Simple( 1, function()
 			for k,v in pairs( player.GetAll() ) do
 				if v:SteamID64() == activesuspect then
-					activesuspect:Kill()
+					v:Kill()
 					break
 				end
 			end
