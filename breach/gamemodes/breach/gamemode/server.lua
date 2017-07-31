@@ -441,7 +441,7 @@ function PunishVote( ply, victim )
 		EndPunishVote()
 	end )
 end
-
+[[--
 function EndPunishVote()
 	local specvotedforgive = math.Round( 3 * specforgive / ( specpunish + specforgive ) )
 	if tostring( specvotedforgive ) != "nan" then
@@ -476,4 +476,4 @@ function EndPunishVote()
 	suspectname = ""
 	activesuspect = nil
 	activevictim = nil
-end
+end--]]
