@@ -283,19 +283,19 @@ end
 function GM:PlayerCanHearPlayersVoice( listener, talker )
 	if talker:Alive() == false then return false end
 	if listener:Alive() == false then return false end
-	if talker:GTeam() == TEAM_SCP then
-		if talker:GetNClass() == ROLES.ROLE_SCP939 then
-			local wep = talker:GetWeapon("weapon_scp_939")
+	//if talker:GTeam() == TEAM_SCP then
+		//if talker:GetNClass() == ROLES.ROLE_SCP939 then
+			//local wep = talker:GetWeapon("weapon_scp_939")
 			//print("Channel "..wep.Channel)
-			if wep.Channel == "ALL" and listener:GTeam() == TEAM_SPEC then return false end
-			if wep.Channel == "MTF" and listener:GTeam() != TEAM_GUARD then return false end
-			if wep.Channel == "SCIENT" and listener:GTeam() != TEAM_SCI then return false end
-			if wep.Channel == "D" and listener:GTeam() != TEAM_CLASSD then return false end
-			if wep.Channel == "CI" and listener:GTeam() != TEAM_CHAOS then return false end
-		elseif listener:GTeam() != TEAM_SCP then
-			return false
-		end
-	end
+			//if wep.Channel == "ALL" and listener:GTeam() == TEAM_SPEC then return false end
+			//if wep.Channel == "MTF" and listener:GTeam() != TEAM_GUARD then return false end
+			//if wep.Channel == "SCIENT" and listener:GTeam() != TEAM_SCI then return false end
+			//if wep.Channel == "D" and listener:GTeam() != TEAM_CLASSD then return false end
+			//if wep.Channel == "CI" and listener:GTeam() != TEAM_CHAOS then return false end
+		//elseif listener:GTeam() != TEAM_SCP then
+			//return false
+		//end
+	//end
 	if talker:GTeam() == TEAM_SPEC then
 		if listener:GTeam() == TEAM_SPEC then
 			return true
@@ -314,7 +314,7 @@ function GM:PlayerCanHearPlayersVoice( listener, talker )
 end
 
 function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, talker )
-	if activevote then
+	[[--if activevote then
 		local votemsg = false
 		if talker.voted == true or talker:SteamID64() == activesuspect then
 			if !talker.timeout then talker.timeout = 0 end
@@ -354,7 +354,7 @@ function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, talker )
 				return false
 			end
 		end
-	end
+	end--]
 	if talker:GetNClass() == ROLES.ADMIN or listener:GetNClass() == ROLES.ADMIN then return true end
 	if talker:Alive() == false then return false end
 	if listener:Alive() == false then return false end
