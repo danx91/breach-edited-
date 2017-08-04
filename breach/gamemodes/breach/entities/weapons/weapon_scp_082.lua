@@ -70,8 +70,8 @@ function SWEP:Think()
 		self.Freeze = false
 		self.Owner:SetCrouchedWalkSpeed(0.6)
 		self.Owner:SetJumpPower(200)
-		self.Owner:SetWalkSpeed(130)
-		self.Owner:SetRunSpeed(130)
+		self.Owner:SetWalkSpeed(150)
+		self.Owner:SetRunSpeed(150)
 	end
 end
 

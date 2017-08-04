@@ -1,5 +1,6 @@
 activeRound = nil
 rounds = -1
+roundEnd = 0
 
 function RestartGame()
 	game.ConsoleCommand("changelevel "..game.GetMap().."\n")
@@ -14,6 +15,7 @@ function CleanUp()
 	timer.Destroy("NTFEnterTime")
 	timer.Destroy("966Debug")
 	timer.Destroy("MTFDebug")
+	timer.Destroy("PunishEnd")
 	timer.Destroy("GateExplode")
 	if timer.Exists("CheckEscape") == false then
 		timer.Create("CheckEscape", 1, 0, CheckEscape)
@@ -140,20 +142,27 @@ function RoundRestart()
 			net.WriteInt(GetRoundTime(), 12)
 		net.Broadcast()		
 		print("round: started")
+		roundEnd = CurTime() + GetRoundTime() + 3
 		timer.Create("RoundTime", GetRoundTime(), 1, function()
 			postround = false
-			postround = true		
+			postround = true	
+			print( "post init: good" )
 			activeRound:postround()		
-			GiveExp()			
+			GiveExp()	
+			print( "post functions: good" )
 			print( "round: post" )			
 			net.Start("SendRoundInfo")
 				net.WriteTable(roundstats)
-			net.Broadcast()			
+			net.Broadcast()		
 			net.Start("PostStart")
 				net.WriteInt(GetPostTime(), 6)
 				net.WriteInt(1, 4)
-			net.Broadcast()		
+			net.Broadcast()	
+			print( "data broadcast: good" )
+			roundEnd = 0
+			timer.Destroy("PunishEnd")
 			timer.Create("PostTime", GetPostTime(), 1, function()
+				print( "restarting round" )
 				RoundRestart()
 			end)		
 		end)
@@ -365,6 +374,13 @@ function WinCheck()
 	if postround then return end
 	if !activeRound then return end
 	activeRound:endcheck()
+	if roundEnd > 0 and roundEnd < CurTime() then
+		roundEnd = 0
+		endround = true
+		why = "game ran out of time limit"
+		print( "Something went wrong!" )
+		print( debug.traceback() )
+	end
 	if endround then
 		print("Ending round because " .. why)
 		PrintMessage(HUD_PRINTCONSOLE, "Ending round because " .. why)

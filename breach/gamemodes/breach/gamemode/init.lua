@@ -41,6 +41,7 @@ AddCSLuaFile( "cl_targetid.lua" )
 AddCSLuaFile( "classes.lua" )
 AddCSLuaFile( "cl_classmenu.lua" )
 AddCSLuaFile( "cl_headbob.lua" )
+--AddCSLuaFile( "cl_splash.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include( "server.lua" )
 include( "rounds.lua" )
@@ -462,7 +463,10 @@ function SpawnAllItems()
 			WakeEntity(car)
 		end
 	
-		for k, v in pairs(SPAWN_VEHICLE_NTF) do
+		for k, v in ipairs(SPAWN_VEHICLE_NTF) do
+			if k > math.Clamp( GetConVar( "br_cars_ammount" ):GetInt(), 0, 12 ) then
+				break
+			end
 			local car = ents.Create("prop_vehicle_jeep")
 			if GetConVar("br_cars_oldmodels"):GetInt() == 0 then
 				car:SetModel("models/tdmcars/jeep_wrangler_fnf.mdl")

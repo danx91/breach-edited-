@@ -42,7 +42,7 @@ function GM:PlayerInitialSpawn( ply )
 	ply.Active = false
 	ply.freshspawn = true
 	ply.isblinking = false
-	ply.ActivePlayer = true
+	ply.ActivePlayer = true --false
 	ply.Premium = false
 	IsPremium(ply)
 	ply.Karma = StartingKarma() or 1000
@@ -195,7 +195,9 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 	local wasteam = victim:GTeam()
 	victim:SetTeam(TEAM_SPEC)
 	victim:SetGTeam(TEAM_SPEC)
-	//victim:UnUseArmor()
+	if GetConVar( "br_dropvestondeath" ):GetInt() != 0 then
+		victim:UnUseArmor()
+	end
 	if #victim:GetWeapons() > 0 then
 		local pos = victim:GetPos()
 		for k,v in pairs(victim:GetWeapons()) do
@@ -220,7 +222,7 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 	end
 	WinCheck()
 	if !postround then
-		if !IsValid( attacker ) then return end
+		if !IsValid( attacker ) or !attacker.GTeam then return end
 		if attacker:GTeam() == wasteam then
 			PunishVote( attacker, victim )
 		elseif attacker:GTeam() == TEAM_GUARD then
@@ -336,6 +338,7 @@ function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, talker )
 			end
 			talker.voted = true
 			votemsg = true
+			talker.timeout = CurTime() + 0.5
 		elseif text == "!punish" then
 			if talker:SteamID64() == activevictim then
 				votepunish = votepunish + 5
@@ -346,9 +349,10 @@ function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, talker )
 			end
 			talker.voted = true
 			votemsg = true
+			talker.timeout = CurTime() + 0.5
 		end
 		if votemsg then
-			if IsSuperAdmin( listener ) then
+			if listener:IsSuperAdmin() then
 				return true
 			else
 				return false

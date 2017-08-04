@@ -29,6 +29,11 @@ util.AddNetworkString("ClearData")
 util.AddNetworkString("Restart")
 util.AddNetworkString("AdminMode")
 util.AddNetworkString("ShowText")
+util.AddNetworkString("PlayerReady")
+
+net.Receive( "PlayerReady", function( len, ply )
+	ply.ActivePlayer = true
+end )
 
 net.Receive( "SpectateMode", function( len, ply )
 	/*
@@ -419,7 +424,7 @@ specpunish = 0
 specforgive = 0
 
 function PunishVote( ply, victim )
-	print( "okok", ply, victim )
+	if GetConVar( "br_allow_punish" ):GetInt() == 0 then return end
 	if ply == victim then return end
 	if activevote then
 		EndPunishVote()

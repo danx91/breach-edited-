@@ -143,6 +143,7 @@ include(mapfile)
 
 include("cl_hud.lua")
 include("cl_hud_new.lua")
+--include( "cl_splash.lua" )
 
 RADIO4SOUNDSHC = {
 	{"chatter1", 39},
@@ -681,3 +682,18 @@ concommand.Add( "br_dropweapon", function( ply )
 end )
 
 print("cl_init loads")
+/*
+if !file.Exists( "breach/intro.dat", "DATA" ) then
+	PlayIntro()
+	--file.Write( "breach/intro.dat", "" )
+else
+	net.Start( "PlayerReady" )
+	net.SendToServer()
+end
+
+concommand.Add( "br_reset_intro", function( ply )
+	if file.Exists( "breach/intro.dat", "DATA" ) then
+		file.Deleate( "breach/intro.dat" )
+	end
+end ) */
+print( "client ready" )
