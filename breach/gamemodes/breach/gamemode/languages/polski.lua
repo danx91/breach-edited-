@@ -113,6 +113,12 @@ polski.starttexts = {
 		"Podpalając kogoś troche się leczysz",
 		"LPM - atak, PPM - kosztem zycia zyskujesz prędkość"}
 	},
+	ROLE_SCP1471 = {
+		"Jesteś SCP-1471-A",
+		{"Twoim celem jest ucieczka z placówki",
+		"Możesz przeteleportować się do swojej ofiary",
+		"LPM - atak, PPM - aby się teleportować"}
+	},
 	ROLE_SCP1048A = {
 		"Jesteś SCP-1048-A",
 		{"Twoim celem jest ucieczka z placówki",
@@ -346,6 +352,7 @@ polski.ROLES.ROLE_SCP0492 = "SCP-049-2"
 polski.ROLES.ROLE_SCP0082 = "SCP-008-2"
 polski.ROLES.ROLE_SCP966 = "SCP-966"
 polski.ROLES.ROLE_SCP023 = "SCP-023"
+polski.ROLES.ROLE_SCP1471 = "SCP-1471-A"
 polski.ROLES.ROLE_SCP1048A = "SCP-1048-A"
 polski.ROLES.ROLE_SCP1048B = "SCP-1048-B"
 polski.ROLES.ROLE_SCP8602 = "SCP-860-2"
@@ -373,5 +380,23 @@ polski.ROLES.ROLE_CHAOSSPY = "Szpieg CI"
 polski.ROLES.ROLE_CHAOS = "Żołnierz CI"
 polski.ROLES.ROLE_CHAOSCOM = "Dowódca CI"
 polski.ROLES.ROLE_SPEC = "Obserwator"
+
+polski.credits_orig = "Stworzone przez:"
+polski.credits_edit = "Zmodyfikowane i poprawione przez:"
+polski.settings = "Ustawienia"
+polski.updateinfo = "Wyświetlaj zmiany po każdej aktualizacji"
+polski.done = "Gotowe"
+polski.repe = "Wpisz br_reset_intro aby zobaczyć intro ponownie"
+
+polski.author = "Autor"
+polski.helper = "Asystent"
+polski.originator = "Pomysłodawca"
+
+polski.updates = {
+	"polski",
+	"Opis wersji",
+	"Opis aktualizacji %s jest niedostępny!",
+	"Wersja serwera",
+}
 
 ALLLANGUAGES.polski = polski

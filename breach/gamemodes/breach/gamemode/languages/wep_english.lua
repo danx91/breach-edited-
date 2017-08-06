@@ -182,6 +182,17 @@ lang.SCP_1048B = {
 	instructions = "LMB to attack",
 }
 
+lang.SCP_1471 = {
+	author = "danx91",
+	contact = "Look at this gamemode in workshop and search for creators",
+	purpose = "Kill",
+	instructions = "LMB to attack, RMB to teleport yourself",
+	HUD = {
+		attackReady = "Ready to attack",
+		attackCD = "Next attack in",
+	},
+}
+
 lang.HOLSTER = {
 	author = "Kanade",
 	contact = "Look at this gamemode in workshop and search for creators",

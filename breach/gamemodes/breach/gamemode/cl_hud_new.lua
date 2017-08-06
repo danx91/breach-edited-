@@ -10,7 +10,26 @@ hook.Add( "HUDShouldDraw", "HideHUDElements", function( name )
 	if hide[ name ] then return false end
 end )
 
+local texture  = surface.GetTextureID( "pp/rt" )
+
 hook.Add( "HUDPaint", "Breach_HUD", function()
+	/*if CamEnable then
+		surface.SetTexture( texture )
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
+		render.PushFilterMag( TEXFILTER.ANISOTROPIC )
+		surface.DrawTexturedRect( 0, 0, ScrW(), ScrH() )
+		render.PopFilterMag()
+		timer.Simple( 0.7, function() 
+			CamEnable = false
+		end )
+		return
+	end
+	if ShowTex1471 then
+		surface.SetTexture( surface.GetTextureID( render.GetScreenEffectTexture():GetName() ) )
+		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
+		surface.DrawTexturedRect( 0, 0, ScrW() / 3, ScrH() / 3 )
+	end*/
+	if playing then return end
 	local scale = hudScale
 	local width = ScrW() * scale
 	local height = ScrH() * scale

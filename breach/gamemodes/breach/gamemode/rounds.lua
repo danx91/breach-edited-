@@ -34,7 +34,7 @@ ROUNDS = {
 		end,
 		postround = function() end,
 		endcheck = function()
-			if #player.GetAll() < 2 then return end	
+			if #GetActivePlayers() < 2 then return end	
 			endround = false
 			local ds = gteams.NumPlayers(TEAM_CLASSD)
 			local mtfs = gteams.NumPlayers(TEAM_GUARD)
@@ -117,7 +117,7 @@ ROUNDS = {
 		roundstart = function() end,
 		postround = function() end,
 		endcheck = function()
-			if #player.GetAll() < 2 then return end
+			if #GetActivePlayers() < 2 then return end
 			local ds = gteams.NumPlayers(TEAM_CLASSD)
 			local mtfs = gteams.NumPlayers(TEAM_GUARD)
 			local scps = gteams.NumPlayers(TEAM_SCP)
@@ -174,7 +174,7 @@ ROUNDS = {
 		end,
 		postround = function() end,
 		endcheck = function()
-			if #player.GetAll() < 2 then return end	
+			if #GetActivePlayers() < 2 then return end	
 			endround = false
 			local ds = gteams.NumPlayers(TEAM_CLASSD)
 			local mtfs = gteams.NumPlayers(TEAM_GUARD)

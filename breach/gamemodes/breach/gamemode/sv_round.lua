@@ -43,8 +43,10 @@ function CleanUpPlayers()
 		v:SetModelScale( 1 )
 		v:SetCrouchedWalkSpeed(0.6)
 		v.mblur = false
+		--print( v.ActivePlayer, v:GetNActive() )
 		player_manager.SetPlayerClass( v, "class_breach" )
 		player_manager.RunClass( v, "SetupDataTables" )
+		--print( v.ActivePlayer, v:GetNActive() )
 		v:Freeze(false)
 		v.MaxUses = nil
 		v.blinkedby173 = false
@@ -52,6 +54,7 @@ function CleanUpPlayers()
 		v.isescaping = false
 		v:AddKarma(KarmaRound())
 		v:UpdateNKarma()
+		v:SendLua( "CamEnable = false" )
 	end
 	net.Start("Effect")
 		net.WriteBool( false )
@@ -70,7 +73,7 @@ function RoundTypeUpdate()
 	RunConsoleCommand( "br_force_specialround", "" )
 	if !activeRound /*and #ROUNDS > 1*/ then
 		local pct = math.Clamp( GetConVar( "br_specialround_pct" ):GetInt(), 0, 100 )
-		print( pct )
+		--print( pct )
 		if math.random( 0, 100 ) < pct then
 			repeat
 				activeRound = table.Random( ROUNDS )
@@ -104,6 +107,7 @@ function RoundRestart()
 	preparing = true
 	postround = false
 	activeRound = nil
+	if #GetActivePlayers() < MINPLAYERS then WinCheck() end
 	RoundTypeUpdate()
 	activeRound:setup()
 	SetupAdmins( player.GetAll() )
@@ -376,11 +380,17 @@ function WinCheck()
 	activeRound:endcheck()
 	if roundEnd > 0 and roundEnd < CurTime() then
 		roundEnd = 0
-		endround = true
-		why = "game ran out of time limit"
+	--	endround = true
+	--	why = "game ran out of time limit"
 		print( "Something went wrong!" )
 		print( debug.traceback() )
 	end
+	/*if #GetActivePlayers() < 2 then 
+		endround = true
+		why = " there are not enough players"
+		gamestarted = false
+		BroadcastLua( "gamestarted = false" )
+	end*/
 	if endround then
 		print("Ending round because " .. why)
 		PrintMessage(HUD_PRINTCONSOLE, "Ending round because " .. why)
@@ -399,10 +409,10 @@ function WinCheck()
 		net.Broadcast()
 		activeRound:postround()	
 		GiveExp()
+		endround = false
 		timer.Create("PostTime", GetPostTime(), 1, function()
 			RoundRestart()
 		end)
-		endround = false
 	end
 end
 
@@ -414,7 +424,7 @@ function StopRound()
 	timer.Stop("PlayerInfo")
 end
 
-timer.Create("WinCheckTimer", 25, 0, function()
+timer.Create("WinCheckTimer", 5, 0, function()
 	if postround == false and preparing == false then
 		WinCheck()
 	end

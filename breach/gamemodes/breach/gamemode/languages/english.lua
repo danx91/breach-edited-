@@ -119,6 +119,12 @@ english.starttexts = {
 		"Igniting others regenerate your health",
 		"LMB - attack, RMB - you gain speed but you lose heath"}
 	},
+	ROLE_SCP1471 = {
+		"You are the SCP-1471-A",
+		{"Your objective is to escape the facility",
+		"You can teleport yourself to your target",
+		"LMB - attack, RMB - teleport to your target"}
+	},
 	ROLE_SCP1048A = {
 		"You are the SCP-1048-A",
 		{"Your objective is to escape the facility",
@@ -344,6 +350,7 @@ english.ROLES.ROLE_SCP082 = "SCP-082"
 english.ROLES.ROLE_SCP939 = "SCP-939"
 english.ROLES.ROLE_SCP999 = "SCP-999"
 english.ROLES.ROLE_SCP023 = "SCP-023"
+english.ROLES.ROLE_SCP1471 = "SCP-1471-A"
 english.ROLES.ROLE_SCP8602 = "SCP-860-2"
 english.ROLES.ROLE_SCP1048A = "SCP-1048-A"
 english.ROLES.ROLE_SCP1048B = "SCP-1048-B"
@@ -354,7 +361,7 @@ english.ROLES.ROLE_RES = "Researcher"
 english.ROLES.ROLE_MEDIC = "Medic"
 english.ROLES.ROLE_NO3 = "Level 3 Researcher"
 
-english.ROLES.ROLE_CLASSD = "Class D personnel"
+english.ROLES.ROLE_CLASSD = "Class D Personnel"
 english.ROLES.ROLE_VETERAN = "Class D Veteran"
 english.ROLES.ROLE_CIC = "CI Agent"
 
@@ -373,5 +380,23 @@ english.ROLES.ROLE_CHAOSSPY = "CI Spy"
 english.ROLES.ROLE_CHAOS = "CI Soldier"
 english.ROLES.ROLE_CHAOSCOM = "CI Commander"
 english.ROLES.ROLE_SPEC = "Spectator"
+
+english.credits_orig = "Created by:"
+english.credits_edit = "Modified and repaired by:"
+english.settings = "Settings"
+english.updateinfo = "Show changes after update"
+english.done = "Ready"
+english.repe = "Write br_reset_intro to show intro again"
+
+english.author = "Author"
+english.helper = "Assistant"
+english.originator = "Originator"
+
+english.updates = {
+	"english",
+	"Update notes",
+	"Update notes of version %s are unavailable",
+	"Server version",
+}
 
 ALLLANGUAGES.english = english

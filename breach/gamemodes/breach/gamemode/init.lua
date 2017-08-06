@@ -41,7 +41,7 @@ AddCSLuaFile( "cl_targetid.lua" )
 AddCSLuaFile( "classes.lua" )
 AddCSLuaFile( "cl_classmenu.lua" )
 AddCSLuaFile( "cl_headbob.lua" )
---AddCSLuaFile( "cl_splash.lua" )
+AddCSLuaFile( "cl_splash.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include( "server.lua" )
 include( "rounds.lua" )
@@ -130,6 +130,10 @@ SPCS = {
 	func = function(pl)
 		pl:SetSCP023()
 	end},
+	{name = "SCP 1471-A",
+	func = function(pl)
+		pl:SetSCP1471()
+	end},
 	{name = "SCP 1048-A",
 	func = function(pl)
 		pl:SetSCP1048A()
@@ -144,10 +148,10 @@ SPCS = {
 	end}
 }
 
---	SPCS = {	{name = "SCP 860-2",
---	func = function(pl)
---	pl:SetSCP8602()
---	end} }
+	SPCS = {	{name = "SCP 1741-A",
+	func = function(pl)
+	pl:SetSCP1471()
+	end} }
 	
 // Variables
 gamestarted = false
@@ -163,7 +167,7 @@ end
 function GetActivePlayers()
 	local tab = {}
 	for k,v in pairs(player.GetAll()) do
-		if v.ActivePlayer == nil then v.ActivePlayer = true end
+		if v.ActivePlayer == nil then v.ActivePlayer = true v:SetNActive( true ) end
 		if v.ActivePlayer == true then
 			table.ForceInsert(tab, v)
 		end
@@ -174,7 +178,7 @@ end
 function GetNotActivePlayers()
 	local tab = {}
 	for k,v in pairs(player.GetAll()) do
-		if v.ActivePlayer == nil then v.ActivePlayer = true end
+		if v.ActivePlayer == nil then v.ActivePlayer = true v:SetNActive( true ) end
 		if v.ActivePlayer == false then
 			table.ForceInsert(tab, v)
 		end
@@ -224,6 +228,12 @@ function OnUseEyedrops(ply)
 		ply:PrintMessage(HUD_PRINTTALK, "You will be blinking now")
 	end)
 end
+
+/*timer.Create( "CheckStart", 10, 0, function() 
+	if !gamestarted then
+		CheckStart()
+	end
+end )*/
 
 timer.Create("BlinkTimer", GetConVar("br_time_blinkdelay"):GetInt(), 0, function()
 	local time = GetConVar("br_time_blink"):GetFloat()
@@ -793,7 +803,7 @@ function GetAlivePlayers()
 end
 
 function GM:GetFallDamage( ply, speed )
-	return ( speed / 5 )
+	return ( speed / 6 )
 end
 
 function PlayerCount()
@@ -872,7 +882,7 @@ end
 
 inUse = false
 function explodeGateA( ply )
-	if !isInTabel( ply, ents.FindInSphere(POS_EXPLODE_A, 250) ) then return end
+	if !isInTable( ply, ents.FindInSphere(POS_EXPLODE_A, 250) ) then return end
 	if inUse == true then return end
 	if isGateAOpen() then return end
 	inUse = true
@@ -946,13 +956,13 @@ function isGateAOpen()
 	local doors = ents.FindInSphere( POS_MIDDLE_GATE_A, 50 )
 	for k, v in pairs( doors ) do
 		if v:GetClass() == "prop_dynamic" then 
-			if isInTabel( v:GetPos(), POS_GATE_A_DOORS ) then return false end
+			if isInTable( v:GetPos(), POS_GATE_A_DOORS ) then return false end
 		end
 	end
 	return true
 end
 
-function isInTabel( element, tab )
+function isInTable( element, tab )
 	for k, v in pairs( tab ) do
 		if v == element then return true end
 	end

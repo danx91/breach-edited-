@@ -597,6 +597,39 @@ function mply:SetSCP023()
 	self.UsingArmor = nil
 end
 
+function mply:SetSCP1471()
+	self:Flashlight( false )
+	self.handsmodel = nil
+	self:UnSpectate()
+	self:GodDisable()
+	self:Spawn()
+	self:SetPos( SPAWN_1471 )
+	self:StripWeapons()
+	self:RemoveAllAmmo()
+	self:SetGTeam(TEAM_SCP)
+	self:SetNClass(ROLES.ROLE_SCP1471)
+	self:SetModel("models/burd/scp1471/scp1471.mdl")
+	self:SetHealth(3000)
+	self:SetMaxHealth(3000)
+	self:SetArmor(0)
+	self:SetWalkSpeed(165)
+	self:SetRunSpeed(165)
+	self:SetMaxSpeed(165)
+	self:SetJumpPower(200)
+	self:SetNoDraw(false)
+	self.Active = true
+	self:SetupHands()
+	self.canblink = false
+	self.noragdoll = false
+	self:AllowFlashlight( false )
+	self.WasTeam = TEAM_SCP
+	self:SetNoTarget( true )
+	self:Give("weapon_scp_1471")
+	self:SelectWeapon("weapon_scp_1471")
+	self.BaseStats = nil
+	self.UsingArmor = nil
+end
+
 function mply:SetSCP1048A()
 	self:Flashlight( false )
 	self.handsmodel = nil
@@ -729,7 +762,7 @@ function mply:SetSCP0082( hp, speed, spawn )
 	self.Active = true
 	print("adding " .. self:Nick() .. " to zombies")
 	self:SetupHands()
-	//WinCheck()
+	WinCheck()
 	self.canblink = false
 	self.noragdoll = false
 	self:AllowFlashlight( false )
@@ -1295,13 +1328,21 @@ function mply:SetRoleName(name)
 	end
 end
 
+function mply:SetActive( active )
+	self.ActivePlayer = active
+	self:SetNActive( active )
+	if !gamestarted then
+		CheckStart()
+	end
+end
+
 function mply:ToogleAdminMode()
 	if self.AdminMode == nil then self.AdminMode = false end
 	if self.AdminMode == true then
 		self.AdminMode = false
-		self.ActivePlayer = true
+		self.SetActive( true )
 	else
 		self.AdminMode = true
-		self.ActivePlayer = false
+		self.SetActive( false )
 	end
 end

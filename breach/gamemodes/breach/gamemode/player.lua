@@ -7,8 +7,10 @@ function IsPremium(ply)
 		local ID = string.find( tostring(body), "<ID64>"..ply:SteamID64().."</ID64>" )
 			if ID == nil then
 				ply.Premium = false
+				ply:SetNPremium( false )
 			else
 				ply.Premium = true
+				ply:SetNPremium( true )
 				if GetConVar("br_premium_display"):GetString() != "" and GetConVar("br_premium_display"):GetString() != "none" then
 					print("Premium member "..ply:GetName().." has joined")
 					for k, v in pairs(player.GetAll()) do
@@ -28,7 +30,7 @@ function CheckStart()
 	if gamestarted == false and #GetActivePlayers() >= MINPLAYERS then
 		RoundRestart()
 	end
-	if #GetActivePlayers() == MINPLAYERS then
+	if #GetActivePlayers() == MINPLAYERS and #GetActivePlayers() == #player.GetAll() then
 		RoundRestart()
 	end
 	if gamestarted then
@@ -42,7 +44,6 @@ function GM:PlayerInitialSpawn( ply )
 	ply.Active = false
 	ply.freshspawn = true
 	ply.isblinking = false
-	ply.ActivePlayer = true --false
 	ply.Premium = false
 	IsPremium(ply)
 	ply.Karma = StartingKarma() or 1000
@@ -53,6 +54,11 @@ function GM:PlayerInitialSpawn( ply )
 	end
 	player_manager.SetPlayerClass( ply, "class_breach" )
 	player_manager.RunClass( ply, "SetupDataTables" )
+	ply:SetActive( false )
+	if ply:IsBot() then
+		ply:SetActive( true )
+	end
+	print( ply.ActivePlayer, ply:GetNActive() )
 	CheckStart()
 	if gamestarted then
 		ply:SendLua( 'gamestarted = true' )
@@ -248,6 +254,7 @@ end
 function GM:PlayerDisconnected( ply )
 	 ply:SetTeam(TEAM_SPEC)
 	 if #player.GetAll() < MINPLAYERS then
+		Print( "RESETEFGRTHYUJRHE" )
 		BroadcastLua('gamestarted = false')
 		gamestarted = false
 	 end
@@ -285,7 +292,7 @@ end
 function GM:PlayerCanHearPlayersVoice( listener, talker )
 	if talker:Alive() == false then return false end
 	if listener:Alive() == false then return false end
-	if talker:GTeam() == TEAM_SCP then
+	if talker:GTeam() == TEAM_SCP and GetConVar( "br_allow_scptovoicechat" ):GetInt() == 0 then
 		if talker:GetNClass() == ROLES.ROLE_SCP939 then
 			local wep = talker:GetWeapon("weapon_scp_939")
 			//print("Channel "..wep.Channel)

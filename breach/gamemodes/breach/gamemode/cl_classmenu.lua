@@ -230,95 +230,96 @@ function OpenClassMenu()
 			draw.RoundedBox( 2, 1, 1, w - 2, h - 2, v.color )
 		end
 		for i,cls in ipairs(v.roles) do
-		
-			local model
-			if cls.showmodel == nil then
-				model = table.Random(cls.models)
-			else
-				model = cls.showmodel
-			end
-		
-			local class_panel = vgui.Create( "DButton", scroller )
-			class_panel:SetText("")
-			class_panel:SetMouseInputEnabled( true )
-			class_panel.DoClick = function()
-				selectedclass = cls
-				selectedclr = v.color
-				sclass_model:SetModel( model )
-			end
-			//class_panel:SetText( cls.name )
-			//class_panel:SetFont("MTF_Main")
-			class_panel:Dock( TOP )
-			class_panel:SetSize(0,60)
-			if i != 1 then
-				class_panel:DockMargin( 0, 4, 0, 0 )
-			end
-			
-			local level = "Clearance Level: "
-			if cls.level == 6 then
-				level = level .. "Omni"
-			else
-				level = level .. cls.level
-			end
-			
-			//local enabled = true
-			//if enabled == true then enabled = "Yes" else enabled = "No" end
-			
-			class_panel.Paint = function( self, w, h )
-				if selectedclass == cls then
-					draw.RoundedBox( 0, 0, 0, w, h, Color(v.color.r - 20, v.color.g - 20, v.color.b - 20) )
+			if GetConVar( "br_dclass_keycards" ):GetInt() == 0 and i != 2 or GetConVar( "br_dclass_keycards" ):GetInt() != 0 and i != 1 or v.name != "Class D Personell" then
+				local model
+				if cls.showmodel == nil then
+					model = table.Random(cls.models)
 				else
-					draw.RoundedBox( 0, 0, 0, w, h, Color(v.color.r - 50, v.color.g - 50, v.color.b - 50) )
+					model = cls.showmodel
 				end
-				draw.Text( {
-					text = GetLangRole(cls.name),
-					font = "MTF_Main",
-					xalign = TEXT_ALIGN_LEFT,
-					yalign = TEXT_ALIGN_CENTER,
-					pos = { 70, h / 3.5 }
-				} )
-				draw.Text( {
-					text = level,
-					font = "MTF_Main",
-					xalign = TEXT_ALIGN_LEFT,
-					yalign = TEXT_ALIGN_CENTER,
-					pos = { 70, h / 1.4 }
-				} )
-				/*
-				draw.Text( {
-					text = "Enabled: " .. enabled,
-					font = "MTF_Main",
-					xalign = TEXT_ALIGN_RIGHT,
-					yalign = TEXT_ALIGN_CENTER,
-					pos = { w - 15, h / 2 }
-				} )
-				*/
-			end
 			
-			local class_modelpanel = vgui.Create( "DPanel", class_panel )
-			class_modelpanel:Dock( LEFT )
-			class_modelpanel.Paint = function( self, w, h )
-				draw.RoundedBox( 0, 0, 0, w, h, Color(v.color.r - 25, v.color.g - 25, v.color.b - 25) )
-			end
-			
+				local class_panel = vgui.Create( "DButton", scroller )
+				class_panel:SetText("")
+				class_panel:SetMouseInputEnabled( true )
+				class_panel.DoClick = function()
+					selectedclass = cls
+					selectedclr = v.color
+					sclass_model:SetModel( model )
+				end
+				//class_panel:SetText( cls.name )
+				//class_panel:SetFont("MTF_Main")
+				class_panel:Dock( TOP )
+				class_panel:SetSize(0,60)
+				if i != 1 then
+					class_panel:DockMargin( 0, 4, 0, 0 )
+				end
+				
+				local level = "Clearance Level: "
+				if cls.level == 6 then
+					level = level .. "Omni"
+				else
+					level = level .. cls.level
+				end
+				
+				//local enabled = true
+				//if enabled == true then enabled = "Yes" else enabled = "No" end
+				
+				class_panel.Paint = function( self, w, h )
+					if selectedclass == cls then
+						draw.RoundedBox( 0, 0, 0, w, h, Color(v.color.r - 20, v.color.g - 20, v.color.b - 20) )
+					else
+						draw.RoundedBox( 0, 0, 0, w, h, Color(v.color.r - 50, v.color.g - 50, v.color.b - 50) )
+					end
+					draw.Text( {
+						text = GetLangRole(cls.name),
+						font = "MTF_Main",
+						xalign = TEXT_ALIGN_LEFT,
+						yalign = TEXT_ALIGN_CENTER,
+						pos = { 70, h / 3.5 }
+					} )
+					draw.Text( {
+						text = level,
+						font = "MTF_Main",
+						xalign = TEXT_ALIGN_LEFT,
+						yalign = TEXT_ALIGN_CENTER,
+						pos = { 70, h / 1.4 }
+					} )
+					/*
+					draw.Text( {
+						text = "Enabled: " .. enabled,
+						font = "MTF_Main",
+						xalign = TEXT_ALIGN_RIGHT,
+						yalign = TEXT_ALIGN_CENTER,
+						pos = { w - 15, h / 2 }
+					} )
+					*/
+				end
+				
+				local class_modelpanel = vgui.Create( "DPanel", class_panel )
+				class_modelpanel:Dock( LEFT )
+				class_modelpanel.Paint = function( self, w, h )
+					draw.RoundedBox( 0, 0, 0, w, h, Color(v.color.r - 25, v.color.g - 25, v.color.b - 25) )
+				end
+				
 
-			local class_model = vgui.Create( "DModelPanel", class_modelpanel )
-			class_model:Dock( FILL )
-			class_model:SetFOV(35)
-			class_model:SetModel( model )
-			function class_model:LayoutEntity( entity )
-				entity:SetAngles(Angle(0,18,0))
-			end
-			local ent = class_model:GetEntity()
-			if cls.pmcolor != nil then
-				function ent:GetPlayerColor() return Vector ( cls.pmcolor.r / 255, cls.pmcolor.g / 255, cls.pmcolor.b / 255 ) end
-			end
-			if ent:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
-				local eyepos = ent:GetBonePosition( ent:LookupBone( "ValveBiped.Bip01_Head1" ) )
-				eyepos:Add( Vector( 0, 0, 2 ) )
-				class_model:SetLookAt( eyepos )
-				class_model:SetCamPos( eyepos-Vector( -24, 0, 0 ) )
-				ent:SetEyeTarget( eyepos-Vector( -24, 0, 0 ) )
+				local class_model = vgui.Create( "DModelPanel", class_modelpanel )
+				class_model:Dock( FILL )
+				class_model:SetFOV(35)
+				class_model:SetModel( model )
+				function class_model:LayoutEntity( entity )
+					entity:SetAngles(Angle(0,18,0))
+				end
+				local ent = class_model:GetEntity()
+				if cls.pmcolor != nil then
+					function ent:GetPlayerColor() return Vector ( cls.pmcolor.r / 255, cls.pmcolor.g / 255, cls.pmcolor.b / 255 ) end
+				end
+				if ent:LookupBone( "ValveBiped.Bip01_Head1" ) != nil then
+					local eyepos = ent:GetBonePosition( ent:LookupBone( "ValveBiped.Bip01_Head1" ) )
+					eyepos:Add( Vector( 0, 0, 2 ) )
+					class_model:SetLookAt( eyepos )
+					class_model:SetCamPos( eyepos-Vector( -24, 0, 0 ) )
+					ent:SetEyeTarget( eyepos-Vector( -24, 0, 0 ) )
+				end
 			end
 		end
 	end

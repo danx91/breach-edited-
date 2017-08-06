@@ -143,7 +143,7 @@ include(mapfile)
 
 include("cl_hud.lua")
 include("cl_hud_new.lua")
---include( "cl_splash.lua" )
+include( "cl_splash.lua" )
 
 RADIO4SOUNDSHC = {
 	{"chatter1", 39},
@@ -262,7 +262,7 @@ timefromround = 0
 -----------------------------CREDITS--------------------------------
 
 timer.Create( "Credits", 180, 0, function() 
-	print("Breach(edited) by danx91 [ZGFueDkx] update 0.17 [patch 19/07/2017]")
+	print("Breach(edited) by danx91 [ZGFueDkx] update "..VERSION.." [patch "..DATE.."]")
 end )
 
 --------------------------------------------------------------------
@@ -670,6 +670,30 @@ end
 hook.Add( "CalcView", "CalcView3DPerson", CalcView3DPerson )
 */
 
+function GM:CalcView( ply, origin, angles, fov )
+	local data = {}
+	data.drawviewer = false
+	data.origin = origin
+	data.angles = angles
+	data.fov = fov
+	if CamEnable then
+		--print( "enabled" )
+		if !timer.Exists( "CamViewChange" ) then
+			print( "creting timer" )
+			timer.Create( "CamViewChange", 1, 1, function()
+				print( "timer" )
+				CamEnable = false
+			end )
+		end
+		data.drawviewer = true
+		dir = dir or Vector( 0, 0, 0 )
+		--print( dir )
+		data.origin = ply:GetPos() - dir - dir:GetNormalized() * 30 + Vector( 0, 0, 80 )
+		data.angles = Angle( 10, dir:Angle().y, 0 )
+	end
+	return data
+end
+
 function GetWeaponLang()
 	if cwlang then
 		return cwlang
@@ -682,18 +706,38 @@ concommand.Add( "br_dropweapon", function( ply )
 end )
 
 print("cl_init loads")
-/*
+
+if !file.Exists( "breach", "DATA" ) then
+	file.CreateDir( "breach" )
+end
+
 if !file.Exists( "breach/intro.dat", "DATA" ) then
 	PlayIntro()
-	--file.Write( "breach/intro.dat", "" )
 else
-	net.Start( "PlayerReady" )
-	net.SendToServer()
+	if GetConVar( "br_force_showupdates" ):GetInt() != 0 then
+		showupdates = true
+		PlayIntro( 5 )
+	else
+		local res = file.Read( "breach/intro.dat" )
+		if string.match( res, "true" ) then
+			showupdates = true
+			PlayIntro( 4 )
+		end
+	end
+	timer.Simple( 1, function()
+		net.Start( "PlayerReady" )
+		net.SendToServer()
+	end )
 end
 
 concommand.Add( "br_reset_intro", function( ply )
 	if file.Exists( "breach/intro.dat", "DATA" ) then
-		file.Deleate( "breach/intro.dat" )
+		file.Delete( "breach/intro.dat" )
 	end
-end ) */
+end ) 
+
+concommand.Add( "br_show_update", function( ply )
+	PlayIntro( 5 )
+end ) 
+
 print( "client ready" )

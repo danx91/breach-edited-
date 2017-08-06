@@ -4,6 +4,9 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
+VERSION = "0.19"
+DATE = "06/08/2017"
+
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
 end
@@ -61,6 +64,7 @@ ROLES.ROLE_SCP939 = "SCP-939"
 ROLES.ROLE_SCP999 = "SCP-999"
 ROLES.ROLE_SCP082 = "SCP-082"
 ROLES.ROLE_SCP023 = "SCP-023"
+ROLES.ROLE_SCP1471 = "SCP-1471-A"
 ROLES.ROLE_SCP1048A = "SCP-1048-A"
 ROLES.ROLE_SCP1048B = "SCP-1048-B"
 ROLES.ROLE_SCP0492 = "SCP-049-2"
@@ -137,6 +141,8 @@ if !ConVarExists("br_punishvote_time") then CreateConVar("br_punishvote_time", "
 if !ConVarExists("br_allow_punish") then CreateConVar("br_allow_punish", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Is punish system allowed?" ) end
 if !ConVarExists("br_cars_ammount") then CreateConVar("br_cars_ammount", "12", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "How many cars should spawn?" ) end
 if !ConVarExists("br_dropvestondeath") then CreateConVar("br_dropvestondeath", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Do players drop vests on death?" ) end
+if !ConVarExists("br_force_showupdates") then CreateConVar("br_force_showupdates", "0", {FCVAR_SERVER_CAN_EXECUTE}, "Should players see update logs any time they join to server?" ) end
+if !ConVarExists("br_allow_scptovoicechat") then CreateConVar("br_allow_scptovoicechat", "0", {FCVAR_SERVER_CAN_EXECUTE}, "Should players see update logs any time they join to server?" ) end
 
 
 MINPLAYERS = GetConVar("br_min_players"):GetInt()

@@ -182,6 +182,17 @@ lang.SCP_1048B = {
 	instructions = "LPM aby atakować",
 }
 
+lang.SCP_1471 = {
+	author = "danx91",
+	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
+	purpose = "Zabijaj",
+	instructions = "LPM aby atakować, PPM aby się przeteleportować",
+	HUD = {
+		attackReady = "Atak gotowy",
+		attackCD = "Następny atak za",
+	},
+}
+
 lang.HOLSTER = {
 	author = "Kanade",
 	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",

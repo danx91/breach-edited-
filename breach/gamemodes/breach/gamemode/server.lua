@@ -32,7 +32,7 @@ util.AddNetworkString("ShowText")
 util.AddNetworkString("PlayerReady")
 
 net.Receive( "PlayerReady", function( len, ply )
-	ply.ActivePlayer = true
+	ply:SetActive( true )
 end )
 
 net.Receive( "SpectateMode", function( len, ply )
@@ -41,10 +41,10 @@ net.Receive( "SpectateMode", function( len, ply )
 		if ply:Alive() and ply:Team() != TEAM_SPEC then
 			ply:SetSpectator()
 		end
-		ply.ActivePlayer = false
+		ply.SetActive( false )
 		ply:PrintMessage(HUD_PRINTTALK, "Changed mode to spectator")
 	elseif ply.ActivePlayer == false then
-		ply.ActivePlayer = true
+		ply.SetActive( true )
 		ply:PrintMessage(HUD_PRINTTALK, "Changed mode to player")
 	end
 	CheckStart()
@@ -52,6 +52,11 @@ net.Receive( "SpectateMode", function( len, ply )
 end)
 
 net.Receive( "AdminMode", function( len, ply )
+	for k, v in pairs( player.GetAll() ) do
+		print( v.ActivePlayer, v:GetNActive(), gamestarted )
+		--v:SetNActive( true )
+	end
+	if true then return end
 	if ply:IsSuperAdmin() then
 		ply:ToogleAdminMode()
 	end

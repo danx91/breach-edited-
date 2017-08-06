@@ -6,6 +6,65 @@ end
 
 surface.CreateFont("sb_names", {font = "Trebuchet18", size = 14, weight = 700})
 
+helpers = {
+
+}
+
+originators = {
+	"76561198079069017",
+	"76561198174088183",
+	"76561198358493307",
+	"76561198108330803",
+	"76561198337913733",
+}
+
+ranks = {
+	author = {
+		color = Color(70, 50, 220, 255),
+		textcolor = Color(0, 0, 0, 255),
+		text = function() return clang.author end,
+		check = function( ply )
+			if ply:SteamID64() == "76561198110788144" or ply:SteamID64() == "76561198156389563" then
+				return true
+			end
+		end,
+		sorting = 0
+	},
+	vip = {
+		color = Color(220, 220, 50, 255),
+		textcolor = Color(0, 0, 0, 255),
+		text = "VIP",
+		check = function( ply )
+			if ply:GetNPremium() then
+				return true
+			end
+		end,
+		sorting = 1
+	},
+	helper = {
+		color = Color(100, 100, 100, 255),
+		textcolor = Color(0, 0, 0, 255),
+		text = function() return clang.helper end,
+		check = function( ply )
+			if IsInTable( helpers, ply:SteamID64() ) then
+				return true
+			end
+		end,
+		sorting = 2
+	},
+	originator = {
+		color = Color(255, 192, 203, 255),
+		textcolor = Color(0, 0, 0, 255),
+		text = function() return clang.originator end,
+		check = function( ply )
+			if IsInTable( originators, ply:SteamID64() ) then
+				return true
+			end
+		end,
+		sorting = 3
+	},
+}
+
 function RanksEnabled()
 	return GetConVar("br_scoreboardranks"):GetBool()
 end
@@ -100,9 +159,16 @@ function ShowScoreBoard()
 		else
 			v.imp = 0
 		end
-		if v:SteamID64() == "76561198156389563" then
+		if ranks.author.check( v ) then	
 			v.imp = 100
-			print(v)
+		elseif ranks.helper.check( v ) then	
+			v.imp = 80
+		elseif ranks.originator.check( v ) then	
+			v.imp = 70
+--		elseif ranks.vip.check( v ) then	
+--			v.imp = 60
+		elseif ranks.vip.check( v ) then	
+			v.imp = 50
 		end
 	end
 	
@@ -294,15 +360,20 @@ function ShowScoreBoard()
 						tcolor = gteams.GetColor(v:GTeam())
 					end
 					txt = GetLangRole(v.knownrole)
-					if v:SteamID64() == "76561198156389563" then
+					if ranks.author.check( v ) then	
 						tcolor = Color(114, 9, 53)
 						tcolor2 = color_white
 					end
+					if !v:GetNActive() then
+						tcolor["a"] = 100
+					else
+						tcolor["a"] = 255
+					end	
 					draw.RoundedBox( 0, 0, 0, w, h, tcolor )
 					draw.Text( {
 						text = string.sub(v:Nick(), 1, 16),
 						pos = { width + 2, h / 2 },
-						font = "sb_names",
+						font = "sb_names",	
 						color = tcolor2,
 						xalign = TEXT_ALIGN_LEFT,
 						yalign = TEXT_ALIGN_CENTER
@@ -316,6 +387,32 @@ function ShowScoreBoard()
 						xalign = TEXT_ALIGN_CENTER,
 						yalign = TEXT_ALIGN_CENTER
 					})
+					local rankid = 0
+					--print( v:GetName(), v:GetNActive() )
+					local rankstouse = {}
+					for _, rank in pairs( ranks ) do
+						if rank.check( v ) then
+							table.insert( rankstouse, rank )
+						end
+					end
+					table.sort( rankstouse, function( a, b ) return a.sorting < b.sorting end )
+					for _, rank in ipairs( rankstouse ) do
+						local color = rank.color
+						if !v:GetNActive() then
+							color["a"] = 100
+						end
+						draw.RoundedBox( 0, width + 277 + 127 * rankid, 2, 125, h - 4, color )
+						draw.Text( {
+							text = isfunction( rank.text ) and rank.text() or rank.text,
+							pos = { width + 339.5 + 127 * rankid, h / 2 },
+							font = "sb_names",
+							color = rank.textcolor,
+							xalign = TEXT_ALIGN_CENTER,
+							yalign = TEXT_ALIGN_CENTER
+						})
+						rankid = rankid + 1
+					end
+					
 					local panel_x = w / 1.1175
 					local panel_w = w / 14
 				end
@@ -384,4 +481,11 @@ function GM:ScoreboardHide()
 	if IsValid(Frame) then
 		Frame:Close()
 	end
+end
+
+function IsInTable( tab, element )
+	for k, v in pairs( tab ) do
+		if v == element then return true end
+	end
+	return false
 end
