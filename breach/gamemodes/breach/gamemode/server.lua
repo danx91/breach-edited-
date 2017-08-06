@@ -138,6 +138,12 @@ function clearData( ply )
 	ply:SetNLevel( 0 )
 end
 
+function clearDataID( id64 )
+	util.RemovePData( id64, "breach_karma" )
+	util.RemovePData( id64, "breach_exp" )
+	util.RemovePData( id64, "breach_level" )
+end
+
 --net.Receive( "RequestGateA", function( len, ply )
 --	RequestOpenGateA(ply)
 --end)

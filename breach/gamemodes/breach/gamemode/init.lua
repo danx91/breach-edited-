@@ -148,10 +148,10 @@ SPCS = {
 	end}
 }
 
-	SPCS = {	{name = "SCP 1741-A",
-	func = function(pl)
-	pl:SetSCP1471()
-	end} }
+--	SPCS = {	{name = "SCP 1741-A",
+--	func = function(pl)
+--	pl:SetSCP1471()
+--	end} }
 	
 // Variables
 gamestarted = false

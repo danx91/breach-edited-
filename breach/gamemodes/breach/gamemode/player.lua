@@ -1,6 +1,7 @@
 // Serverside file for all player related functions
 
 function IsPremium(ply)
+	if CheckULXPremium( ply ) == true then return end
 	if GetConVar("br_premium_url"):GetString() == "" or GetConVar("br_premium_url"):GetString() == "none" then return end
 	http.Fetch( GetConVar("br_premium_url"):GetString(), function( body, size, headers, code )
 		if ( body == nil ) then return end
@@ -13,9 +14,7 @@ function IsPremium(ply)
 				ply:SetNPremium( true )
 				if GetConVar("br_premium_display"):GetString() != "" and GetConVar("br_premium_display"):GetString() != "none" then
 					print("Premium member "..ply:GetName().." has joined")
-					for k, v in pairs(player.GetAll()) do
-						v:PrintMessage(HUD_PRINTCENTER, string.format(GetConVar("br_premium_display"):GetString(), ply:GetName()))
-					end
+					PrintMessage(HUD_PRINTCENTER, string.format(GetConVar("br_premium_display"):GetString(), ply:GetName()))
 				end
 			end
 	end,
@@ -23,6 +22,22 @@ function IsPremium(ply)
 		print("HTTP ERROR")
 		print(error)
 	end )
+end
+
+function CheckULXPremium( ply )
+	if GetConVar("br_ulx_premiumgroup_name"):GetString() == "" or GetConVar("br_ulx_premiumgroup_name"):GetString() == "none" then return end
+	if !ply.CheckGroup then
+		print( "To use br_ulx_premiumgroup_name you have to install ULX!" )
+		return
+	end
+	if ply:CheckGroup( GetConVar("br_ulx_premiumgroup_name"):GetString() ) then
+		ply.Premium = true
+		ply:SetNPremium( true )
+		if GetConVar("br_premium_display"):GetString() != "" and GetConVar("br_premium_display"):GetString() != "none" then
+			print("Premium member "..ply:GetName().." has joined")
+			PrintMessage(HUD_PRINTCENTER, string.format(GetConVar("br_premium_display"):GetString(), ply:GetName()))
+		end
+	end
 end
 
 function CheckStart()
@@ -45,7 +60,6 @@ function GM:PlayerInitialSpawn( ply )
 	ply.freshspawn = true
 	ply.isblinking = false
 	ply.Premium = false
-	IsPremium(ply)
 	ply.Karma = StartingKarma() or 1000
 	if timer.Exists( "RoundTime" ) == true then
 		net.Start("UpdateTime")
@@ -54,11 +68,12 @@ function GM:PlayerInitialSpawn( ply )
 	end
 	player_manager.SetPlayerClass( ply, "class_breach" )
 	player_manager.RunClass( ply, "SetupDataTables" )
+	IsPremium(ply)
 	ply:SetActive( false )
 	if ply:IsBot() then
 		ply:SetActive( true )
 	end
-	print( ply.ActivePlayer, ply:GetNActive() )
+	--print( ply.ActivePlayer, ply:GetNActive() )
 	CheckStart()
 	if gamestarted then
 		ply:SendLua( 'gamestarted = true' )

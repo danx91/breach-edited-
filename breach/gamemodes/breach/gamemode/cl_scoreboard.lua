@@ -400,6 +400,8 @@ function ShowScoreBoard()
 						local color = rank.color
 						if !v:GetNActive() then
 							color["a"] = 100
+						else
+							color["a"] = 255
 						end
 						draw.RoundedBox( 0, width + 277 + 127 * rankid, 2, 125, h - 4, color )
 						draw.Text( {
