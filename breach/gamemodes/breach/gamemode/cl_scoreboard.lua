@@ -100,8 +100,9 @@ function ShowScoreBoard()
 	local unknown = {}
 	
 	for k,v in pairs(allplayers) do
-		if not v.GetNClass then
+		if !v.GetNClass or !v.GetNPremium then
 			player_manager.RunClass( v, "SetupDataTables" )
+			IsPremium( v, true )
 		end
 		table.ForceInsert(unknown, v)
 		v.knownrole = clang.class_unknown or "Unknown"
@@ -154,8 +155,6 @@ function ShowScoreBoard()
 			v.imp = 4
 		elseif gteam == TEAM_CHAOS then
 			v.imp = 4
-		elseif gteam == TEAM_SCP then
-			v.imp = 5
 		else
 			v.imp = 0
 		end
@@ -291,7 +290,7 @@ function ShowScoreBoard()
 			// players
 			local panelwidth = 55	
 			local dark = true
-			for k,v in pairs(tab.list) do
+			for k,v in ipairs(tab.list) do
 				local panels = {
 					{
 						name = "Ping",

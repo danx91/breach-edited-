@@ -176,6 +176,13 @@ concommand.Add( "br_spectate", function( ply, cmd, args )
 	net.SendToServer()
 end )
 
+concommand.Add( "br_recheck_premium", function( ply, cmd, args )
+	if ply:IsSuperAdmin() then
+		net.Start("RecheckPremium")
+		net.SendToServer()
+	end
+end )
+
 concommand.Add( "br_roundrestart_cl", function( ply, cmd, args )
 	if ply:IsSuperAdmin() then
 		net.Start("RoundRestart")
@@ -679,9 +686,7 @@ function GM:CalcView( ply, origin, angles, fov )
 	if CamEnable then
 		--print( "enabled" )
 		if !timer.Exists( "CamViewChange" ) then
-			print( "creting timer" )
 			timer.Create( "CamViewChange", 1, 1, function()
-				print( "timer" )
 				CamEnable = false
 			end )
 		end

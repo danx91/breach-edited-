@@ -30,9 +30,18 @@ util.AddNetworkString("Restart")
 util.AddNetworkString("AdminMode")
 util.AddNetworkString("ShowText")
 util.AddNetworkString("PlayerReady")
+util.AddNetworkString("RecheckPremium")
 
 net.Receive( "PlayerReady", function( len, ply )
 	ply:SetActive( true )
+end )
+
+net.Receive( "RecheckPremium", function( len, ply )
+	if ply:IsSuperAdmin() then
+		for k, v in pairs( player.GetAll() ) do
+			IsPremium( v, true )
+		end
+	end
 end )
 
 net.Receive( "SpectateMode", function( len, ply )
@@ -52,11 +61,6 @@ net.Receive( "SpectateMode", function( len, ply )
 end)
 
 net.Receive( "AdminMode", function( len, ply )
-	for k, v in pairs( player.GetAll() ) do
-		print( v.ActivePlayer, v:GetNActive(), gamestarted )
-		--v:SetNActive( true )
-	end
-	if true then return end
 	if ply:IsSuperAdmin() then
 		ply:ToogleAdminMode()
 	end
@@ -112,7 +116,6 @@ end)
 
 net.Receive( "ClearData", function( len, ply )
 	if not(ply:IsSuperAdmin()) then return end
-	
 	local com = net.ReadString()
 	if com == "&ALL" then
 		for k, v in pairs( player:GetAll() ) do
@@ -124,6 +127,9 @@ net.Receive( "ClearData", function( len, ply )
 				clearData( v )
 				return
 			end
+		end
+		if IsValidSteamID( com ) then
+			clearDataID( com )
 		end
 	end
 end)
@@ -142,6 +148,15 @@ function clearDataID( id64 )
 	util.RemovePData( id64, "breach_karma" )
 	util.RemovePData( id64, "breach_exp" )
 	util.RemovePData( id64, "breach_level" )
+end
+
+function IsValidSteamID( id )
+	if string.len( id ) == 17 then
+		if tonumber( id ) then
+			return true
+		end
+	end
+	return false
 end
 
 --net.Receive( "RequestGateA", function( len, ply )

@@ -1,18 +1,18 @@
 // Serverside file for all player related functions
 
-function IsPremium(ply)
-	if CheckULXPremium( ply ) == true then return end
+function IsPremium( ply, silent )
+	ply:SetNPremium( false )
+	ply.Premium = false
+	if CheckULXPremium( ply, silent ) == true then return end
+	print( "http" )
 	if GetConVar("br_premium_url"):GetString() == "" or GetConVar("br_premium_url"):GetString() == "none" then return end
 	http.Fetch( GetConVar("br_premium_url"):GetString(), function( body, size, headers, code )
 		if ( body == nil ) then return end
 		local ID = string.find( tostring(body), "<ID64>"..ply:SteamID64().."</ID64>" )
-			if ID == nil then
-				ply.Premium = false
-				ply:SetNPremium( false )
-			else
+			if ID != nil then
 				ply.Premium = true
 				ply:SetNPremium( true )
-				if GetConVar("br_premium_display"):GetString() != "" and GetConVar("br_premium_display"):GetString() != "none" then
+				if GetConVar("br_premium_display"):GetString() != "" and GetConVar("br_premium_display"):GetString() != "none" and !silent then
 					print("Premium member "..ply:GetName().." has joined")
 					PrintMessage(HUD_PRINTCENTER, string.format(GetConVar("br_premium_display"):GetString(), ply:GetName()))
 				end
@@ -24,19 +24,28 @@ function IsPremium(ply)
 	end )
 end
 
-function CheckULXPremium( ply )
+function CheckULXPremium( ply, silent )
 	if GetConVar("br_ulx_premiumgroup_name"):GetString() == "" or GetConVar("br_ulx_premiumgroup_name"):GetString() == "none" then return end
 	if !ply.CheckGroup then
 		print( "To use br_ulx_premiumgroup_name you have to install ULX!" )
 		return
 	end
-	if ply:CheckGroup( GetConVar("br_ulx_premiumgroup_name"):GetString() ) then
+	local pgroups = string.Split( GetConVar("br_ulx_premiumgroup_name"):GetString(), "," )
+	local ispremium
+	for k,v in pairs( pgroups ) do
+		if ply:CheckGroup( v ) then
+			ispremium = true
+			break
+		end
+	end
+	if ispremium then
 		ply.Premium = true
 		ply:SetNPremium( true )
-		if GetConVar("br_premium_display"):GetString() != "" and GetConVar("br_premium_display"):GetString() != "none" then
+		if GetConVar("br_premium_display"):GetString() != "" and GetConVar("br_premium_display"):GetString() != "none" and !silent then
 			print("Premium member "..ply:GetName().." has joined")
 			PrintMessage(HUD_PRINTCENTER, string.format(GetConVar("br_premium_display"):GetString(), ply:GetName()))
 		end
+		return true
 	end
 end
 

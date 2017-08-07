@@ -390,7 +390,7 @@ english.repe = "Write br_reset_intro to show intro again"
 
 english.author = "Author"
 english.helper = "Assistant"
-english.originator = "Originator"
+english.originator = "Collaborator"
 
 english.updates = {
 	"english",
