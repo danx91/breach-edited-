@@ -265,6 +265,7 @@ lang.SNAV_ULT = {
 	ddetect = "Wykryto klasę D",
 	unkdetect = "Wykryto humanoida",
 	detect = "wykryto",
+	items = "Wykryte przedmioty:"
 }
 
 lang.KEYCARD_1 = {

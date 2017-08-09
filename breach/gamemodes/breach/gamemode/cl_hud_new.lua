@@ -10,8 +10,6 @@ hook.Add( "HUDShouldDraw", "HideHUDElements", function( name )
 	if hide[ name ] then return false end
 end )
 
-local texture  = surface.GetTextureID( "pp/rt" )
-
 hook.Add( "HUDPaint", "Breach_HUD", function()
 	/*if CamEnable then
 		surface.SetTexture( texture )
@@ -25,7 +23,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		return
 	end
 	if ShowTex1471 then
-		surface.SetTexture( surface.GetTextureID( render.GetScreenEffectTexture():GetName() ) )
+		surface.SetMaterial( matn )
 		surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 		surface.DrawTexturedRect( 0, 0, ScrW() / 3, ScrH() / 3 )
 	end*/

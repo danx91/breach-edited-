@@ -183,6 +183,13 @@ concommand.Add( "br_recheck_premium", function( ply, cmd, args )
 	end
 end )
 
+concommand.Add( "br_punish_cancel", function( ply, cmd, args )
+	if ply:IsSuperAdmin() then
+		net.Start("CancelPunish")
+		net.SendToServer()
+	end
+end )
+
 concommand.Add( "br_roundrestart_cl", function( ply, cmd, args )
 	if ply:IsSuperAdmin() then
 		net.Start("RoundRestart")
@@ -412,6 +419,8 @@ hook.Add( "OnPlayerChat", "CheckChatFunctions", function( ply, strText, bTeam, b
 		return true
 	end
 end)
+
+hook.Add( "PlayerSpray", function( ply ) return false end )
 
 // Blinking system
 
@@ -679,10 +688,19 @@ hook.Add( "CalcView", "CalcView3DPerson", CalcView3DPerson )
 
 function GM:CalcView( ply, origin, angles, fov )
 	local data = {}
-	data.drawviewer = false
 	data.origin = origin
 	data.angles = angles
 	data.fov = fov
+	data.drawviewer = false
+	local item = ply:GetActiveWeapon()
+	if IsValid( item ) then
+		if item.CalcView then
+			local vec, ang, ifov = item:CalcView( ply, origin, angles, fov )
+			if vec then data.origin = vec end
+			if ang then data.angles = ang end
+			if ifov then data.fov = ifov end
+		end
+	end
 	if CamEnable then
 		--print( "enabled" )
 		if !timer.Exists( "CamViewChange" ) then

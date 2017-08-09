@@ -32,6 +32,7 @@ polski.punish = "KARA"
 polski.forgive = "PRZEBACZENIE"
 polski.voteresult = "Wynik głosowania przeciwko %s... %s"
 polski.votes = "Z %s graczy %s zagłosowało nad karą, a %s nad przebaczeniem"
+polski.votecancel = "Ostatnie głosowanie zostało przerwane przez administratora"
 
 polski.starttexts = {
 	ROLE_SCP173 = {

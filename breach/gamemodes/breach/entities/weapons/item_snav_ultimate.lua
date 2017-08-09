@@ -65,6 +65,7 @@ function SWEP:CalcView( ply, pos, ang, fov )
 end
 
 SWEP.warnings = {}
+SWEP.scps = {}
 SWEP.toshow = {}
 SWEP.ScanDelay = 0
 function SWEP:Think()
@@ -81,6 +82,7 @@ function SWEP:Think()
 		if self.ScanDelay > CurTime() then return end
 		self.ScanDelay = CurTime() + 1
 		self.warnings = {}
+		self.scps = {}
 		self.toshow = {}
 		local lp = LocalPlayer()
 		for k,v in pairs(ents.FindInSphere( lp:GetPos(), 1000 )) do
@@ -108,24 +110,30 @@ function SWEP:Think()
 						if not v.GetNClass then
 							player_manager.RunClass( v, "SetupDataTables" )
 						end
-						table.ForceInsert(self.warnings, v:GetNClass().." "..self.Lang.detect)
+						--table.ForceInsert(self.warnings, v:GetNClass().." "..self.Lang.detect)
+						table.ForceInsert( self.scps, v )
 					else
 						table.ForceInsert(self.warnings, self.Lang.unkdetect)
 					end
 				end
 			elseif v:IsWeapon() then
 				local found = false
+				local nowarn = false
 				if IsValid(v.Owner) then
 					found = true
 				end
-				if v.ISSCP != nil then
+				/*if v.ISSCP != nil then
 					if v.ISSCP == true then
+						table.ForceInsert( self.scps, v )
 						found = true
+						nowarn = true
 					end
-				end
+				end*/
 				if !found then
 					table.ForceInsert(self.toshow, v)
-					table.ForceInsert(self.warnings, language.GetPhrase( v:GetPrintName() ).." "..self.Lang.detect)
+					if !nowarn then
+						table.ForceInsert( self.warnings, language.GetPhrase( v:GetPrintName() ).." "..self.Lang.detect )
+					end
 				end
 			end
 		end
@@ -161,6 +169,8 @@ end
 
 function SWEP:DrawHUD()
 	if self.Enabled then
+		local w, h = ScrW(), ScrH()
+		--surface.DrawCircle( w * 0.5, h * 0.5, 3, Color( 0, 255, 0, 255 ) )
 		/*
 		if BUTTONS != nil then
 			for k,v in pairs(BUTTONS) do
@@ -182,23 +192,69 @@ function SWEP:DrawHUD()
 		*/
 		for k,v in pairs(self.toshow) do
 			if IsValid(v) then
-				if v:GetPos():Distance(LocalPlayer():GetPos()) < 425 then
-					DrawInfo(v:GetPos(), v:GetPrintName(), Color(255,255,255))
+				if v:GetPos():Distance(LocalPlayer():GetPos()) < 400 then
+					local pos = v:GetPos():ToScreen()
+					local npos = v:GetPos()
+					npos.x = npos.x - 25
+					DrawInfo(npos, v:GetPrintName(), Color(255,255,255))
+					surface.DrawCircle( pos.x, pos.y, 3, Color( 0, 255, 0, 255 ) )
 				end
 			end
+		end
+		if #self.warnings > 0 then
+			draw.Text( {
+				text = self.Lang.items,
+				pos = { ScrW() * 0.8, ScrH() * 0.4 - 25 },
+				font = "173font",
+				color = Color(150,0,150),
+				xalign = TEXT_ALIGN_CENTER,
+				yalign = TEXT_ALIGN_CENTER,
+			})
 		end
 		for i,v in ipairs(self.warnings) do
 			draw.Text( {
 				text = v,
-				pos = { ScrW() / 2, ScrH() / 2 - ((i * -25) - 125) },
+				pos = { ScrW() * 0.9, ScrH() * 0.4 + i * 25 },
+				font = "173font",
+				color = Color(200,0,100),
+				xalign = TEXT_ALIGN_RIGHT,
+				yalign = TEXT_ALIGN_CENTER,
+			})
+		end
+		if #self.scps > 0 then
+			draw.Text( {
+				text = "SCP:",
+				pos = { ScrW() * 0.5, ScrH() * 0.045 },
 				font = "173font",
 				color = Color(255,0,0),
 				xalign = TEXT_ALIGN_CENTER,
 				yalign = TEXT_ALIGN_CENTER,
 			})
 		end
+		for i, v in ipairs( self.scps ) do
+			if IsValid( v ) then
+				draw.Text( {
+					text = v:GetNClass(),
+					pos = { ScrW() * 0.5, ScrH() * 0.05 + i * 25 },
+					font = "173font",
+					color = Color(255,0,0),
+					xalign = TEXT_ALIGN_CENTER,
+					yalign = TEXT_ALIGN_CENTER,
+				})
+				--surface.DrawRect( v:GetPos():ToScreen().x - 10, v:GetPos():ToScreen().y - 10, 20, 20 )
+				--local dist = self.Owner:GetPos():Distance( v:GetPos() )
+				local dist = distance( self.Owner:GetPos():ToScreen(), v:GetPos():ToScreen() )
+				local r = math.ceil( dist / 100 ) * 100
+				for i = 0, 3 do
+					surface.DrawCircle( w * 0.5, h * 0.5, r - i, Color( 255, 255, 255, 255 ) )
+				end
+			end
+		end
 	end
 end
 
-
-
+function distance( coords1, coords2 )
+	local dx, dy = coords1.x - coords2.x, coords1.y - coords2.y
+	local dist = math.sqrt( math.pow( dx, 2 ) + math.pow( dy, 2 ), 2 )
+	return dist
+end

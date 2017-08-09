@@ -265,6 +265,7 @@ lang.SNAV_ULT = {
 	ddetect = "Class D detected",
 	unkdetect = "Humanoid form detected",
 	detect = "detected",
+	items = "Detected items:"
 }
 
 lang.KEYCARD_1 = {

@@ -86,6 +86,7 @@ function RoundTypeUpdate()
 end
 
 function RoundRestart()
+	--print( debug.traceback() )  
 	print("round: starting")
 	CleanUp()
 	print("round: map cleaned")
@@ -410,6 +411,7 @@ function WinCheck()
 		activeRound:postround()	
 		GiveExp()
 		endround = false
+		--print( debug.traceback() )  
 		timer.Create("PostTime", GetPostTime(), 1, function()
 			RoundRestart()
 		end)

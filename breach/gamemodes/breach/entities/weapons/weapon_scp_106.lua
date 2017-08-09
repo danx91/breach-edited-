@@ -83,11 +83,14 @@ function SWEP:PrimaryAttack()
 				if ent:GTeam() == TEAM_SPEC then return end
 				if ent.Using714 then return end
 				local pos = GetPocketPos()
+				local ang = ent:GetAngles()
+				ang.yaw = math.random( -180, 180 )
 				if pos then
 					roundstats.teleported = roundstats.teleported + 1
 					self.Owner:SetHealth(self.Owner:Health() + 100)
-					ent:TakeDamage( 30, self.Owner, self.Owner )
+					ent:TakeDamage( math.random( 20, 40 ), self.Owner, self.Owner )
 					ent:SetPos(pos)
+					ent:SetAngles( ang )
 					self.Owner:AddExp(75, true)
 				end
 			else

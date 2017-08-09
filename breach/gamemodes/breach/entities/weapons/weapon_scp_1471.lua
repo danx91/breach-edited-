@@ -162,9 +162,7 @@ function SWEP:SecondaryAttack()
 					local dmd = dist:GetNormalized()
 					ent:SendLua( "CamEnable = true" )
 					ent:SendLua( "dir = Vector( "..dmd.x..", "..dmd.y..", "..dmd.z.." )" )
-					print( "sent" )
 					--self.Owner:SendLua( "CamEnable = true" )
-					--print( "dir = Vector("..dmd.x..", "..dmd.y..", "..dmd.z.." )" )
 					--self.Owner:SendLua( "dir = Vector( "..dmd.x..", "..dmd.y..", "..dmd.z.." )" )
 				--end
 			end

@@ -32,7 +32,7 @@ function ENT:Use(ply)
 	end
 	if SERVER then
 		ply:ApplyArmor(self.ArmorType)
-		self:EmitSound( Sound("npc/combine_soldier/zipline_clothing".. math.random(1, 2).. ".wav") )
+		self:EmitSound( Sound("npc/combine_soldier/gear".. math.random(1, 6).. ".wav") )
 		self:Remove()
 	end
 	if CLIENT then

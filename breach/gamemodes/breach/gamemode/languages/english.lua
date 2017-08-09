@@ -32,6 +32,7 @@ english.punish = "PUNISH"
 english.forgive = "FORGIVE"
 english.voteresult = "Voting result against %s is... %s"
 english.votes = "From %s players %s voted for punish and %s for forgive"
+english.votecancel = "Last punish vote was canceled by admin"
 
 english.starttexts = {
 	ROLE_SCP173 = {

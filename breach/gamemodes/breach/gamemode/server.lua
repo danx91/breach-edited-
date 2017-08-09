@@ -31,6 +31,13 @@ util.AddNetworkString("AdminMode")
 util.AddNetworkString("ShowText")
 util.AddNetworkString("PlayerReady")
 util.AddNetworkString("RecheckPremium")
+util.AddNetworkString("CancelPunish")
+
+net.Receive( "CancelPunish", function( len, ply )
+	if ply:IsSuperAdmin() then
+		CancelVote()
+	end
+end )
 
 net.Receive( "PlayerReady", function( len, ply )
 	ply:SetActive( true )
@@ -495,16 +502,33 @@ function EndPunishVote()
 		net.WriteTable( result )
 	net.Broadcast()
 	if votepunish > voteforgive then
-		timer.Simple( 1, function()
-			for k,v in pairs( player.GetAll() ) do
-				if v:SteamID64() == activesuspect then
+		for k,v in pairs( player.GetAll() ) do
+			if v:SteamID64() == activesuspect then
+				if v.warn then
 					v:Kill()
-					break
+				else
+					v.warn = true
 				end
+				break
 			end
-		end )
+		end
 	end
 	suspectname = ""
 	activesuspect = nil
 	activevictim = nil
+end
+
+function CancelVote()
+	timer.Destroy( "PunishEnd" )
+	net.Start( "ShowText" )
+		net.WriteString( "text_punish_cancel" )
+	net.Broadcast()
+	activevote = false
+	suspectname = ""
+	activesuspect = nil
+	activevictim = nil
+	votepunish = 0
+	voteforgive = 0
+	specpunish = 0
+	specforgive = 0
 end

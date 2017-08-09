@@ -116,7 +116,7 @@ function mply:ApplyArmor(name)
 	elseif name == "armor_hazmat" then
 		self:SetModel("models/scp/soldier_4.mdl")
 		stats = 0.93
-	elseif name == "armor_electroprooft" then
+	elseif name == "armor_electroproof" then
 		self:SetModel("models/scp/soldier_2.mdl")
 		stats = 0.8
 	elseif name == "armor_csecurity" then
@@ -762,7 +762,9 @@ function mply:SetSCP0082( hp, speed, spawn )
 	self.Active = true
 	print("adding " .. self:Nick() .. " to zombies")
 	self:SetupHands()
-	WinCheck()
+	if !spawn then
+		WinCheck()
+	end
 	self.canblink = false
 	self.noragdoll = false
 	self:AllowFlashlight( false )
@@ -1192,17 +1194,27 @@ function mply:ChangeSpecMode()
 	*/
 	
 	if m == OBS_MODE_IN_EYE then
-		self:Spectate(OBS_MODE_CHASE)
-		self:SpectatePlayerLeft()
+		self:Spectate(OBS_MODE_CHASE)	
 	elseif m == OBS_MODE_CHASE then
-		self:Spectate(OBS_MODE_ROAMING)
+		if GetConVar( "br_allow_roaming_spectate" ):GetInt() == 1 then
+			self:Spectate(OBS_MODE_ROAMING)
+		elseif GetConVar( "br_allow_ineye_spectate" ):GetInt() == 1 then
+			self:Spectate(OBS_MODE_IN_EYE)
+			self:SpectatePlayerLeft()
+		else
+			self:SpectatePlayerLeft()
+		end	
 	elseif m == OBS_MODE_ROAMING then
-		self:Spectate(OBS_MODE_CHASE)
-		self:SpectatePlayerLeft()
+		if GetConVar( "br_allow_ineye_spectate" ):GetInt() == 1 then
+			self:Spectate(OBS_MODE_IN_EYE)
+			self:SpectatePlayerLeft()
+		else
+			self:Spectate(OBS_MODE_CHASE)
+			self:SpectatePlayerLeft()
+		end
 	else
 		self:Spectate(OBS_MODE_ROAMING)
 	end
-	
 end
 
 function mply:SaveExp()
@@ -1340,9 +1352,9 @@ function mply:ToogleAdminMode()
 	if self.AdminMode == nil then self.AdminMode = false end
 	if self.AdminMode == true then
 		self.AdminMode = false
-		self.SetActive( true )
+		self:SetActive( true )
 	else
 		self.AdminMode = true
-		self.SetActive( false )
+		self:SetActive( false )
 	end
 end

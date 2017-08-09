@@ -22,6 +22,9 @@ function SetupInfect( ply )
 	spawns = table.Copy( SPAWN_CLASSD )
 	ply, spawn = nil, nil
 	for i = 1, roles[2] do
+		if #spawns < 1 then
+			spawns = table.Copy( SPAWN_CLASSD )
+		end
 		ply = table.remove( players, math.random( 1, #players ) )
 		spawn = table.remove( spawns, math.random( 1, #spawns ) )
 		ply:SetInfectMTF()
@@ -29,6 +32,9 @@ function SetupInfect( ply )
 	end
 	ply, spawn = nil, nil
 	for i = 1, roles[3] do
+		if #spawns < 1 then
+			spawns = table.Copy( SPAWN_CLASSD )
+		end
 		ply = table.remove( players, math.random( 1, #players ) )
 		spawn = table.remove( spawns, math.random( 1, #spawns ) )
 		ply:SetInfectD()
