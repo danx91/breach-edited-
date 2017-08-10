@@ -160,9 +160,23 @@ postround = false
 roundcount = 0
 MAPBUTTONS = table.Copy(BUTTONS)
 
-function GM:PlayerSpray( sprayer )
-	return (sprayer:GTeam() == TEAM_SPEC)
+local pos1 = Vector( 1492.638062, 3762.967285, 481.975006 )
+local pos2 = Vector( 4352.205566, 5390.020020, 982.629272 )
+
+OrderVectors( pos1, pos2 )
+
+function GM:PlayerSpray( ply )
+	if ply:GTeam() == TEAM_SPEC then
+		return true
+	end
+	if ply:GetPos():WithinAABox( pos1, pos2 ) then
+		ply:PrintMessage( HUD_PRINTCENTER, "You cant spray in the Pocket Dimension" )
+		return true
+	end
 end
+ 
+hook.Add( "PlayerSpray", "DisableSprayInPD", function( ply )
+end)
 
 function GetActivePlayers()
 	local tab = {}

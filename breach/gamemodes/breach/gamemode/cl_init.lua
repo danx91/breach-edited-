@@ -420,8 +420,6 @@ hook.Add( "OnPlayerChat", "CheckChatFunctions", function( ply, strText, bTeam, b
 	end
 end)
 
-hook.Add( "PlayerSpray", function( ply ) return false end )
-
 // Blinking system
 
 local brightness = 0
