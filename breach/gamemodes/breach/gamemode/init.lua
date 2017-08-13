@@ -160,16 +160,11 @@ postround = false
 roundcount = 0
 MAPBUTTONS = table.Copy(BUTTONS)
 
-local pos1 = Vector( 1492.638062, 3762.967285, 481.975006 )
-local pos2 = Vector( 4352.205566, 5390.020020, 982.629272 )
-
-OrderVectors( pos1, pos2 )
-
 function GM:PlayerSpray( ply )
 	if ply:GTeam() == TEAM_SPEC then
 		return true
 	end
-	if ply:GetPos():WithinAABox( pos1, pos2 ) then
+	if ply:GetPos():WithinAABox( POCKETD_MINS, POCKETD_MAXS ) then
 		ply:PrintMessage( HUD_PRINTCENTER, "You cant spray in the Pocket Dimension" )
 		return true
 	end
@@ -335,12 +330,36 @@ function Kanade()
 	end
 end
 
+function UseAll()
+	for k, v in pairs( FORCE_USE ) do
+		local enttab = ents.FindInSphere( v, 3 )
+		for _, ent in pairs( enttab ) do
+			if ent:GetPos() == v then
+				ent:Fire( "Use" )
+				break
+			end
+		end
+	end
+end
+
+function DestroyAll()
+	for k, v in pairs( FORCE_DESTROY ) do
+		local enttab = ents.FindInSphere( v, 1 )
+		for _, ent in pairs( enttab ) do
+			if ent:GetPos() == v then
+				ent:Remove()
+				break
+			end
+		end
+	end
+end
+
 function SpawnAllItems()
 	for k,v in pairs(SPAWN_FIREPROOFARMOR) do
 		local vest = ents.Create( "armor_fireproof" )
 		if IsValid( vest ) then
 			vest:Spawn()
-			vest:SetPos( v + Vector(0,0,-5) )
+			vest:SetPos( v )
 			WakeEntity(vest)
 		end
 	end
@@ -349,7 +368,7 @@ function SpawnAllItems()
 		local vest = ents.Create( "armor_mtfguard" )
 		if IsValid( vest ) then
 			vest:Spawn()
-			vest:SetPos( v + Vector(0,0,-15) )
+			vest:SetPos( v )
 			WakeEntity(vest)
 		end
 	end
@@ -358,7 +377,7 @@ function SpawnAllItems()
 		local vest = ents.Create( "armor_electroproof" )
 		if IsValid( vest ) then
 			vest:Spawn()
-			vest:SetPos( v + Vector(0,0,-5) )
+			vest:SetPos( v )
 			WakeEntity( vest )
 		end
 	end
@@ -375,7 +394,7 @@ function SpawnAllItems()
 		if IsValid( wep ) then
 			wep:recalculateDamage()
 			wep:Spawn()
-			wep:SetPos( v + Vector(0,0,-25) )
+			wep:SetPos( v )
 			WakeEntity(wep)
 		end
 	end
@@ -395,7 +414,7 @@ function SpawnAllItems()
 		if IsValid( wep ) then
 			wep:recalculateDamage()
 			wep:Spawn()
-			wep:SetPos( v + Vector(0,0,-25) )
+			wep:SetPos( v )
 			WakeEntity(wep)
 		end
 	end
@@ -418,7 +437,7 @@ function SpawnAllItems()
 		if IsValid( wep ) then
 			wep:recalculateDamage()
 			wep:Spawn()
-			wep:SetPos( v + Vector(0,0,-25) )
+			wep:SetPos( v )
 			WakeEntity(wep)
 		end
 	end
@@ -430,7 +449,7 @@ function SpawnAllItems()
 			wep.DamageMult = 1
 			wep:recalculateDamage()
 			wep:Spawn()
-			wep:SetPos( v + Vector(0,0,-25) )
+			wep:SetPos( v )
 			WakeEntity(wep)
 		end
 	end
@@ -447,7 +466,7 @@ function SpawnAllItems()
 		if IsValid( wep ) then
 			wep:recalculateDamage()
 			wep:Spawn()
-			wep:SetPos( v + Vector(0,0,-25) )
+			wep:SetPos( v )
 			WakeEntity(wep)
 		end
 	end
@@ -457,7 +476,7 @@ function SpawnAllItems()
 		if IsValid( wep ) then
 			wep.AmmoCapacity = 25
 			wep:Spawn()
-			wep:SetPos( v + Vector(0,0,-25) )
+			wep:SetPos( v )
 			WakeEntity(wep)
 		end
 	end
@@ -466,7 +485,7 @@ function SpawnAllItems()
 		local wep = ents.Create("cw_ammo_40mm")
 		if IsValid( wep ) then
 			wep:Spawn()
-			wep:SetPos( v + Vector(0,0,-25) )
+			wep:SetPos( v )
 			WakeEntity(wep)
 		end
 	end */
@@ -481,7 +500,7 @@ function SpawnAllItems()
 				car:SetModel("models/buggy.mdl")
 				car:SetKeyValue("vehiclescript","scripts/vehicles/jeep_test.txt")
 			end
-			car:SetPos(v + Vector(0,0,-25))
+			car:SetPos( v )
 			car:SetAngles( Angle(0, 90, 0) )
 			car:Spawn()
 			WakeEntity(car)
@@ -499,7 +518,7 @@ function SpawnAllItems()
 				car:SetModel("models/buggy.mdl")
 				car:SetKeyValue("vehiclescript","scripts/vehicles/jeep_test.txt")
 			end
-			car:SetPos(v + Vector(0,0,-25))
+			car:SetPos( v )
 			car:SetAngles( Angle(0, 270, 0) )
 			car:Spawn()
 			WakeEntity(car)
@@ -512,11 +531,15 @@ function SpawnAllItems()
 		item:Spawn()
 	end
 	
+	local pos500 = table.Copy( SPAWN_500 )
+	
 	for i = 1, 2 do
 		local item = ents.Create( "item_scp_500" )
 		if IsValid( item ) then
-			item:SetPos( table.Random( SPAWN_500 ) )
+			local pos = table.Random( pos500 )
+			item:SetPos( pos )
 			item:Spawn()
+			table.RemoveByValue( pos500, pos )
 		end
 	end
 	
@@ -958,7 +981,7 @@ end
 
 function destroyGate()
 	if isGateAOpen() then return end
-	local doorsEnts = ents.FindInSphere( POS_MIDDLE_GATE_A, 50 )
+	local doorsEnts = ents.FindInSphere( POS_MIDDLE_GATE_A, 125 )
 	for k, v in pairs( doorsEnts ) do
 		if v:GetClass() == "prop_dynamic" or v:GetClass() == "func_door" then
 			v:Remove()
@@ -967,7 +990,7 @@ function destroyGate()
 end
 
 function isGateAOpen()
-	local doors = ents.FindInSphere( POS_MIDDLE_GATE_A, 50 )
+	local doors = ents.FindInSphere( POS_MIDDLE_GATE_A, 125 )
 	for k, v in pairs( doors ) do
 		if v:GetClass() == "prop_dynamic" then 
 			if isInTable( v:GetPos(), POS_GATE_A_DOORS ) then return false end

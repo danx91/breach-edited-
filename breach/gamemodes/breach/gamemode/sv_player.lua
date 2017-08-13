@@ -148,7 +148,7 @@ function mply:SetSpectator()
 	self:Flashlight( false )
 	self:AllowFlashlight( false )
 	self.handsmodel = nil
-	self:Spectate(6)
+	self:Spectate( OBS_MODE_CHASE )
 	self:StripWeapons()
 	self:RemoveAllAmmo()
 	self:SetGTeam(TEAM_SPEC)

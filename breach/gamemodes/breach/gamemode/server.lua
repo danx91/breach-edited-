@@ -170,7 +170,7 @@ end
 --	RequestOpenGateA(ply)
 --end)
 
-net.Receive( "NTFRequest" , function( len )
+net.Receive( "NTFRequest" , function( len, ply )
 	if ply:IsSuperAdmin() then
 		SpawnNTFS()
 	end
