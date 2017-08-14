@@ -145,6 +145,7 @@ if !ConVarExists("br_force_showupdates") then CreateConVar("br_force_showupdates
 if !ConVarExists("br_allow_scptovoicechat") then CreateConVar("br_allow_scptovoicechat", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Can SCPs talk with humans?" ) end
 if !ConVarExists("br_ulx_premiumgroup_name") then CreateConVar("br_ulx_premiumgroup_name", "", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Name of ULX premium group" ) end
 if !ConVarExists("br_experimental_bulletdamage_system") then CreateConVar("br_experimental_bulletdamage_system", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Turn it off when you see any problem with bullets" ) end
+if !ConVarExists("br_experimental_antiknockback_force") then CreateConVar("br_experimental_antiknockback_force", "5", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Turn it off when you see any problem with bullets" ) end
 if !ConVarExists("br_allow_ineye_spectate") then CreateConVar("br_allow_ineye_spectate", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
 if !ConVarExists("br_allow_roaming_spectate") then CreateConVar("br_allow_roaming_spectate", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
 
@@ -195,18 +196,26 @@ function GetNTFEnterTime()
 end
 
 function GM:EntityFireBullets( ent, data )
-	if GetConVar( "br_experimental_bulletdamage_system" ):GetInt() == 0 then return false end
-	local damage = data.Damage
-	data.Damage = 0
-	data.Force = 0
-	data.Callback = function( ent, tr, info )
-		if !SERVER then return end
-		local vic = tr.Entity
-		if IsValid( vic ) then
-			vic:TakeDamage( damage, ent, ent )
+	if GetConVar( "br_experimental_bulletdamage_system" ):GetInt() != 0 then
+		local damage = data.Damage
+		data.Damage = 0
+		data.Callback = function( ent, tr, info )
+			if !SERVER then return end
+			local vic = tr.Entity
+			if IsValid( vic ) then
+				info:SetDamage( damage )
+				gamemode.Call( "ScalePlayerDamage", vic, nil, info )
+				local scaleddamge = info:GetDamage()
+				local force = info:GetDamageForce():GetNormalized()
+				local antiforce = GetConVar( "br_experimental_antiknockback_force" ):GetInt() * -1
+				info:SetDamage( 0 )
+				info:SetDamageForce( Vector( 0 ) )
+				vic:TakeDamage( scaleddamge, ent, ent )
+				vic:SetVelocity( force * scaleddamge * antiforce )
+			end
 		end
+		return true
 	end
-	return true
 end
 
 function GM:PlayerFootstep( ply, pos, foot, sound, volume, rf )
@@ -314,7 +323,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 						end
 					end
 				end
-				if postround == false then
+				if postround == false and at.GTeam and ply.GTeam then
 					if at:GTeam() == TEAM_GUARD then
 						if ply:GTeam() == TEAM_GUARD then 
 							rdm = true
