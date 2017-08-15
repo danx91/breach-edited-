@@ -4,8 +4,8 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
-VERSION = "0.21"
-DATE = "13/08/2017"
+VERSION = "0.22"
+DATE = "15/08/2017"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
@@ -237,12 +237,39 @@ function GM:PlayerFootstep( ply, pos, foot, sound, volume, rf )
 	return false
 end
 
-/*
 function GM:ShouldCollide( ent1, ent2 )
-	if ( IsValid( ent1 ) and IsValid( ent2 ) and ent1:IsPlayer() and ent2:IsPlayer() ) then return false end
+	local ply = ent1:IsPlayer() and ent1 or ent2:IsPlayer() and ent2
+	local ent
+	if ply then
+		if ent1 == ply then
+			ent = ent2
+		else
+			ent = ent1
+		end
+	end
+	if ent and ent:GetClass() == "func_door" or ent:GetClass() == "prop_dynamic" then
+		if ent:GetClass() == "prop_dynamic" then
+			local ennt = ents.FindInSphere( ent:GetPos(), 5 )
+			local neardors = false
+			for k, v in pairs( ennt ) do
+				if v:GetClass() == "func_door" then
+					neardors = true
+					break
+				end
+			end
+			if !neardors then return true end
+		end
+		if ply:GetNClass() == ROLES.ROLE_SCP106 then
+			for k, v in pairs( DOOR_RESTRICT106 ) do
+				if ent:GetPos():Distance( v ) < 100 then
+					return true
+				end
+			end
+			return false
+		end
+	end
 	return true
 end
-*/
 
 /*
 function GM:PlayerShouldTakeDamage( ply, attacker ) 

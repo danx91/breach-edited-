@@ -110,8 +110,8 @@ function RoundRestart()
 	activeRound = nil
 	if #GetActivePlayers() < MINPLAYERS then WinCheck() end
 	RoundTypeUpdate()
-	activeRound:setup()
 	SetupAdmins( player.GetAll() )
+	activeRound:setup()
 	print( "round: setup end" )	
 	net.Start("UpdateRoundType")
 		net.WriteString(activeRound.name)

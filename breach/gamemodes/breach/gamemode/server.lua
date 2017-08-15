@@ -69,7 +69,7 @@ end)
 
 net.Receive( "AdminMode", function( len, ply )
 	if ply:IsSuperAdmin() then
-		ply:ToogleAdminMode()
+		ply:ToggleAdminModePref()
 	end
 end)
 
@@ -430,9 +430,13 @@ end
 
 function SetupAdmins( players )
 	for k, v in pairs( players ) do
-		if v:IsSuperAdmin() and v.ActivePlayer == false and v.AdminMode then
+		if v.admpref then
+			if !v.AdminMode then
+				v:ToggleAdminMode()
+			end
 			v:SetupAdmin()
-			--v:SetPos()
+		elseif v.AdminMode then
+			v:ToggleAdminMode()
 		end
 	end
 end

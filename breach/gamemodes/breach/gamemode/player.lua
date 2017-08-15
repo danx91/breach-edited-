@@ -539,7 +539,8 @@ function GM:AllowPlayerPickup( ply, ent )
 end
 // usesounds = true,
 function GM:PlayerUse( ply, ent )
-	if ply:GTeam() == TEAM_SPEC then return false end
+	if ply:GTeam() == TEAM_SPEC and ply:GetNClass() != ROLES.ADMIN then return false end
+	if ply:GetNClass() == ROLES.ADMIN then return true end
 	if ply.lastuse == nil then ply.lastuse = 0 end
 	if ply.lastuse > CurTime() then return end
 	for k,v in pairs(MAPBUTTONS) do

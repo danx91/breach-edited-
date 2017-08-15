@@ -33,6 +33,10 @@ SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.NextAttackW			= 0
 
+function SWEP:OnRemove()
+	self.Owner:SetCustomCollisionCheck( false )
+end
+
 function SWEP:Deploy()
 	self.Owner:DrawViewModel( false )
 end

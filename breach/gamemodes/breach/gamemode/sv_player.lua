@@ -213,9 +213,9 @@ function mply:SetSCP106()
 	self:SetHealth(2250)
 	self:SetMaxHealth(2250)
 	self:SetArmor(0)
-	self:SetWalkSpeed(175)
-	self:SetRunSpeed(175)
-	self:SetMaxSpeed(175)
+	self:SetWalkSpeed(160)
+	self:SetRunSpeed(160)
+	self:SetMaxSpeed(160)
 	self:SetJumpPower(200)
 	self:SetNoDraw(false)
 	self.Active = true
@@ -229,6 +229,7 @@ function mply:SetSCP106()
 	self:SelectWeapon("weapon_scp_106")
 	self.BaseStats = nil
 	self.UsingArmor = nil
+	self:SetCustomCollisionCheck( true )
 end
 
 function mply:SetSCP066()
@@ -941,7 +942,7 @@ end
 
 function mply:SetupAdmin()
 	self:Flashlight( false )
-	self:AllowFlashlight( false )
+	self:AllowFlashlight( true )
 	self.handsmodel = nil
 	self:UnSpectate()
 	//self:Spectate(6)
@@ -1348,13 +1349,32 @@ function mply:SetActive( active )
 	end
 end
 
-function mply:ToogleAdminMode()
+function mply:ToggleAdminModePref()
+	if self.admpref == nil then self.admpref = false end
+	if self.admpref then
+		self.admpref = false
+		if self.AdminMode then
+			self:ToggleAdminMode()
+			self:SetSpectator()
+		end
+	else
+		self.admpref = true
+		if self:GetNClass() == ROLES.ROLE_SPEC then
+			self:ToggleAdminMode()
+			self:SetupAdmin()
+		end
+	end
+end
+
+function mply:ToggleAdminMode()
 	if self.AdminMode == nil then self.AdminMode = false end
 	if self.AdminMode == true then
 		self.AdminMode = false
 		self:SetActive( true )
+		self:DrawWorldModel( true ) 
 	else
 		self.AdminMode = true
 		self:SetActive( false )
+		self:DrawWorldModel( false ) 
 	end
 end

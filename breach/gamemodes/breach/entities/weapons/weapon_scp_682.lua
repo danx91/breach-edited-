@@ -58,6 +58,10 @@ function SWEP:Holster()
 	return true
 end
 
+function SWEP:OnRemove()
+	self.Owner:SetModelScale( 1 )
+end
+
 function SWEP:HUDShouldDraw( element )
 	local hide = {
 		CHudAmmo = true,

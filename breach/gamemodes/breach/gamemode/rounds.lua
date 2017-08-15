@@ -14,7 +14,7 @@ ROUNDS = {
 			timer.Create("MTFDebug", 2, 1, function()
 				local fent = ents.FindInSphere(MTF_DEBUG, 750)
 				for k, v in pairs( player.GetAll() ) do
-					if v:GTeam() == TEAM_GUARD then
+					if v:GTeam() == TEAM_GUARD or v:GTeam() == TEAM_CHAOS then
 						local found = false
 						for k0, v0 in pairs(fent) do
 							if v == v0 then
@@ -154,7 +154,7 @@ ROUNDS = {
 			timer.Create("MTFDebug", 2, 1, function()
 				local fent = ents.FindInSphere(MTF_DEBUG, 750)
 				for k, v in pairs( player.GetAll() ) do
-					if v:GTeam() == TEAM_GUARD then
+					if v:GTeam() == TEAM_GUARD or v:GTeam() == TEAM_CHAOS then
 						local found = false
 						for k0, v0 in pairs(fent) do
 							if v == v0 then

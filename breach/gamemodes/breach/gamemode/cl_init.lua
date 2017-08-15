@@ -11,6 +11,7 @@ include( "cl_sounds.lua" )
 include( "cl_targetid.lua" )
 include( "cl_headbob.lua" )
 include( "cl_font.lua" )
+include( "ulx.lua" )
 								  
 surface.CreateFont( "173font", {
 	font = "TargetID",
@@ -272,7 +273,9 @@ drawinfodelete = 0
 shoulddrawinfo = false
 drawendmsg = nil
 timefromround = 0
-
+--------------------------------------------------------------------
+--You are NOT allowed to remove, modify or omit parts of code marked as credits!
+--Removing/editing any credit code will be recognized as copyright infringement!
 -----------------------------CREDITS--------------------------------
 
 timer.Create( "Credits", 180, 0, function() 

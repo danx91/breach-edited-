@@ -5,7 +5,10 @@ if not Frame then
 end
 
 surface.CreateFont("sb_names", {font = "Trebuchet18", size = 14, weight = 700})
-
+--------------------------------------------------------------------
+--You are NOT allowed to remove, modify or omit parts of code marked as credits!
+--Removing/editing any credit code will be recognized as copyright infringement!
+-----------------------------CREDITS--------------------------------
 helpers = {
 
 }
@@ -17,7 +20,6 @@ originators = {
 	"76561198108330803",
 	"76561198337913733",
 }
-
 ranks = {
 	author = {
 		color = Color(70, 50, 220, 255),
@@ -64,7 +66,7 @@ ranks = {
 		sorting = 3
 	},
 }
-
+--------------------------------------------------------------------
 function RanksEnabled()
 	return GetConVar("br_scoreboardranks"):GetBool()
 end

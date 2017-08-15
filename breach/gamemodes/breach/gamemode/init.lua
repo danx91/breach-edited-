@@ -43,6 +43,7 @@ AddCSLuaFile( "cl_classmenu.lua" )
 AddCSLuaFile( "cl_headbob.lua" )
 AddCSLuaFile( "cl_splash.lua" )
 AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "ulx.lua" )
 include( "server.lua" )
 include( "rounds.lua" )
 include( "class_breach.lua" )
@@ -55,6 +56,7 @@ include( "player.lua" )
 include( "sv_round.lua" )
 include( "gteams.lua" )
 include( "sv_func.lua" )
+include( "ulx.lua" )
 
 resource.AddFile( "sound/radio/chatter1.ogg" )
 resource.AddFile( "sound/radio/chatter2.ogg" )
@@ -154,7 +156,7 @@ SPCS = {
 --	end} }
 	
 // Variables
-gamestarted = false
+gamestarted = gamestarted or false
 preparing = false
 postround = false
 roundcount = 0

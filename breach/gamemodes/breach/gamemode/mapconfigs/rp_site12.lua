@@ -580,6 +580,11 @@ BUTTONS = {
 		name = "Maintenance Tunnel", 
 		pos = Vector(-1095.00, 4137.00, 53.00),
 		clevel = 3
+	},
+	{
+		name = "SCP 079", 
+		pos = Vector(2149.09, 6687.00, -74.31),
+		canactivate = function( ply, ent ) return false end
 	}
 }
 
@@ -642,4 +647,15 @@ FORCE_DESTROY = {
 	Vector(-1504.00, 6517.00, 80.00), 
 	Vector(-1504.00, 6690.00, 82.00), 
 	Vector(-1504.00, 6667.00, 80.00), 
+}
+
+DOOR_RESTRICT106 = {
+	 Vector( 2880.00, 4779.50, 55.50 ),
+	 Vector( -1095.00, 4140.50, 55.50 ),
+	 Vector( -484.00, 5476.00, 50.00 ),
+	 Vector( -412.00, 5476.00, 50.00 ),
+	 Vector( -484.00, 6020.00, 50.00 ),
+	 Vector( -412.00, 6020.00, 50.00 ),
+	 Vector( -2208.00, 6494.00, 82.00 ),
+	 Vector( -2208.00, 6667.00, 80.00 ),
 }

@@ -61,6 +61,10 @@ function SWEP:Holster()
 	return true;
 end
 
+function SWEP:OnRemove()
+	self.Owner:SetModelScale( 1 )
+end
+
 SWEP.Freeze = false
 
 function SWEP:Think()
