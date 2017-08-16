@@ -964,6 +964,7 @@ function mply:SetupAdmin()
 	self:SetMaxSpeed(300)
 	self:ConCommand( "noclip" )
 	self:Give( "br_holster" )
+	self:Give( "br_entity_remover" )
 	self:Give( "weapon_physgun" )
 end
 

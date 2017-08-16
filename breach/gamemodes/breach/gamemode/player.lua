@@ -525,6 +525,7 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 			if wep:GetClass() == "br_holster" then return true end
 			if wep:GetClass() == "weapon_physgun" then return true end
 			if wep:GetClass() == "gmod_tool" then return true end
+			if wep:GetClass() == "br_entity_remover" then return true end
 		end
 		return false
 	end

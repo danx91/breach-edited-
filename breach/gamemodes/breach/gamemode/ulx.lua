@@ -3,6 +3,18 @@ if !ulx or !ULib then
 	return
 end
 
+local class_names = {}
+for _, group in pairs( ALLCLASSES ) do
+	for k, class in pairs( group.roles ) do
+		table.insert( class_names, class.name )
+	end
+end
+
+local scp_names = {}
+for _, scp in pairs( SPCS ) do
+	table.insert( scp_names, scp.name )
+end
+
 function ulx.forcespawn( ply, plys, class )
 	if !class then return end
 	local cl, gr
@@ -44,7 +56,7 @@ end
 
 local forcespawn = ulx.command( "Breach Admin", "ulx force_spawn", ulx.forcespawn, "!forcespawn" )
 forcespawn:addParam{ type = ULib.cmds.PlayersArg }
-forcespawn:addParam{ type = ULib.cmds.StringArg, hint = "class name", ULib.cmds.takeRestOfLine }
+forcespawn:addParam{ type = ULib.cmds.StringArg, hint = "class name", completes = class_names, ULib.cmds.takeRestOfLine }
 forcespawn:defaultAccess( ULib.ACCESS_SUPERADMIN )
 forcespawn:help( "Sets player(s) to specific class and spawns him" )
 
@@ -65,7 +77,7 @@ end
 
 local forcescp = ulx.command( "Breach Admin", "ulx force_scp", ulx.forcescp, "!forcescp" )
 forcescp:addParam{ type = ULib.cmds.PlayerArg }
-forcescp:addParam{ type = ULib.cmds.StringArg, hint = "SCP name", ULib.cmds.takeRestOfLine }
+forcescp:addParam{ type = ULib.cmds.StringArg, hint = "SCP name", completes = scp_names, ULib.cmds.takeRestOfLine }
 forcescp:defaultAccess( ULib.ACCESS_SUPERADMIN )
 forcescp:help( "Sets player to specific SCP and spawns him" )
 
@@ -135,4 +147,4 @@ end
 
 local adminmode = ulx.command( "Breach Admin", "ulx admin_mode", ulx.adminmode, "!adminmode" )
 adminmode:defaultAccess( ULib.ACCESS_ADMIN )
-adminmode:help( "Restarts game" )
+adminmode:help( "Toggles admin mode" )

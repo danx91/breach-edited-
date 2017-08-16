@@ -46,6 +46,77 @@ function GetLangRole(rl)
 	end
 end
 
+SPCS = {
+	{name = "SCP 173",
+	func = function(pl)
+		pl:SetSCP173()
+	end},
+	{name = "SCP 096",
+	func = function(pl)
+		pl:SetSCP096()
+	end},
+	{name = "SCP 049",
+	func = function(pl)
+		pl:SetSCP049()
+	end},
+	{name = "SCP 066",
+	func = function(pl)
+		pl:SetSCP066()
+	end},
+	{name = "SCP 106",
+	func = function(pl)
+		pl:SetSCP106()
+	end},
+	{name = "SCP 457",
+	func = function(pl)
+		pl:SetSCP457()
+	end},
+	{name = "SCP 966",
+	func = function(pl)
+		pl:SetSCP966()
+	end},
+	{name = "SCP 682",
+	func = function(pl)
+		pl:SetSCP682()
+	end},
+	{name = "SCP 999",
+	func = function(pl)
+		pl:SetSCP999()
+	end},
+	{name = "SCP 689",
+	func = function(pl)
+		pl:SetSCP689()
+	end},
+	{name = "SCP 939",
+	func = function(pl)
+		pl:SetSCP939()
+	end},
+	{name = "SCP 082",
+	func = function(pl)
+		pl:SetSCP082()
+	end},
+	{name = "SCP 023",
+	func = function(pl)
+		pl:SetSCP023()
+	end},
+	{name = "SCP 1471-A",
+	func = function(pl)
+		pl:SetSCP1471()
+	end},
+	{name = "SCP 1048-A",
+	func = function(pl)
+		pl:SetSCP1048A()
+	end},
+	{name = "SCP 1048-B",
+	func = function(pl)
+		pl:SetSCP1048B()
+	end},
+	{name = "SCP 860-2",
+	func = function(pl)
+		pl:SetSCP8602()
+	end}
+}
+
 ROLES = {}
 
 ROLES.ADMIN = "ADMIN MODE"
