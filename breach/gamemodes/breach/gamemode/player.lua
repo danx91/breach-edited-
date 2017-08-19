@@ -278,7 +278,6 @@ end
 function GM:PlayerDisconnected( ply )
 	 ply:SetTeam(TEAM_SPEC)
 	 if #player.GetAll() < MINPLAYERS then
-		Print( "RESETEFGRTHYUJRHE" )
 		BroadcastLua('gamestarted = false')
 		gamestarted = false
 	 end

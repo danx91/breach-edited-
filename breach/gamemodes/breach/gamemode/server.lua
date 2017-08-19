@@ -322,108 +322,86 @@ function SetupPlayers(pltab)
 	
 	// Security
 	local security = ALLCLASSES["security"]["roles"]
-	local snum = pltab[2]
 	local securityspawns = table.Copy(SPAWN_GUARD)
 	
-	local i4 = math.floor(snum / GetConVar("br_i4_min_mtf"):GetInt())
-	
-	local i4roles = {}
-	local i4players = {}
-	local i3roles = {}
-	local i3players = {}
-	local i2roles = {}
-	local i2players = {}
-	for k,v in pairs(security) do
-		if v.importancelevel == 4 then
-			table.ForceInsert(i4roles, v)
-		elseif v.importancelevel == 3 then
-			table.ForceInsert(i3roles, v)
-		elseif v.importancelevel == 2 then
-			table.ForceInsert(i2roles, v)
+	local i4inuse = false
+	for i = 1, pltab[2] do
+		if #securityspawns < 1 then
+			securityspawns = table.Copy(SPAWN_GUARD)
 		end
-	end
-	
-	for _,pl in pairs(allply) do
-		for k,v in pairs(security) do
-			if v.importancelevel > 1 then
+		if #securityspawns > 0 then
+			local pl = table.remove( allply, math.random( #allply ) )
+			if !IsValid( pl ) then return end
+			local spawn = table.remove( securityspawns, math.random( #allply ) )
+			local thebestone
+			for k, v in pairs( ALLCLASSES["security"]["roles"] ) do
+				local useci = math.random( 1, 6 )
 				local can = true
 				if v.customcheck != nil then
-					if v.customcheck(pl) == false then
+					if !v.customcheck( self ) then
 						can = false
 					end
 				end
-				if can == true then
+				local using = 0
+				for _, pl in pairs( player.GetAll() ) do
+					if pl:GetNClass() == v.name then
+						using = using + 1
+					end
+				end
+				if using >= v.max then
+					can = false
+				end
+				if v.importancelevel == 4 and ( i < GetConVar( "br_i4_min_mtf" ):GetInt() or i4inuse ) then
+					can = false
+				end
+				if can then
 					if pl:GetLevel() >= v.level then
-						if v.importancelevel == 2 then
-							table.ForceInsert(i2players, pl)
-						elseif v.importancelevel == 3 then
-							table.ForceInsert(i3players, pl)
+						if thebestone != nil then
+							if thebestone.sorting < v.sorting then
+								thebestone = v
+							end
 						else
-							table.ForceInsert(i4players, pl)
+							thebestone = v
+						end
+					else
+						can = false
+					end
+				end
+			end
+			if !thebestone then
+				thebestone = ALLCLASSES["security"]["roles"][1]
+			end
+			if thebestone.name == ROLES.ROLE_MTFGUARD then
+				if math.random( 1, 4 ) == 4 then
+					for _, role in pairs( ALLCLASSES["security"]["roles"] ) do
+						if role.name == ROLES.ROLE_CHAOSSPY then
+							thebestone = role
+							break
 						end
 					end
 				end
 			end
-		end
-	end
-	
-	if i4 >= 1 then
-		if #i4roles > 0 and #i4players > 0 then
-			local pl = table.Random(i4players)
-			local spawn = table.Random(securityspawns)
+			if useci == 6 then
+				local fakeci = math.random( 1, 3 ) == 1
+				for _, role in pairs( ALLCLASSES["security"]["roles"] ) do
+					local tofind = ROLES.ROLE_CHAOSSPY
+					if fakeci then tofind = ROLES.ROLE_MTFGUARD end
+					if role.name == tofind then
+						thebestone = role
+						break
+					end
+				end
+			end
+			if thebestone.importancelevel == 4 then
+				i4inuse = true
+			end
 			pl:SetupNormal()
-			pl:ApplyRoleStats(table.Random(i4roles))
-			table.RemoveByValue(i4players, pl)
-			table.RemoveByValue(i3players, pl)
-			table.RemoveByValue(i2players, pl)
-			pl:SetPos(spawn)
-			print("assigning " .. pl:Nick() .. " to security i4")
-			table.RemoveByValue(securityspawns, spawn)
-			table.RemoveByValue(allply, pl)
+			pl:ApplyRoleStats( thebestone )
+			pl:SetPos( spawn )
+			print("assigning " .. pl:Nick() .. " to MTFs")
 		end
 	end
-
-	if #i3roles > 0 and #i3players > 0 then
-		local pl = table.Random(i3players)
-		local spawn = table.Random(securityspawns)
-		pl:SetupNormal()
-		pl:ApplyRoleStats(table.Random(i3roles))
-		table.RemoveByValue(i4players, pl)
-		table.RemoveByValue(i3players, pl)
-		table.RemoveByValue(i2players, pl)
-		pl:SetPos(spawn)
-		print("assigning " .. pl:Nick() .. " to security i3")
-		table.RemoveByValue(securityspawns, spawn)
-		table.RemoveByValue(allply, pl)
-	end
 	
-	if #i2roles > 0 and #i2players > 0 then
-		local pl = table.Random(i2players)
-		local spawn = table.Random(securityspawns)
-		pl:SetupNormal()
-		pl:ApplyRoleStats(table.Random(i2roles))
-		pl:SetPos(spawn)
-		table.RemoveByValue(i4players, pl)
-		table.RemoveByValue(i3players, pl)
-		table.RemoveByValue(i2players, pl)
-		print("assigning " .. pl:Nick() .. " to security i2")
-		table.RemoveByValue(securityspawns, spawn)
-		table.RemoveByValue(allply, pl)
-	end
-	
-	for k,v in pairs(allply) do
-		if #securityspawns < 1 then
-			securityspawns = table.Copy(SPAWN_GUARD2)
-		end
-		local spawn = table.Random(securityspawns)
-		v:SetupNormal()
-		v:SetSecurityI1()
-		v:SetPos(spawn)
-		print("assigning " .. v:Nick() .. " to security i1")
-		table.RemoveByValue(securityspawns, spawn)
-	end
-	
-
 	net.Start("RolesSelected")
 	net.Broadcast()
 end

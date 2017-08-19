@@ -1,3 +1,8 @@
+--------------------------------------------------------------------
+--You are NOT allowed to remove, modify or omit parts of code marked as credits!
+--Removing/editing any credit code will be recognized as copyright infringement!
+--------------------------CREDITS(whole file)--------------------------
+
 playing = false
 local sequence = 0
 
@@ -139,7 +144,7 @@ function Logo()
 	
 	for k, v in pairs( elements ) do
 		if v[5] > 0 then
-			v[5] = v[5] - 1
+			v[5] = v[5] - 2
 			return
 		end
 	end
@@ -153,7 +158,7 @@ function Logo()
 	surface.DrawTexturedRect( w * 0.43, h * 0.3, w * 0.14, h * 0.25 )
 	
 	if brla < 255 then
-		brla = brla + 1
+		brla = brla + 2
 		return
 	end
 	
@@ -175,7 +180,7 @@ function Logo()
 	})
 	
 	if ka < 255 then
-		ka = ka + 1
+		ka = ka + 2
 		return
 	end
 	
@@ -205,7 +210,7 @@ function Logo()
 	})
 	
 	if da < 255 then
-		da = da + 1
+		da = da + 2
 		return
 	end
 	
@@ -213,7 +218,7 @@ function Logo()
 	surface.DrawRect( 0, 0, w, h )
 	
 	if foa < 255 then
-		foa = foa + 1
+		foa = foa + 2
 		return
 	end
 	
@@ -314,7 +319,7 @@ function Settings()
 	surface.DrawRect( 0, 0, w, h )
 	
 	if sa > 0 then
-		sa = sa - 1
+		sa = sa - 2
 		return
 	end
 	
@@ -324,7 +329,7 @@ function Settings()
 	surface.DrawRect( 0, 0, w, h )
 	
 	if sfoa < 255 then
-		sfoa = sfoa + 1
+		sfoa = sfoa + 2
 		return
 	end
 	

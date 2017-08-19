@@ -4,8 +4,8 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
-VERSION = "0.22"
-DATE = "15/08/2017"
+VERSION = "0.23"
+DATE = "19/08/2017"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
@@ -219,6 +219,7 @@ if !ConVarExists("br_experimental_bulletdamage_system") then CreateConVar("br_ex
 if !ConVarExists("br_experimental_antiknockback_force") then CreateConVar("br_experimental_antiknockback_force", "5", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE}, "Turn it off when you see any problem with bullets" ) end
 if !ConVarExists("br_allow_ineye_spectate") then CreateConVar("br_allow_ineye_spectate", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
 if !ConVarExists("br_allow_roaming_spectate") then CreateConVar("br_allow_roaming_spectate", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
+if !ConVarExists("br_scale_bullet_damage") then CreateConVar("br_scale_bullet_damage", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Bullet damage scale" ) end
 
 MINPLAYERS = GetConVar("br_min_players"):GetInt()
 
@@ -317,26 +318,10 @@ function GM:ShouldCollide( ent1, ent2 )
 		else
 			ent = ent1
 		end
-	end
-	if ent and ent:GetClass() == "func_door" or ent:GetClass() == "prop_dynamic" then
-		if ent:GetClass() == "prop_dynamic" then
-			local ennt = ents.FindInSphere( ent:GetPos(), 5 )
-			local neardors = false
-			for k, v in pairs( ennt ) do
-				if v:GetClass() == "func_door" then
-					neardors = true
-					break
-				end
-			end
-			if !neardors then return true end
-		end
 		if ply:GetNClass() == ROLES.ROLE_SCP106 then
-			for k, v in pairs( DOOR_RESTRICT106 ) do
-				if ent:GetPos():Distance( v ) < 100 then
-					return true
-				end
+			if ent.ignorecollide106 then
+				return false
 			end
-			return false
 		end
 	end
 	return true
@@ -488,7 +473,26 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		//mul = math.Round(mul)
 		//print("mul: " .. mul)
 		dmginfo:ScaleDamage(mul)
+		if ply:GTeam() == TEAM_SCP and OUTSIDE_BUFF( ply:GetPos() ) then
+			dmginfo:ScaleDamage( 0.75 )
+		end
+		local scale = math.Clamp( GetConVar( "br_scale_bullet_damage" ):GetFloat(), 0.1, 2 )
+		dmginfo:ScaleDamage( scale )
 	end
 end
 
-
+function GM:Move( ply, mv )
+	if ply:GTeam() == TEAM_SCP and OUTSIDE_BUFF( ply:GetPos() ) then
+		local speed = 0.0025
+		local ang = mv:GetMoveAngles()
+		local vel = mv:GetVelocity()
+		local z = vel.z
+		if z == 0 then 
+			vel = vel + ang:Forward() * mv:GetForwardSpeed() * speed
+			vel = vel + ang:Right() * mv:GetSideSpeed() * speed
+			vel.z = z
+		end
+		
+		mv:SetVelocity( vel )
+	end
+end

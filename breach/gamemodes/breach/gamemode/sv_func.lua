@@ -1,16 +1,16 @@
 WEP_DMG = {
-	fiveseven = 10,
-	deagle = 18,
-	mp5 = 7,
-	ump45 = 8,
-	g36c = 9,
-	scarh = 10,
-	m14 = 12,
-	ar15 = 8,
-	ak74 = 9,
-	l115 = 100,
-	shorty = 4.5,
-	super90 = 4,
+	fiveseven = 9,
+	deagle = 17,
+	mp5 = 6,
+	ump45 = 7,
+	g36c = 8,
+	scarh = 9,
+	m14 = 10,
+	ar15 = 7,
+	ak74 = 8,
+	l115 = 90,
+	shorty = 4,
+	super90 = 3.5,
 }
 
 function GetTableOverride( tab )

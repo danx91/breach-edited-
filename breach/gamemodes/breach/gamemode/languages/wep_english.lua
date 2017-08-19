@@ -110,6 +110,7 @@ lang.SCP_689 = {
 	HUD = {
 		attackReady = "Ready to attack",
 		attackCD = "Next attack in",
+		targets = "Targets"
 	},
 }
 

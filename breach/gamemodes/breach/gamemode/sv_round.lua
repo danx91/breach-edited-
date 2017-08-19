@@ -86,7 +86,7 @@ function RoundTypeUpdate()
 end
 
 function RoundRestart()
-	--print( debug.traceback() )  
+	print( debug.traceback() )  
 	print("round: starting")
 	CleanUp()
 	print("round: map cleaned")
@@ -110,6 +110,7 @@ function RoundRestart()
 	activeRound = nil
 	if #GetActivePlayers() < MINPLAYERS then WinCheck() end
 	RoundTypeUpdate()
+	SetupCollide()
 	SetupAdmins( player.GetAll() )
 	activeRound:setup()
 	print( "round: setup end" )	
@@ -441,3 +442,36 @@ timer.Create("EXPTimer", 180, 0, function()
 		end
 	end
 end)
+
+function SetupCollide()
+	local fent = ents.GetAll()
+	for k, v in pairs( fent ) do
+		if v and v:GetClass() == "func_door" or v:GetClass() == "prop_dynamic" then
+			if v:GetClass() == "prop_dynamic" then
+				local ennt = ents.FindInSphere( v:GetPos(), 5 )
+				local neardors = false
+				for k, v in pairs( ennt ) do
+					if v:GetClass() == "func_door" then
+						neardors = true
+						break
+					end
+				end
+				if !neardors then 
+					v.ignorecollide106 = false
+					continue
+				end
+			end
+			local changed
+			for _, pos in pairs( DOOR_RESTRICT106 ) do
+				if v:GetPos():Distance( pos ) < 100 then
+					v.ignorecollide106 = false
+					changed = true
+					break
+				end
+			end
+			if !changed then
+				v.ignorecollide106 = true
+			end
+		end
+	end
+end

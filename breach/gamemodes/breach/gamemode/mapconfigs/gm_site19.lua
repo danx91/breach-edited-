@@ -711,3 +711,9 @@ DOOR_RESTRICT106 = {
 	Vector( 1324.00, -795.97, 50.00 ),
 	Vector( 1324.00, -868.00, 50.00 ),
 }
+
+function OUTSIDE_BUFF( pos )
+	if pos.z > 1350 then
+		return true
+	end
+end

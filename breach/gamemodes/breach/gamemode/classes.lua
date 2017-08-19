@@ -386,7 +386,7 @@ ALLCLASSES = {
 			 pmcolor = nil,
 			 flashlight = true,
 			 level = 8,
-			 max = 3,
+			 max = 1,
 			 sorting = 5,
 			 importancelevel = 1
 			},

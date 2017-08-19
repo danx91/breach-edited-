@@ -256,17 +256,16 @@ concommand.Add( "br_livecolors", function( ply, cmd, args )
 		chat.AddText("livecolors enabled")
 	end
 end )
-/*
-concommand.Add( "br_weapon_info", function( ply, cmd, args )
+
+/*concommand.Add( "br_weapon_info", function( ply, cmd, args )
 	local wep = ply:GetActiveWeapon()
 	if IsValid( wep ) then
-		ply:PrintMessage( HUD_PRINTCONSOLE , "Weapon name: "..wep:GetClass()..", " )
-		if wep.Damage_Orig != nil then ply:PrintMessage( HUD_PRINTCONSOLE , "Weapon original damage: "..wep.Damage_Orig..", " ) end
-		if wep.DamageMult != nil then ply:PrintMessage( HUD_PRINTCONSOLE , "Weapon damage multiplier: "..wep.DamageMult..", " ) end
-		if wep.DamageMult != nil then ply:PrintMessage( HUD_PRINTCONSOLE , "Weapon final damage: "..wep.Damage..", " ) end
+		print( "Weapon name: "..wep:GetClass() )
+		if wep.Damage_Orig then print( "Weapon original damage: "..wep.Damage_Orig ) end
+		if wep.DamageMult then print( "Weapon damage multiplier: "..wep.DamageMult ) end
+		if wep.DamageMult then print( "Weapon final damage: "..wep.Damage ) end
 	end
-end )
-*/
+end )*/
 gamestarted = false
 cltime = 0
 drawinfodelete = 0

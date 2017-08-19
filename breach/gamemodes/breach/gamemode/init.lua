@@ -101,9 +101,6 @@ function GM:PlayerSpray( ply )
 		return true
 	end
 end
- 
-hook.Add( "PlayerSpray", "DisableSprayInPD", function( ply )
-end)
 
 function GetActivePlayers()
 	local tab = {}
