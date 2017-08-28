@@ -77,6 +77,9 @@ hook.Add( "Tick", "966check", function()
 			hide = false
 		end
 	end
+	if LocalPlayer().n420endtime and LocalPlayer().n420endtime > CurTime() then
+		hide = false
+	end
 	for k,v in pairs(player.GetAll()) do
 		if not v.GetNClass then
 			player_manager.RunClass( v, "SetupDataTables" )

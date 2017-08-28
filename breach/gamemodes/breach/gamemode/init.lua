@@ -472,6 +472,15 @@ function SpawnAllItems()
 		end
 	end
 	
+	for k, v in pairs( SPAWN_420 ) do
+		local item = ents.Create( "item_scp_420j" )
+		if IsValid( item ) then
+			local pos = table.Random( v )
+			item:SetPos( pos )
+			item:Spawn()
+		end
+	end
+	
 	for k,v in pairs(SPAWN_KEYCARD2) do
 		local item = ents.Create( "keycard_level2" )
 		if IsValid( item ) then

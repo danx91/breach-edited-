@@ -483,14 +483,13 @@ end
 
 function GM:Move( ply, mv )
 	if ply:GTeam() == TEAM_SCP and OUTSIDE_BUFF( ply:GetPos() ) then
-		local speed = 0.0025
+		local speed = 0.002
 		local ang = mv:GetMoveAngles()
 		local vel = mv:GetVelocity()
-		local z = vel.z
-		if z == 0 then 
+		if vel.z == 0 then 
 			vel = vel + ang:Forward() * mv:GetForwardSpeed() * speed
 			vel = vel + ang:Right() * mv:GetSideSpeed() * speed
-			vel.z = z
+			vel.z = 0
 		end
 		
 		mv:SetVelocity( vel )

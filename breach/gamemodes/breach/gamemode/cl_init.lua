@@ -532,6 +532,15 @@ hook.Add( "RenderScreenspaceEffects", "blinkeffects", function()
 	local clr_g = 0
 	local clr_b = 0
 	local bloommul = 1.2
+	
+	if LocalPlayer().n420endtime and LocalPlayer().n420endtime > CurTime() then
+		DrawMotionBlur( 1 - ( LocalPlayer().n420endtime - CurTime() ) / 15 , 0.3, 0.025 )
+		DrawSharpen( ( LocalPlayer().n420endtime - CurTime() ) / 3, ( LocalPlayer().n420endtime - CurTime() ) / 20 )
+		clr_r = ( LocalPlayer().n420endtime - CurTime() ) * 2
+		clr_g = ( LocalPlayer().n420endtime - CurTime() ) * 2
+		clr_b = ( LocalPlayer().n420endtime - CurTime() ) * 2
+	end
+	
 --	last996attack = last996attack - 0.002
 --	if last996attack < 0 then
 --		last996attack = 0

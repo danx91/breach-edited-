@@ -88,6 +88,7 @@ function Intro()
 	elseif sequence == 2 then
 		Settings()
 	elseif sequence == 3 then
+		gui.EnableScreenClicker( false )
 		sequence = 0
 		file.Write( "breach/intro.dat", tostring( showupdates ) )
 		net.Start( "PlayerReady" )
@@ -221,8 +222,6 @@ function Logo()
 		foa = foa + 2
 		return
 	end
-	
-	gui.EnableScreenClicker( true )
 	sequence = 2
 	
 end
@@ -238,6 +237,9 @@ end
 
 local sfoa = -1
 function Settings()
+	if !vgui.CursorVisible() then
+		gui.EnableScreenClicker( true )
+	end
 	local w, h = ScrW(), ScrH()
 	surface.SetDrawColor( 0, 0, 0, 255 )
 	surface.DrawRect( 0, 0, w, h )
@@ -349,6 +351,9 @@ local COLOR_BUFF = Color( 20, 200, 20, 255 )
 local COLOR_NERF = Color( 200, 20, 20, 255 )
 
 function Update()
+	if !vgui.CursorVisible() then
+		gui.EnableScreenClicker( true )
+	end
 	local w, h = ScrW(), ScrH()
 	surface.SetDrawColor( 0, 0, 0, 200 )
 	surface.DrawRect( h * 0.1, h * 0.1, w - h * 0.2, h * 0.8 )
