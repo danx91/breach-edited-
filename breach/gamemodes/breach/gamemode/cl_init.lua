@@ -512,6 +512,24 @@ function Blink(time)
 	//print("blink start")
 end
 
+net.Receive( "PlayerReady", function()
+	local tab = net.ReadTable()
+	sR = tab[1]
+	sL = tab[2]
+end )
+
+net.Receive( "689", function( len )
+	if LocalPlayer():GetNClass() == ROLES.ROLE_SCP689 then
+		local targets = net.ReadTable()
+		if targets then
+			local swep = LocalPlayer():GetWeapon( "weapon_scp_689" )
+			if IsValid( swep ) then
+				swep.Targets = targets
+			end
+		end
+	end
+end )
+
 net.Receive("Effect", function()
 	LocalPlayer().mblur = net.ReadBool()
 end )
@@ -618,7 +636,7 @@ end)
 --	net.SendToServer()
 --end)
 
-concommand.Add("br_requestNTFrespawn", function( ply, cmd, args )
+concommand.Add("br_requestNTFspawn", function( ply, cmd, args )
 	if ply:IsSuperAdmin() then
 		net.Start("NTFRequest")
 		net.SendToServer()

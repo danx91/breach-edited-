@@ -4,8 +4,8 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
-VERSION = "0.23"
-DATE = "19/08/2017"
+VERSION = "0.24"
+DATE = "03/09/2017"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
@@ -114,6 +114,10 @@ SPCS = {
 	{name = "SCP 860-2",
 	func = function(pl)
 		pl:SetSCP8602()
+	end},
+	{name = "SCP 076-2",
+	func = function(pl)
+		pl:SetSCP076()
 	end}
 }
 
@@ -135,6 +139,7 @@ ROLES.ROLE_SCP939 = "SCP-939"
 ROLES.ROLE_SCP999 = "SCP-999"
 ROLES.ROLE_SCP082 = "SCP-082"
 ROLES.ROLE_SCP023 = "SCP-023"
+ROLES.ROLE_SCP076 = "SCP-076-2"
 ROLES.ROLE_SCP1471 = "SCP-1471-A"
 ROLES.ROLE_SCP1048A = "SCP-1048-A"
 ROLES.ROLE_SCP1048B = "SCP-1048-B"

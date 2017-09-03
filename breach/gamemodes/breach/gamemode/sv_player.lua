@@ -730,6 +730,49 @@ function mply:SetSCP8602()
 	self.UsingArmor = nil
 end
 
+function mply:SetSCP076()
+	self:Flashlight( false )
+	self.handsmodel = nil
+	self:UnSpectate()
+	self:GodDisable()
+	self:Spawn()
+	SetupSCP0761( self )
+	self:StripWeapons()
+	self:RemoveAllAmmo()
+	self:SetGTeam(TEAM_SCP)
+	self:SetNClass(ROLES.ROLE_SCP076)
+	self:SetModel("models/abel/abel.mdl")
+	self:SetHealth(300)
+	self:SetMaxHealth(300)
+	self:SetArmor(0)
+	self:SetWalkSpeed(220)
+	self:SetRunSpeed(250)
+	self:SetMaxSpeed(250)
+	self:SetJumpPower(210)
+	self:SetNoDraw(false)
+	self.Active = true
+	self:SetupHands()
+	self.canblink = false
+	self.noragdoll = false
+	self:AllowFlashlight( false )
+	self.WasTeam = TEAM_SCP
+	self:SetNoTarget( true )
+	self:Give("weapon_scp_076")
+	self:SelectWeapon("weapon_scp_076")
+	self.BaseStats = nil
+	self.UsingArmor = nil
+end
+
+function SetupSCP0761( ply )
+	if !IsValid( SCP0761 ) then
+		cspawn076 = table.Random( SPAWN_076 )
+		SCP0761 = ents.Create( "item_scp_0761" )
+		SCP0761:Spawn()
+		SCP0761:SetPos( cspawn076 )
+	end
+	ply:SetPos( cspawn076 )
+end
+
 function mply:DropWep(class, clip)
 	local wep = ents.Create( class )
 	if IsValid( wep ) then

@@ -46,6 +46,13 @@ lang.SCP_082 = {
 	instructions = "LMB to attack",
 }
 
+lang.SCP_076 = {
+	author = "danx91",
+	contact = "Look at this gamemode in workshop and search for creators",
+	purpose = "Kill",
+	instructions = "LMB to attack",
+}
+
 lang.SCP_096 = {
 	author = "Vinrax, edited by danx91",
 	contact = "Look at this gamemode in workshop and search for creators",
@@ -75,6 +82,13 @@ lang.SCP_173 = {
 		specReady = "Special ready to use",
 		slook = "Someone is looking",
 	}
+}
+
+lang.SCP_420j = {
+	author = "danx91",
+	contact = "Look at this gamemode in workshop and search for creators",
+	purpose = "The Best weed in the World",
+	instructions = "MAN DATS SUM GOOD ASS SHIT",
 }
 
 lang.SCP_457 = {

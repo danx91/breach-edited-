@@ -104,7 +104,7 @@ function ShowScoreBoard()
 	for k,v in pairs(allplayers) do
 		if !v.GetNClass or !v.GetNPremium then
 			player_manager.RunClass( v, "SetupDataTables" )
-			IsPremium( v, true )
+			--IsPremium( v, true )
 		end
 		table.ForceInsert(unknown, v)
 		v.knownrole = clang.class_unknown or "Unknown"

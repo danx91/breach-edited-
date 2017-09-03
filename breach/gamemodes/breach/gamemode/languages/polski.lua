@@ -148,6 +148,12 @@ polski.starttexts = {
 		{"Twoim celem jest ucieczka z placówki",
 		"Pomagaj SCP-049"}
 	},
+	ROLE_SCP076 = {
+		"Jesteś SCP-076-2",
+		{"Twoim celem jest ucieczka z placówki",
+		"Jesteś szybki i masz mało zdrowia",
+		"Będziesz się odradzać dopóki ktoś nie zniszczy SCP-076-1"}
+	},
 	ROLE_SCP0082 = {
 		"Jesteś SCP-008-2",
 		{"Twoim celem jest zarażenie wszystkich MTF i D",
@@ -353,6 +359,7 @@ polski.ROLES.ROLE_SCP0492 = "SCP-049-2"
 polski.ROLES.ROLE_SCP0082 = "SCP-008-2"
 polski.ROLES.ROLE_SCP966 = "SCP-966"
 polski.ROLES.ROLE_SCP023 = "SCP-023"
+polski.ROLES.ROLE_SCP076 = "SCP-076-2"
 polski.ROLES.ROLE_SCP1471 = "SCP-1471-A"
 polski.ROLES.ROLE_SCP1048A = "SCP-1048-A"
 polski.ROLES.ROLE_SCP1048B = "SCP-1048-B"

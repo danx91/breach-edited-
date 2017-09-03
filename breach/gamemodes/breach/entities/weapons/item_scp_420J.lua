@@ -41,7 +41,7 @@ SWEP.Lang = nil
 
 function SWEP:Initialize()
 	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_500
+		self.Lang = GetWeaponLang().SCP_420j
 		self.Author		= self.Lang.author
 		self.Contact		= self.Lang.contact
 		self.Purpose		= self.Lang.purpose

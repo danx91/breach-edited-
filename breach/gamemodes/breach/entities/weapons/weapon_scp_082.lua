@@ -97,7 +97,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:HackNSlash()
-	--self.Owner:LagCompensation( true )
+	self.Owner:LagCompensation( true )
 	local slash = {
 		start = self.Owner:GetShootPos(),
 		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 65,
@@ -138,11 +138,11 @@ function SWEP:HackNSlash()
 			elseif slashtrace.Hit then
 				self:EmitSound( self.KnifeShink )
 				look = self.Owner:GetEyeTrace()
-				--util.Decal( "ManhackCut", look.HitPos + look.HitNormal * 5, look.HitPos - look.HitNormal * 5 )
+				util.Decal( "ManhackCut", look.HitPos + look.HitNormal * 5, look.HitPos - look.HitNormal * 5 )
 			end
 		--end
 	end
-	--self.Owner:LagCompensation(false)
+	self.Owner:LagCompensation(false)
 end
 
 function SWEP:SecondaryAttack()

@@ -1,7 +1,6 @@
 if !ulx or !ULib then 
 	print( "ULX or ULib not found" ) 
-	return
-end
+else
 
 local class_names = {}
 for _, group in pairs( ALLCLASSES ) do
@@ -200,3 +199,20 @@ adminmode:addParam{ type = ULib.cmds.BoolArg, invisible = true }
 adminmode:setOpposite( "ulx silent admin_mode", { _, true }, "!sadminmode" )
 adminmode:defaultAccess( ULib.ACCESS_ADMIN )
 adminmode:help( "Toggles admin mode" )
+
+function ulx.requestntf( ply, silent )
+	SpawnNTFS()
+	if silent then
+		ulx.fancyLogAdmin( ply, true, "#A spawned support units" )
+	else
+		ulx.fancyLogAdmin( ply, "#A spawned support units" )
+	end
+end
+
+local requestntf = ulx.command( "Breach Admin", "ulx request_ntf", ulx.requestntf, "!ntf" )
+requestntf:addParam{ type = ULib.cmds.BoolArg, invisible = true }
+requestntf:setOpposite( "ulx silent request_ntf", { _, true }, "!sntf" )
+requestntf:defaultAccess( ULib.ACCESS_SUPERADMIN )
+requestntf:help( "Spawns support units" )
+
+end

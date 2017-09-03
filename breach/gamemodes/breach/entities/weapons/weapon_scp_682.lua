@@ -148,7 +148,7 @@ function SWEP:SecondaryAttack()
 	end
 	
 	local hp = applyEffect()
-	timer.Create( "SCP_PLAYER_WILL_LOSE_BUFF", 7.5, 1, function()
+	timer.Create( "682BuffEnd"..self.Owner:SteamID64(), 7.5, 1, function()
 		removeEffect( hp, 0 )
 	end )
 end

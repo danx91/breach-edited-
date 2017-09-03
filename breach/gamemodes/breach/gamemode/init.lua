@@ -79,11 +79,6 @@ resource.AddFile( "sound/radio/scpradio8.ogg" )
 resource.AddFile( "sound/radio/ohgod.ogg" )
 
 include( "ulx.lua" )
-
---	SPCS = {	{name = "SCP 1741-A",
---	func = function(pl)
---	pl:SetSCP1471()
---	end} }
 	
 // Variables
 gamestarted = gamestarted or false
@@ -769,7 +764,7 @@ function GetAlivePlayers()
 	local plys = {}
 	for k,v in pairs(player.GetAll()) do
 		if v:GTeam() != TEAM_SPEC then
-			if v:Alive() then
+			if v:Alive() or v:GetNClass() == ROLES.ROLE_SCP076 then
 				table.ForceInsert(plys, v)
 			end
 		end

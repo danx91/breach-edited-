@@ -32,36 +32,8 @@ SWEP.HoldType 			= "normal"
 
 SWEP.Targets = {}
 
-function SWEP:EncodePlayerID( id )
-	return math.pow( 2, id - 1 )
-end
-
-function SWEP:DecodePlayersIDs( sum )
-	if !sum then return end
-	local ntab = {}
-	local i = 0
-	repeat
-		local cpw = math.pow( 2, i )
-		local npw = math.pow( 2, i + 1 )
-		table.insert( ntab, cpw )
-		i = i + 1
-	until cwp == sum or npw > sum
-	local IDs = {}
-	local nid = 1
-	for i = #ntab, 1, -1 do
-		if sum - ntab[i] < 0 then continue end
-		print( nid, sum, ntab[i], i )
-		IDs[ nid ] = i
-		sum = sum - ntab[i]
-		nid = nid + 1
-	end
-	return IDs
-end
-
 function SWEP:SetupDataTables()
-	self:NetworkVar( "Int", 0, "NTargets" )
 	self:NetworkVar( "Entity", 0, "NCurTarget" )
-	self:SetNTargets( 0 )
 	self:SetNCurTarget( nil )
 end
 
@@ -95,40 +67,11 @@ function SWEP:Think()
 	if postround or preparing then return end
 	if self.ntabupdate < CurTime() then
 		self.ntabupdate = CurTime() + 1 --delay for performance
-		if CLIENT then
-			local ids = self:DecodePlayersIDs( self:GetNTargets() )
-			if ids then
-				self.Targets = {}
-				for k, v in pairs( ids ) do
-					local ply
-					for i, pl in ipairs( player.GetAll() ) do
-						if i == v then
-							ply = pl
-							break
-						end
-					end
-					--print( ply )
-					if IsValid( ply ) then
-						table.insert( self.Targets, ply )
-					end
-				end
-			end
-		else
-			local sum = 0
-			for k, v in pairs( self.Targets ) do
-				local allply = player.GetAll()
-				local id = 0
-				for i = 1, #allply do
-					if allply[i] == v then
-						id = i
-						break
-					end
-				end
-				sum = sum + self:EncodePlayerID( id or 0 )
-			end
-			self:SetNTargets( sum )
+		if SERVER then
+			net.Start( "689" )
+				net.WriteTable( self.Targets )
+			net.Send( self.Owner )
 		end
-		--PrintTable( player.GetAll() )
 	end
 	if CLIENT then return end
 	for k, v in pairs( self.Targets ) do
@@ -164,7 +107,6 @@ function SWEP:Think()
 end
 
 SWEP.NextPrimary = 0
-SWEP.CurTarget = nil
 
 function SWEP:PrimaryAttack()
 	if preparing or postround then return end
@@ -181,20 +123,19 @@ function SWEP:PrimaryAttack()
 		end
 		self.Owner:EmitSound(self.Sound)
 		at:EmitSound(self.Sound)
-		timer.Create("CheckTimer", 0.5, math.floor(self.Primary.Delay), function()
+		timer.Create("CheckTimer"..self.Owner:SteamID64(), 0.5, math.floor(self.Primary.Delay), function()
 			if !( IsValid( self.Owner ) and self.Owner:Alive() and IsValid( at ) and at:Alive() and at:GTeam() != TEAM_SPEC ) or at.Using714 then
 				timer.Destroy("CheckTimer")
 				timer.Destroy("KillTimer")
 			end
 		end )
-		timer.Create("KillTimer", math.floor(self.Primary.Delay / 2), 1, function()
+		timer.Create("KillTimer"..self.Owner:SteamID64(), math.floor(self.Primary.Delay / 2), 1, function()
 			if IsValid(self.Owner) and self.Owner:Alive() and IsValid(at) and at:Alive() and at:GTeam() != TEAM_SPEC then
 				local pos = at:GetPos()
 				at:Kill()
 				self.Owner:SetPos(pos)
 				self.Owner:AddExp(125, true)
 				table.RemoveByValue(self.Targets, at)
-				self.CurTarget = nil
 				self:SetNCurTarget( nil )
 			end
 		end )
@@ -230,15 +171,16 @@ function SWEP:Reload()
 	if self.NextPrimary > CurTime() then return end
 	if self.LastReload > CurTime() then return end
 	self.LastReload = CurTime() + 0.25
-	self.CurTarget = self:GetNCurTarget()
-	if !IsValid( self.CurTarget ) then
+	local CurTarget = self:GetNCurTarget()
+	if !IsValid( CurTarget ) then
 		self:SetNCurTarget( self.Targets[1] )
 		return
 	end
 	for i, v in ipairs( self.Targets ) do
-		if v == self.CurTarget then
+		if v == CurTarget then
 			if i == #self.Targets then self:SetNCurTarget( self.Targets[1] ) return end
-			self:SetNCurTarget( self.Targets[i + 1] ) return
+			self:SetNCurTarget( self.Targets[i + 1] ) 
+			return
 		end
 	end
 end

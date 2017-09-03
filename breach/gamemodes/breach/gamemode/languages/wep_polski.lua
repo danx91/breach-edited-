@@ -28,6 +28,13 @@ lang.SCP_049 = {
 	},
 }
 
+lang.SCP_076 = {
+	author = "danx91",
+	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
+	purpose = "Zabijaj",
+	instructions = "LPM aby atakować",
+}
+
 lang.SCP_096 = {
 	author = "Vinrax, edytowane przez danx91",
 	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
@@ -75,6 +82,13 @@ lang.SCP_173 = {
 		specReady = "Umiejęntność specjalna gotowa",
 		slook = "Ktoś patrzy",
 	},
+}
+
+lang.SCP_420j = {
+	author = "danx91",
+	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
+	purpose = "Najlepsze zioło na świecie",
+	instructions = "MAN DATS SUM GOOD ASS SHIT",
 }
 
 lang.SCP_457 = {

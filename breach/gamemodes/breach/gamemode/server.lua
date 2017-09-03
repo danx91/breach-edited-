@@ -32,6 +32,7 @@ util.AddNetworkString("ShowText")
 util.AddNetworkString("PlayerReady")
 util.AddNetworkString("RecheckPremium")
 util.AddNetworkString("CancelPunish")
+util.AddNetworkString("689")
 
 net.Receive( "CancelPunish", function( len, ply )
 	if ply:IsSuperAdmin() then
@@ -41,6 +42,9 @@ end )
 
 net.Receive( "PlayerReady", function( len, ply )
 	ply:SetActive( true )
+	net.Start( "PlayerReady" )
+		net.WriteTable( { sR, sL } )
+	net.Send( ply )
 end )
 
 net.Receive( "RecheckPremium", function( len, ply )
@@ -425,6 +429,7 @@ function GiveExp()
 		v:SetFrags( 0 )
 		if exptogive > 0 then
 			v:AddExp( exptogive, true )
+			v:PrintMessage( HUD_PRINTTALK, "You have recived "..exptogive.." experience for "..(exptogive / 50).." points" )
 		end
 	end
 end

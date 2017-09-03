@@ -148,6 +148,12 @@ english.starttexts = {
 		{"Your objective is to escape the facility",
 		"Cooperate with SCP-049 to kill more people"}
 	},
+	ROLE_SCP076 = {
+		"You are the SCP-076-2",
+		{"Your objective is to escape the facility",
+		"You are fast and you have low HP",
+		"You will be respawning until somebody destroy SCP-076-1"}
+	},
 	ROLE_SCP0082 = {
 		"You are the SCP-008-2",
 		{"Your objective is to infect every MTF and D",
@@ -351,6 +357,7 @@ english.ROLES.ROLE_SCP082 = "SCP-082"
 english.ROLES.ROLE_SCP939 = "SCP-939"
 english.ROLES.ROLE_SCP999 = "SCP-999"
 english.ROLES.ROLE_SCP023 = "SCP-023"
+english.ROLES.ROLE_SCP076 = "SCP-076-2"
 english.ROLES.ROLE_SCP1471 = "SCP-1471-A"
 english.ROLES.ROLE_SCP8602 = "SCP-860-2"
 english.ROLES.ROLE_SCP1048A = "SCP-1048-A"

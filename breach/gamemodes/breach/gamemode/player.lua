@@ -4,7 +4,6 @@ function IsPremium( ply, silent )
 	ply:SetNPremium( false )
 	ply.Premium = false
 	if CheckULXPremium( ply, silent ) == true then return end
-	print( "http" )
 	if GetConVar("br_premium_url"):GetString() == "" or GetConVar("br_premium_url"):GetString() == "none" then return end
 	http.Fetch( GetConVar("br_premium_url"):GetString(), function( body, size, headers, code )
 		if ( body == nil ) then return end
@@ -125,19 +124,20 @@ function GM:PlayerSetHandsModel( ply, ent )
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
---	if ply:GetNClass() != ROLES.ROLE_SCP173 then
---		CreateRagdollPL(ply, attacker, dmginfo:GetDamageType())
---	end
-	//print("Player: "..ply:GetName(), "Ragdoll? "..ply.noragdoll)
 	if (ply.noragdoll != true) then
 		CreateRagdollPL(ply, attacker, dmginfo:GetDamageType())
 	end
 	ply:AddDeaths(1)
 end
 
-// From Gmod base
+
 function GM:PlayerDeathThink( ply )
-	//if ( ply.NextSpawnTime && ply.NextSpawnTime > CurTime() ) then return end
+	if ply:GetNClass() == ROLES.ROLE_SCP076 and IsValid( SCP0761 ) then
+		if ply.n076nextspawn and ply.n076nextspawn < CurTime() then
+			ply:SetSCP076()
+		end
+		return
+	end
 	if !ply:IsBot() and ply:GTeam() != TEAM_SPEC then
 		ply:SetGTeam(TEAM_SPEC)
 	end
@@ -153,9 +153,12 @@ end
 
 function GM:PlayerDeath( victim, inflictor, attacker )
 	victim:SetModelScale( 1 )
-	victim.nextspawn = CurTime() + 5
 	if attacker:IsPlayer() then
 		print("[KILL] " .. attacker:Nick() .. " [" .. attacker:GetNClass() .. "] killed " .. victim:Nick() .. " [" .. victim:GetNClass() .. "]")
+	end
+	if victim:GetNClass() == ROLES.ROLE_SCP076 and IsValid( SCP0761 ) then
+		victim.n076nextspawn = CurTime() + 10
+		return
 	end
 	victim:SetNClass(ROLES.ROLE_SPEC)
 	if attacker != victim and postround == false and attacker:IsPlayer() then
