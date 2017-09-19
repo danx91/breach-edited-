@@ -103,10 +103,9 @@ function SWEP:PrimaryAttack()
 	} )
 	if tr.Hit then
 		local ent = tr.Entity
-		if ent:IsPlayer() then
+		if ent:IsPlayer() and ent:GTeam() != TEAM_SPEC and ent:GTeam() != TEAM_SCP then
 			self:EmitSound( "Weapon_Knife.Hit" )
-			if SERVER then
-				ent.RagVelocity = damage:GetDamageForce()
+			if SERVER and ent:GTeam() != TEAM_SCP then
 				ent:TakeDamageInfo( damage )
 			end
 		elseif ent:GetClass() != "worldspawn" then
