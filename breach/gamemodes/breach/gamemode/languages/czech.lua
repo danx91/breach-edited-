@@ -124,13 +124,13 @@ czech.starttexts = {
 		"Jsi SCP-1471-A",
 		{"Tvůj úkol je dostat se z tohoto zařízení",
 		"Můžeš se teleportovat ke svému cíli",
-		"LMB - útok, RMB - teleportovat se k tvému cíli."}
+		"Levé tlačítko - útok, pravé tlačítko - teleportovat se k tvému cíli."}
 	},
 	ROLE_SCP1048A = {
 		"Jsi SCP-1048-A",
 		{"Tvůj úkol je dostat se z tohoto zařízení",
-		"You look like SCP-1048, but you are made entirely out of human ears",
-		"You emit a very loud scream"}
+		"Vypadáš jako 1048, ale jsi vyroben z lidských uší",
+		"Vydáváš velmi hlasitý zvuk"}
 	},
 	ROLE_SCP1048B = {
 		"Jsi SCP-1048-B",
@@ -166,7 +166,7 @@ czech.starttexts = {
 		"Dávej si pozor na Třídu D, jelikož tě možná budou chtít zabít."}
 	},
 	ROLE_MEDIC = {
-		"Jsi medik",
+		"Jsi Medik",
 		{"Tvůj úkol je dostat se z tohoto zařízení",
 		"Potřebuješ najít MTF aby tě eskortovali",
 		"Dávej si pozor na Třídu D, jelikož tě možná budou chtít zabít.",
@@ -177,16 +177,16 @@ czech.starttexts = {
 		{"Tvůj úkol je dostat se z tohoto zařízení",
 		"Znáš tohle místo než kdokoliv jiný",
 		"Dávej si pozor na Třídu D, jelikož tě možná budou chtít zabít",
-		"You can communicate with security using the radio"}
+		"Můžeš komunikovat s bezpečnostní s rádiem"}
 	},
 	ROLE_CLASSD = {
-		"You are a Class D",
+		"Jsi Třída D",
 		{"Tvůj úkol je dostat se z tohoto zařízení",
 		"Musíš spolupracovat s ostatnímy Třídami D",
 		"Hledej Keykarty, dávej pozor na MTF a objekty SCP"}
 	},
 	ROLE_VETERAN = {
-		"Jsi Veterán Třídy d",
+		"Jsi Veterán Třídy D",
 		{"Tvůj úkol je dostat se z tohoto zařízení",
 		"Musíš spolupracovat s ostatnímy Třídami D",
 		"Hledej Keykarty, dávej pozor na MTF a objekty SCP"}
@@ -202,7 +202,7 @@ czech.starttexts = {
 		{"Máš za úkol najít a eskortovat všechny",
 		"výzkumníky kteří jsou stále v zařízení",
 		"Můžeš zabít Třídy D a objekty SCP které najdeš",
-		"Listen to your boss's orders and stick to your team"}
+		"Poslouchej rozkazy tvého šéfa"}
 	},
 	ROLE_CSECURITY = {
 		"Jsi Šéf Bezpečnosti",
@@ -225,11 +225,11 @@ czech.starttexts = {
 		"Poslouchej rozkazy Velitela, a drž se svého týmu."}
 	},
 	ROLE_HAZMAT = {
-		"You are a Special MTF Unit",
+		"Jsi Specialní MTF jednotak",
 		{"Máš za úkol najít a eskortovat všechny",
 		"výzkumníky kteří jsou stále v zařízení",
-		"You have to kill any Class Ds or SCPs that you will find",
-		"Listen to the MTF Velitel and Site Director"}
+		"Můžeš zabít Třídy D a objekty SCP které najdeš",
+		"Poslouchej MTF velitele a správce sítě"}
 	},
 	ROLE_MTFL = {
 		"Jsi MTF Poručík",
@@ -259,11 +259,11 @@ czech.starttexts = {
 		"Vstup do zařízení, a pomoc hlídačům zabránit chaosu."}
 	},
 	ROLE_MTFCOM = {
-		"You are a MTF Velitel",
+		"Jsi MTF Velitel",
 		{"Máš za úkol najít a eskortovat všechny",
 		"výzkumníky kteří jsou stále v zařízení",
-		"You have to kill any Class Ds or SCPs that you will find",
-		"Give orders to Hlídačs to simplify the task"}
+		"Můžeš zabít lidi Třídy D nebo objekty SCP které najdeš",
+		"Dávej rozkazy hlídačům abys zjednošuil práci"}
 	},
 	ROLE_CHAOS = {
 		"Jsi Chaos Insurgency Soldier",
@@ -280,8 +280,8 @@ czech.starttexts = {
 	},
 	ROLE_CHAOSCOM = {
 		"Jsi Chaos Insurgency Velitel",
-		{"Your objective is to give objectives to your team",
-		"Kill anyone who will stop you"}
+		{"Máš za úkol dávat rozkazy svému týmu",
+		"Zabij kohokoliv kdo se tě bude snažit zabít"}
 	},
 	ROLE_SPEC = {
 		"Jsi divák",
@@ -312,7 +312,7 @@ czech.lang_end3 = "Hra skončila jelikož už nejde pokračovat."
 czech.escapemessages = {
 	{
 		main = "Unikl si",
-		txt = "Unikl si za {t] minut, dobrá práce!",
+		txt = "Unikl si za {t} minut, dobrá práce!",
 		txt2 = "Nech se eskortovat od MTF příště abys dostal bonus body.",
 		clr = Color(237, 28, 63),
 	},
@@ -323,7 +323,7 @@ czech.escapemessages = {
 		clr = Color(237, 28, 63),
 	},
 	{
-		main = "You were escorted",
+		main = "Byl si eskortován",
 		txt = "Byl si eskortován za {t} minut, dobrá práce!",
 		txt2 = "",
 		clr = Color(237, 28, 63),
