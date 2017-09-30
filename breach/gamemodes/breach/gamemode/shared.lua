@@ -5,7 +5,7 @@ GM.Email 	= ""
 GM.Website 	= ""
 
 VERSION = "0.24"
-DATE = "03/09/2017"
+DATE = "30/09/2017"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )

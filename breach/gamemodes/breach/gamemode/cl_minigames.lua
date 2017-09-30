@@ -151,6 +151,20 @@ hook.Add( "PlayerButtonDown", "SnakeButtons", function( ply, key )
 	end
 end )
 
+concommand.Add( "br_snake", function()
+	if ply:GetNClass() == ROLES.ROLE_SPEC then
+		if snake_enabled then
+			SnakeClose()
+		else
+			SnakeOpen()
+		end
+	end
+end )
+
+concommand.Add( "br_snake_reset", function()
+	SnakeRestart()
+end )
+
 hook.Add( "OnPlayerChat", "SnakeChat", function( ply, text, teamChat, isDead )
 	text = string.lower( text )
 	if text == "!snake" or text == "/snake" then
