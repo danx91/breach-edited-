@@ -12,6 +12,7 @@ include( "cl_targetid.lua" )
 include( "cl_headbob.lua" )
 include( "cl_font.lua" )
 include( "ulx.lua" )
+include( "cl_minigames.lua" )
 								  
 surface.CreateFont( "173font", {
 	font = "TargetID",
