@@ -35,6 +35,13 @@ polski.votes = "Z %s graczy %s zagłosowało nad karą, a %s nad przebaczeniem"
 polski.votecancel = "Ostatnie głosowanie zostało przerwane przez administratora"
 
 polski.starttexts = {
+	ROLE_SCPSantaJ = {
+		"Jesteś SCP-SANTA-J",
+		{"Twoim celem jest ucieczka z placówki",
+		"Jesteś Świętym Mikołajem! Rozdawaj wszystkim prezenty!",
+		"Wesołych Świąt i Szczęśliwego Nowego Roku!",
+		"To jest specialny SCP dostępny tylko przez ograniczony czas!"}
+	},
 	ROLE_SCP173 = {
 		"Jesteś SCP - 173",
 		{"Twoim celem jest ucieczka z placówki",
@@ -344,6 +351,7 @@ polski.ROLES.ADMIN = "TRYB ADMINISTRATORA"
 polski.ROLES.ROLE_INFECTD = "Personel Klasy D"
 polski.ROLES.ROLE_INFECTMTF = "MTF"
 
+polski.ROLES.ROLE_SCPSantaJ = "SCP-SANTA-J"
 polski.ROLES.ROLE_SCP173 = "SCP-173"
 polski.ROLES.ROLE_SCP106 = "SCP-106"
 polski.ROLES.ROLE_SCP049 = "SCP-049"

@@ -208,6 +208,20 @@ lang.SCP_1471 = {
 	},
 }
 
+lang.SCP_SantaJ = {
+	author = "danx91",
+	contact = "Look at this gamemode in workshop and search for creators",
+	purpose = "Give gifts",
+	instructions = "LMB to throw gift",
+	HUD = {
+		attackReady = "Ready to attack",
+		attackCD = "Next attack in",
+		gtype = "Gift type:",
+		explosive = "Explosive",
+		healing = "Healing",
+	},
+}
+
 lang.HOLSTER = {
 	author = "Kanade",
 	contact = "Look at this gamemode in workshop and search for creators",

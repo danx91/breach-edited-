@@ -76,14 +76,14 @@ end
 function SWEP:PrimaryAttack()
 	if postround then return end
 	if self.NextPrimary > CurTime() then return end
-	self.NextPrimary = CurTime() + 0.4
+	self.NextPrimary = CurTime() + 0.8
 	self.NextIdle = CurTime() + self:SequenceDuration( ACT_VM_MISSCENTER )
 	self:EmitSound( "Weapon_Knife.Slash" )
 	self.Owner:LagCompensation( true )
 	
 	local pos = self.Owner:GetShootPos()
 	local aim = self.Owner:GetAimVector()
-	local dmg = math.random( 25, 50 )
+	local dmg = math.random( 25, 40 )
 	local dist = 75
 
 	local damage = DamageInfo()
@@ -103,12 +103,14 @@ function SWEP:PrimaryAttack()
 	} )
 	if tr.Hit then
 		local ent = tr.Entity
-		if ent:IsPlayer() and ent:GTeam() != TEAM_SPEC and ent:GTeam() != TEAM_SCP then
-			self:EmitSound( "Weapon_Knife.Hit" )
-			if SERVER and ent:GTeam() != TEAM_SCP then
-				ent:TakeDamageInfo( damage )
+		if ent:IsPlayer() then
+			if ent:GTeam() != TEAM_SPEC and ent:GTeam() != TEAM_SCP then
+				self:EmitSound( "Weapon_Knife.Hit" )
+				if SERVER and ent:GTeam() != TEAM_SCP then
+					ent:TakeDamageInfo( damage )
+				end
 			end
-		elseif ent:GetClass() != "worldspawn" then
+		elseif ent:GetClass() == "func_breakable" then
 			if SERVER then
 				ent:TakeDamageInfo( damage )
 			end

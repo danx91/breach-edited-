@@ -33,12 +33,12 @@ SWEP.ISSCP 		= true
 SWEP.Teams			= { 1 }
 SWEP.droppable		= false
 
+SWEP.SantasHatPositionOffset = Vector( 16, -5, 3.5 )
+SWEP.SantasHatAngleOffset = Angle( -10, 180, -20 )
+
 function SWEP:Deploy()
 	self.Owner:DrawViewModel( false )
 	self.Owner:SetModelScale( 0.75 )
-end
-
-function SWEP:DrawWorldModel()
 end
 
 SWEP.Lang = nil
@@ -52,6 +52,13 @@ function SWEP:Initialize()
 		self.Instructions	= self.Lang.instructions
 	end
 	self:SetHoldType(self.HoldType)
+	if CLIENT then
+		if !self.SantasHat then
+			self.SantasHat = ClientsideModel( "models/cloud/kn_santahat.mdl" )
+			self.SantasHat:SetModelScale( 1.8 )
+			self.SantasHat:SetNoDraw( true )
+		end
+	end
 end
 
 function SWEP:Holster()
@@ -60,6 +67,9 @@ end
 
 function SWEP:OnRemove()
 	self.Owner:SetModelScale( 1 )
+	if CLIENT and IsValid( self.SantasHat ) then
+		self.SantasHat:Remove()
+	end
 end
 
 function SWEP:HUDShouldDraw( element )
@@ -182,4 +192,27 @@ function SWEP:DrawHUD()
 		xalign = TEXT_ALIGN_CENTER,
 		yalign = TEXT_ALIGN_CENTER,
 	})
+end
+
+function SWEP:DrawWorldModel()
+	if !IsValid( self.SantasHat ) then return end
+	local boneid = self.Owner:LookupBone( "Bip01_Head" )
+	if not boneid then
+		/*for i=0, self.Owner:GetBoneCount()-1 do
+			print( i, self.Owner:GetBoneName( i ) )
+		end*/
+		return
+	end
+
+	local matrix = self.Owner:GetBoneMatrix( boneid )
+	if not matrix then
+		return
+	end
+
+	local newpos, newang = LocalToWorld( self.SantasHatPositionOffset, self.SantasHatAngleOffset, matrix:GetTranslation(), matrix:GetAngles() )
+
+	self.SantasHat:SetPos( newpos )
+	self.SantasHat:SetAngles( newang )
+	self.SantasHat:SetupBones()
+	self.SantasHat:DrawModel()
 end

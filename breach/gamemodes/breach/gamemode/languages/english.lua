@@ -35,6 +35,13 @@ english.votes = "From %s players %s voted for punish and %s for forgive"
 english.votecancel = "Last punish vote was canceled by admin"
 
 english.starttexts = {
+	ROLE_SCPSantaJ = {
+		"You are the SCP-SANTA-J",
+		{"Your objective is to escape the facility",
+		"You are Santa Claus! Give gifts to everyone!",
+		"Merry Christmas and Happy New Year",
+		"This is special SCP available only in Christmas event!"}
+	},
 	ROLE_SCP173 = {
 		"You are the SCP-173",
 		{"Your objective is to escape the facility",
@@ -344,6 +351,7 @@ english.ROLES.ADMIN = "ADMIN MODE"
 english.ROLES.ROLE_INFECTD = "Class D Personnel"
 english.ROLES.ROLE_INFECTMTF = "MTF"
 
+english.ROLES.ROLE_SCPSantaJ = "SCP-SANTA-J"
 english.ROLES.ROLE_SCP173 = "SCP-173"
 english.ROLES.ROLE_SCP106 = "SCP-106"
 english.ROLES.ROLE_SCP049 = "SCP-049"

@@ -31,6 +31,47 @@ team.SetUp( TEAM_SCI, "Scientists", Color(66, 188, 244) )
 team.SetUp( TEAM_CHAOS, "Chaos Insurgency", Color(0, 100, 255) )
 */
 
+surface = surface or  {}
+
+function surface.DrawRing( x, y, radius, thick, angle, segments, fill, rotation )
+	angle = math.Clamp( angle or 360, 1, 360 )
+	fill = math.Clamp( fill or 1, 0, 1 )
+	rotation = rotation or 0
+
+	local segmentstodraw = {}
+	local segang = angle / segments
+	local bigradius = radius + thick
+
+	for i = 1, math.Round( segments * fill ) do
+		local ang1 = math.rad( rotation + ( i - 1 ) * segang )
+		local ang2 = math.rad( rotation + i * segang )
+
+		local sin1 = math.sin( ang1 )
+		local cos1 = -math.cos( ang1 )
+
+		local sin2 = math.sin( ang2 )
+		local cos2 = -math.cos( ang2 )
+
+		surface.DrawPoly( {
+			{ x = x + sin1 * radius, y = y + cos1 * radius },
+			{ x = x + sin1 * bigradius, y = y + cos1 * bigradius },
+			{ x = x + sin2 * bigradius, y = y + cos2 * bigradius },
+			{ x = x + sin2 * radius, y = y + cos2 * radius }
+		} )
+
+	end
+end
+
+function AddTables( tab1, tab2 )
+	for k, v in pairs( tab2 ) do
+		if tab1[k] and istable( v ) then
+			AddTables( tab1[k], v )
+		else
+			tab1[k] = v
+		end
+	end
+end
+
 function GetLangRole(rl)
 	if clang == nil then return rl end
 	local rolef = nil
@@ -47,6 +88,10 @@ function GetLangRole(rl)
 end
 
 SPCS = {
+	{name = "SCP SANTA-J",
+	func = function(pl)
+		pl:SetSCPSantaJ()
+	end},
 	{name = "SCP 173",
 	func = function(pl)
 		pl:SetSCP173()
@@ -121,11 +166,19 @@ SPCS = {
 	end}
 }
 
+EVENT_SCPS = {
+	{name = "SCP SANTA-J",
+	func = function(pl)
+		pl:SetSCPSantaJ()
+	end},
+}
+
 ROLES = {}
 
 ROLES.ADMIN = "ADMIN MODE"
 
 // SCPS
+ROLES.ROLE_SCPSantaJ = "SCP-SANTA-J"
 ROLES.ROLE_SCP173 = "SCP-173"
 ROLES.ROLE_SCP106 = "SCP-106"
 ROLES.ROLE_SCP049 = "SCP-049"

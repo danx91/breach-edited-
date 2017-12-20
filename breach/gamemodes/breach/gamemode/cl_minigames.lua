@@ -166,6 +166,7 @@ concommand.Add( "br_snake_reset", function()
 end )
 
 hook.Add( "OnPlayerChat", "SnakeChat", function( ply, text, teamChat, isDead )
+	if ply != LocalPlayer() then return end
 	text = string.lower( text )
 	if text == "!snake" or text == "/snake" then
 		if !ply.GetNClass then return end

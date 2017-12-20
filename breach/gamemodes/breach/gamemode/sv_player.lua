@@ -165,6 +165,39 @@ function mply:SetSpectator()
 	//self:Spectate(OBS_MODE_IN_EYE)
 end
 
+function mply:SetSCPSantaJ()
+	self:Flashlight( false )
+	self.handsmodel = nil
+	self:UnSpectate()
+	self:GodDisable()
+	self:Spawn()
+	self:SetPos( SPAWN_SANTA )
+	self:StripWeapons()
+	self:RemoveAllAmmo()
+	self:SetGTeam( TEAM_SCP )
+	self:SetNClass( ROLES.ROLE_SCPSantaJ )
+	self:SetModel( "models/player/christmas/santa.mdl" )
+	self:SetHealth( 2250 )
+	self:SetMaxHealth( 2250 )
+	self:SetArmor( 0 )
+	self:SetWalkSpeed( 160 )
+	self:SetRunSpeed( 160 )
+	self:SetMaxSpeed( 160 )
+	self:SetJumpPower( 200 )
+	self:SetNoDraw( false )
+	self.Active = true
+	self:SetupHands()
+	self.canblink = false
+	self.noragdoll = true
+	self:AllowFlashlight( false )
+	self.WasTeam = TEAM_SCP
+	self:SetNoTarget( true )
+	self:Give( "weapon_scp_santaJ" )
+	self:SelectWeapon("weapon_scp_santaJ")
+	self.BaseStats = nil
+	self.UsingArmor = nil
+end
+
 function mply:SetSCP173()
 	self:Flashlight( false )
 	self.handsmodel = nil

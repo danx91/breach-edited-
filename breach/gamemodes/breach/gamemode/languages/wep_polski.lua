@@ -208,6 +208,20 @@ lang.SCP_1471 = {
 	},
 }
 
+lang.SCP_SantaJ = {
+	author = "danx91",
+	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
+	purpose = "Dawaj prezenty",
+	instructions = "LPM aby dawać prezenty",
+	HUD = {
+		attackReady = "Gotowy do ataku",
+		attackCD = "Następny atak za",
+		gtype = "Rodzaj prezentu:",
+		explosive = "Wybuchowy",
+		healing = "Leczący",
+	},
+}
+
 lang.HOLSTER = {
 	author = "Kanade",
 	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",

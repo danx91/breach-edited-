@@ -269,17 +269,64 @@ end
 
 function DestroyAll()
 	for k, v in pairs( FORCE_DESTROY ) do
-		local enttab = ents.FindInSphere( v, 1 )
-		for _, ent in pairs( enttab ) do
-			if ent:GetPos() == v then
+		if isvector( v ) then
+			local enttab = ents.FindInSphere( v, 1 )
+			for _, ent in pairs( enttab ) do
+				if ent:GetPos() == v then
+					ent:Remove()
+					break
+				end
+			end
+		elseif isnumber( v ) then
+			local ent = ents.GetByIndex( v )
+			if IsValid( ent ) then
 				ent:Remove()
-				break
 			end
 		end
 	end
 end
 
 function SpawnAllItems()
+
+	------XMAS PART------
+
+	for k, v in pairs( XMAS_TREES ) do
+		local tree = ents.Create( "prop_physics" )
+		tree:SetModel( "models/unconid/xmas/xmas_tree.mdl" )
+		tree:SetPos( v )
+		local phys = tree:GetPhysicsObject()
+		if IsValid( phys ) then
+			phys:Wake()
+			phyas:EnableMotion( false )
+		end
+	end
+
+	for k, v in pairs( XMAS_SNOWMANS_SMALL ) do
+		local snowman = ents.Create( "prop_physics" )
+		snowman:SetModel( "models/unconid/xmas/snowman_u.mdl" )
+		snowman:SetPos( v[1] )
+		snowman:SetAngles( v[2] )
+		local phys = snowman:GetPhysicsObject()
+		if IsValid( phys ) then
+			phys:Wake()
+			phyas:EnableMotion( false )
+		end
+	end
+
+	for k, v in pairs( XMAS_SNOWMANS_BIG ) do
+		local snowman = ents.Create( "prop_physics" )
+		snowman:SetModel( "models/unconid/xmas/snowman_u_big.mdl" )
+		snowman:SetPos( v[1] )
+		snowman:SetAngles( v[2] )
+		local phys = snowman:GetPhysicsObject()
+		if IsValid( phys ) then
+			phys:Wake()
+			phyas:EnableMotion( false )
+		end
+	end
+
+	---------------------
+
 	for k,v in pairs(SPAWN_FIREPROOFARMOR) do
 		local vest = ents.Create( "armor_fireproof" )
 		if IsValid( vest ) then

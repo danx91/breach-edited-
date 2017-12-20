@@ -105,12 +105,7 @@ langtouse = CreateClientConVar( "br_language", "english", true, false ):GetStrin
 
 cvars.AddChangeCallback( "br_language", function( convar_name, value_old, value_new )
 	langtouse = value_new
-	if ALLLANGUAGES[langtouse] then
-		clang = ALLLANGUAGES[langtouse]
-	end
-	if WEPLANG[langtouse] then
-		cwlang = WEPLANG[langtouse]
-	end
+	LoadLang( langtouse )
 end )
 
 hudScale = CreateClientConVar( "br_hud_scale", 1, true, false ):GetFloat()
@@ -128,17 +123,29 @@ print(langtouse)
 //print("Alllangs:")
 //PrintTable(ALLLANGUAGES)
 
-if ALLLANGUAGES[langtouse] then
-	clang = ALLLANGUAGES[langtouse]
-else
-	clang = ALLLANGUAGES.english
+function LoadLang( lang )
+	local finallang = table.Copy( ALLLANGUAGES.english )
+	local ltu = {}
+	if ALLLANGUAGES[lang] then
+		ltu = ALLLANGUAGES[lang]
+	end
+	AddTables( finallang, ltu )
+	clang = finallang
+
+	local finalweplang = table.Copy( WEPLANG.english )
+	local wltu = {}
+	if WEPLANG[lang] then
+		wltu = WEPLANG[lang]
+	else
+		wltu = WEPLANG.english
+	end
+	for k, v in pairs( wltu ) do
+		finalweplang[k] = v
+	end
+	cwlang = finalweplang
 end
 
-if WEPLANG[langtouse] then
-	cwlang = WEPLANG[langtouse]
-else
-	cwlang = WEPLANG.english
-end
+LoadLang( langtouse )
 
 mapfile = "mapconfigs/" .. game.GetMap() .. ".lua"
 include(mapfile)

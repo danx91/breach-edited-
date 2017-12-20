@@ -23,10 +23,10 @@ function GetTableOverride( tab )
 	return tab
 end
 
-function AddTables( tab1, tab2 )
+/*function AddTables( tab1, tab2 )
 	local returnTable = tab1
 	for k, v in pairs( tab2 ) do
 		returnTable[k] = v
 	end
 	return returnTable
-end
+end*/

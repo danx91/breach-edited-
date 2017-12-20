@@ -263,12 +263,15 @@ function GetRoleTableCustom(all, scps, p_mtf, p_res)
 end
 
 cvars.AddChangeCallback( "br_roundrestart", function( convar_name, value_old, value_new )
-	RoundRestart()
+	if tonumber( value_new ) == 1 then
+		RoundRestart()
+	end
 	RunConsoleCommand("br_roundrestart", "0")
 end )
 
 function SetupPlayers(pltab)
 	local allply = GetActivePlayers()
+	local usespecial = false
 	
 	// SCPS
 	local spctab = table.Copy(SPCS)
@@ -278,12 +281,20 @@ function SetupPlayers(pltab)
 			//print("not enough scps, copying another table")
 		end
 		local pl = table.Random(allply)
-		if IsValid(pl) == false then return end
-		local scp = table.Random(spctab)
-		scp["func"](pl)
-		print("assigning " .. pl:Nick() .. " to scps")
-		table.RemoveByValue(spctab, scp)
-		table.RemoveByValue(allply, pl)
+		if IsValid(pl) == false then continue end
+		if math.random( 1, 100 ) < 20 and !usespecial then
+			usespecial = true
+			local scp = table.Random( EVENT_SCPS )
+			scp["func"](pl)
+			print("assigning " .. pl:Nick() .. " to scps")
+			table.RemoveByValue(allply, pl)
+		else
+			local scp = table.Random(spctab)
+			scp["func"](pl)
+			print("assigning " .. pl:Nick() .. " to scps")
+			table.RemoveByValue(spctab, scp)
+			table.RemoveByValue(allply, pl)
+		end
 	end
 	
 	// Class D Personell
@@ -294,7 +305,7 @@ function SetupPlayers(pltab)
 		end
 		if #dspawns > 0 then
 			local pl = table.Random(allply)
-			if IsValid(pl) == false then return end
+			if IsValid(pl) == false then continue end
 			local spawn = table.Random(dspawns)
 			pl:SetupNormal()
 			pl:SetClassD()
@@ -313,7 +324,7 @@ function SetupPlayers(pltab)
 		end
 		if #resspawns > 0 then
 			local pl = table.Random(allply)
-			if IsValid(pl) == false then return end
+			if IsValid(pl) == false then continue end
 			local spawn = table.Random(resspawns)
 			pl:SetupNormal()
 			pl:SetResearcher()
@@ -335,7 +346,7 @@ function SetupPlayers(pltab)
 		end
 		if #securityspawns > 0 then
 			local pl = table.remove( allply, math.random( #allply ) )
-			if !IsValid( pl ) then return end
+			if !IsValid( pl ) then continue end
 			local spawn = table.remove( securityspawns, math.random( #allply ) )
 			local thebestone
 			for k, v in pairs( ALLCLASSES["security"]["roles"] ) do

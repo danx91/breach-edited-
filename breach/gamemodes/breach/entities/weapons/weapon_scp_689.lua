@@ -126,7 +126,7 @@ function SWEP:PrimaryAttack()
 		timer.Create("CheckTimer"..self.Owner:SteamID64(), 0.5, math.floor(self.Primary.Delay), function()
 			if !( IsValid( self.Owner ) and self.Owner:Alive() and IsValid( at ) and at:Alive() and at:GTeam() != TEAM_SPEC ) or at.Using714 then
 				timer.Destroy("CheckTimer")
-				timer.Destroy("KillTimer")
+				timer.Destroy( "KillTimer"..self.Owner:SteamID64() )
 			end
 		end )
 		timer.Create("KillTimer"..self.Owner:SteamID64(), math.floor(self.Primary.Delay / 2), 1, function()
