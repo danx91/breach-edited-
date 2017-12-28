@@ -47,7 +47,7 @@ function ENT:Initialize()
 		        		if IsValid( v ) and v:IsPlayer() then
 		        			if v:GTeam() != TEAM_SPEC then
 		        				local dist = self:GetPos():Distance( v:GetPos() )
-		        				local health = math.Clamp( v:Health() + math.random( 10, 30 ), 1, v:GetMaxHealth() )
+		        				local health = math.Clamp( v:Health() + math.random( 20, 40 ), 1, v:GetMaxHealth() )
 		        				v:SetHealth( health )
 		        			end
 		        		end
@@ -58,13 +58,13 @@ function ENT:Initialize()
 		        	explosion:SetPos( self:GetPos() )
 		        	explosion:Spawn()
 		        	explosion:Fire( "explode", "", 0 )
-		        	local fent = ents.FindInSphere( self:GetPos(), 250 )
+		        	local fent = ents.FindInSphere( self:GetPos(), 300 )
 		        	for k, v in pairs( fent ) do
 		        		if IsValid( v ) then
 		        			if v:IsPlayer() then
 			        			if v:GTeam() != TEAM_SPEC and v:GTeam() != TEAM_SCP then
 			        				local dist = self:GetPos():Distance( v:GetPos() )
-			        				local dmg = ( 250 - dist ) / 7
+			        				local dmg = ( 300 - dist ) / 4
 			        				v:TakeDamage( dmg, self.Owner, self.Owner )
 			        			end
 			        		elseif v:GetClass() == "func_breakable" then

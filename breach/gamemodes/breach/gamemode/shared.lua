@@ -4,8 +4,8 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
-VERSION = "0.24"
-DATE = "30/09/2017"
+VERSION = "0.25"
+DATE = "28/12/2017"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
