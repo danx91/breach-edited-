@@ -2,6 +2,9 @@
 ------Translanted by Trip------
 --steamcommunity.com/id/b4tr1p-
 ----------------------------
+------Revised by Kaiden--------
+--steamcommunity.com/id/kaidenm-
+----------------------------
 portuguese = {}
 
 portuguese.roundtype = "Tipo de rodada: {type}"
@@ -10,20 +13,20 @@ portuguese.round = "O jogo começou, Boa sorte!"
 portuguese.specialround = "Essa é uma rodada especial"
 
 portuguese.lang_pldied = "{num} jogador(es) morreram"
-portuguese.lang_descaped = "{num} Classe D(s) escaparam"
+portuguese.lang_descaped = "{num} Classe(s) D escaparam"
 portuguese.lang_sescaped = "{num} SCP(s) escaparam"
 portuguese.lang_rescaped = "{num} Pesquisador escaparam"
 portuguese.lang_dcaptured = "A Chaos Insurgency capturou {num} Classe D(s)"
 portuguese.lang_rescorted = "MTF escoltou {num} Pesquisador(es)"
-portuguese.lang_teleported = "SCP - 106 capturou {num} vitima(s) para a Dimensão de bolso"
-portuguese.lang_snapped = "{num} pescoço(s) foram arrebentados pelo SCP173"
+portuguese.lang_teleported = "SCP - 106 capturou {num} vitima(s) para a Dimensão Portátil"
+portuguese.lang_snapped = "{num} pescoço(s) foram quebrados pelo SCP173"
 portuguese.lang_zombies = 'SCP - 049 "curou a doença" {num} vez(es) '
 portuguese.lang_secret_found = "O segredo foi encontrado"
 portuguese.lang_secret_nfound = "O segredo não foi encontrado"
 
 portuguese.class_unknown = "Desconhecido."
 
-portuguese.votefail = "Você já votou ou não é permitido a votar!"
+portuguese.votefail = "Você já votou ou não é permitido votar!"
 portuguese.votepunish = "Vote para punir ou perdoar %s"
 portuguese.voterules = [[
 	Escreva !punish para punir o jogador ou !forgive to perdoar ele
@@ -39,17 +42,24 @@ portuguese.votes = "De %s jogadores %s votaram para punir e %s para perdoar"
 portuguese.votecancel = "A última votação de punição foi cancelada pelo administrador"
 
 portuguese.starttexts = {
+	ROLE_SCPSantaJ = {
+		"Você é o SCP-SANTA-J",
+		{"Seu objetivo é escapar da instalação.",
+		"Você é o Papai Noel! Dê presentes a todos!",
+		"Feliz Natal e Feliz Ano Novo",
+		"Este SCP especial só está disponível no evento de Natal!"}
+	},
 	ROLE_SCP173 = {
 		"Você é o SCP-173",
 		{"Seu objetivo é escapar da instalação.",
-		"Você não pode se mecher enquanto alguem estiver olhando para você",
+		"Você não pode se mexer enquanto alguém estiver olhando para você",
 		"Lembre-se,os humanos estão piscando",
 		"Você tem uma habilidade especial no botão direito do mouse: cega todos ao redor de você"}
 	},
 	ROLE_SCP096 = {
 		"Você é o SCP-096",
 		{"Seu objetivo é escapar da instalação",
-		"Você se move extremamente rapido quando alguem está olhando.",
+		"Você se move extremamente rápido quando alguem está olhando.",
 		"Você pode gritar usando o botão direito do do mouse"}
 	},
 	ROLE_SCP066 = {
@@ -61,28 +71,28 @@ portuguese.starttexts = {
 	ROLE_SCP106 = {
 		"Você é o SCP-106",
 		{"Seu objetivo é escapar da instalação",
-		"Quando você tocar alguem, esse alguem é teleportado",
+		"Quando você tocar alguem, esse alguem é teletransportado",
 		"para sua dimensão portátil"}
 	},
 	ROLE_SCP966 = {
 		"Você é o SCP-966",
 		{"Seu objetivo é escapar da instalação",
-		"Você é invisivel, humanos podem te ver apenas usando Night Vision",
+		"Você é invisível, humanos podem te ver apenas usando Night Vision",
 		"Você machuca humanos quando está perto deles.",
 		"Você também desorienta eles."}
 	},
 	ROLE_SCP682 = {
 		"Você é o SCP-682",
 		{"Seu objetivo é escapar da instalação",
-		"You are a Hard-to-Destroy Reptile",
-		"You kill people instantly, although you are very slow",
-		"You have a special ability on RMB"}
+		"Você é o Réptil Difícil-de-Destruir",
+		"Você irá matar pessoas instantaneamente, porém você é muito devagar",
+		"Você tem uma habilidade especial no botão direito do mouse"}
 	},
 	ROLE_SCP457 = {
 		"Você é o SCP-457",
 		{"Seu objetivo é escapar da instalação",
 		"Você está sempre queimando",
-		"Se você chegar perto o suficiente de um humano, Você vai queimar ele."}
+		"Se você chegar perto o suficiente de um humano, você irá queimar ele."}
 	},
 	ROLE_SCP049 = {
 		"Você é o SCP-049",
@@ -93,16 +103,16 @@ portuguese.starttexts = {
 		"Você é o SCP-689",
 		{"Seu objetivo é escapar da instalação",
 		"Você é extremamente devagar, porém extremamente mortal",
-		"Você pode matar qualquer pessoar que olhar para você",
+		"Você pode matar qualquer pessoa que olhar para você",
 		"Depois de matar alguem, você aparece no corpo",
 		"Botão esquerdo do mouse - Ataca, Botão direito do mouse - quebra janelas"}
 	},
 	ROLE_SCP939 = {
 		"Você é o SCP-939",
 		{"Seu objetivo é escapar da instalação",
-		"Você é rapido e forte",
-		"Você pode enganar seus alvos falando com eles no voice chat",
-		"Botão esquerdo do mouse - Ataca, Botão direito do mouse - fala no voice chat"}
+		"Você é rápido e forte",
+		"Você pode enganar seus alvos falando com eles no canal de voz",
+		"Botão esquerdo do mouse - Ataca, Botão direito do mouse - fala no canal de voz"}
 	},
 	ROLE_SCP999 = {
 		"Você é o SCP-999",
@@ -114,7 +124,7 @@ portuguese.starttexts = {
 		"Você é o SCP-082",
 		{"Seu objetivo é escapar da instalação",
 		"Você é um canibal com um machete",
-		"Seus ataques diminuem a stamina do alvo.",
+		"Seus ataques diminuem a fadiga do alvo.",
 		"Quando você mata alguem você recebe vida."}
 	},
 	ROLE_SCP023 = {
@@ -128,7 +138,7 @@ portuguese.starttexts = {
 		"Você é o SCP-1471-A",
 		{"Seu objetivo é escapar da instalação",
 		"Você pode se teletransportar para o seu alvo",
-		"Botão esquerdo do mouse - Ataca, Botão direito do mouse - Teleporta no seu alvo"}
+		"Botão esquerdo do mouse - Ataca, Botão direito do mouse - Teletransporta no seu alvo"}
 	},
 	ROLE_SCP1048A = {
 		"Você é o SCP-1048-A",
@@ -150,17 +160,17 @@ portuguese.starttexts = {
 	ROLE_SCP0492 = {
 		"Você é o SCP-049-2",
 		{"Seu objetivo é escapar da instalação",
-		"Copere com o SCP-049 para matar mais pessoas"}
+		"Coopere com o SCP-049 para matar mais pessoas"}
 	},
 	ROLE_SCP076 = {
 		"Você é o SCP-076-2",
 		{"Seu objetivo é escapar da instalação",
-		"Você é rapido e tem um HP baixo.",
-		"Você continuara respawnando até que alguém destrua SCP-076-1"}
+		"Você é rápido e tem um HP baixo.",
+		"Você continuara renascendo até que alguém destrua SCP-076-1"}
 	},
 	ROLE_SCP0082 = {
 		"Você é o SCP-008-2",
-		{"Seu objetivo é matar e infectar todos os MTF's e classe D's ",
+		{"Seu objetivo é matar e infectar todos os MTF's e classes D ",
 		"Se você matar alguém, esse alguém vai se tornar um  SCP-008-2 também"}
 	},
 	ROLE_RES = {
@@ -186,18 +196,18 @@ portuguese.starttexts = {
 	ROLE_CLASSD = {
 		"Você é um Classe D",
 		{"Seu objetivo é escapar da instalação",
-		"Você precisa cooperar com outros Classe Ds",
+		"Você precisa cooperar com outros Classes D",
 		"Procure por KEYCARDs e tome cuidado com MTF's e SCP's "}
 	},
 	ROLE_VETERAN = {
 		"Você é um Classe D Veterano",
 		{"Seu objetivo é escapar da instalação",
-		"Você precisa cooperar com outros Classe Ds",
+		"Você precisa cooperar com outros Classes D",
 		"Procure por KEYCARDs e tome cuidado com MTF's e SCP's "}
 	},
 	ROLE_CIC = {
 		"Você é um agente da Chaos Insurgency",
-		{"Seu objetivo é ajudar os Classe Ds",
+		{"Seu objetivo é ajudar os Classes D",
 		"Você organiza eles.",
 		"Tome cuidado com MTF's e SCP's, e espere por ajuda."}
 	},
@@ -229,14 +239,14 @@ portuguese.starttexts = {
 		"Ouça as ordens do comandante da MTF e permaneça junto ao seu time."}
 	},
 	ROLE_HAZMAT = {
-		"You are a Special MTF Unit",
+		"Você é uma Unidade Especial MTF",
 		{"Seu objetivo é encontrar e resgatar todos",
 		"os pesquisadores que continuam na instalação",
 		"Você precisa matar qualquer SCP ou Classe D que encontrar",
 		"Ouça o comandante da MTF e o Diretor"}
 	},
 	ROLE_MTFL = {
-		"You are a MTF Lieutenant",
+		"Você é o Tenente MTF",
 		{"Seu objetivo é encontrar e resgatar todos",
 		"os pesquisadores que continuam na instalação",
 		"Você precisa matar qualquer SCP ou Classe D que encontrar",
@@ -260,7 +270,7 @@ portuguese.starttexts = {
 		{"Seu objetivo é encontrar e resgatar todos",
 		"os pesquisadores que continuam na instalação",
 		"Você precisa matar qualquer SCP ou Classe D que encontrar",
-		"Va para a instalação para ajudar os guardas"}
+		"Vá à instalação para ajudar os guardas"}
 	},
 	ROLE_MTFCOM = {
 		"Você é o Comandante da MTF",
@@ -271,13 +281,13 @@ portuguese.starttexts = {
 	},
 	ROLE_CHAOS = {
 		"Você é um Soldado da Chaos Insurgency",
-		{"Seu objetivo é capturar o máximo de Classe Ds",
+		{"Seu objetivo é capturar o máximo de Classes D",
 		"Escolte eles para fora da instalação",
 		"Você deve matar qualquer um que entre no seu caminho"}
 	},
 	ROLE_CHAOSSPY = {
 		"Você é um Espião da Chaos Insurgency",
-		{"Seu objetivo é matar todos guardas da MTF e capturar todos Classe Ds",
+		{"Seu objetivo é matar todos guardas da MTF e capturar todos Classes D",
 		"Eles não sabem do seu disfarce",
 		"não destrua seu disfarce",
 		"Se encontrar algum classe D tente escoltar ele."}
@@ -288,11 +298,11 @@ portuguese.starttexts = {
 		"Mate qualquer um que tentar te parar"}
 	},
 	ROLE_SPEC = {
-		"You are a Spectator",
+		"Você é um espectador",
 		{'Use o comando "br_spectate" para voltar'}
 	},
 	ADMIN = {
-		"Você ta no modo admin",
+		"Você está no modo administrador",
 		{'Use o comando "br_admin_mode" para voltar no proximo round'}
 	},
 	ROLE_INFECTD = {
@@ -310,14 +320,14 @@ portuguese.starttexts = {
 }
 
 portuguese.lang_end1 = "O jogo acaba aqui."
-portuguese.lang_end2 = "O tempo limit foi alcançado"
+portuguese.lang_end2 = "O tempo limite foi alcançado"
 portuguese.lang_end3 = "O jogo terminou devido à incapacidade de continuar"
 
 portuguese.escapemessages = {
 	{
 		main = "Você escapou",
 		txt = "Você escapou da instalação em {t} minutos, bom trabalho!",
-		txt2 = "Try to get escorted by MTF next time to get bonus points.",
+		txt2 = "Tente ser escortado pelo MTF na próxima vez para conseguir pontos bônus",
 		clr = Color(237, 28, 63),
 	},
 	{
@@ -334,7 +344,7 @@ portuguese.escapemessages = {
 	},
 	{
 		main = "Você escapou",
-		txt = "Você escapou em {t} mminutos, bom trabalho!",
+		txt = "Você escapou em {t} minutos, bom trabalho!",
 		txt2 = "",
 		clr = Color(237, 28, 63),
 	}
@@ -370,8 +380,8 @@ portuguese.ROLES.ROLE_SCP0492 = "SCP-049-2"
 portuguese.ROLES.ROLE_SCP0082 = "SCP-008-2"
 
 portuguese.ROLES.ROLE_RES = "Pesquisador"
-portuguese.ROLES.ROLE_MEDIC = "Meidco"
-portuguese.ROLES.ROLE_NO3 = "Pesquisador Level 3"
+portuguese.ROLES.ROLE_MEDIC = "Médico"
+portuguese.ROLES.ROLE_NO3 = "Pesquisador Nível 3"
 
 portuguese.ROLES.ROLE_CLASSD = "Pessoal Classe D"
 portuguese.ROLES.ROLE_VETERAN = "Classe D veterano"
@@ -398,7 +408,7 @@ portuguese.credits_edit = "Modificado e reparado por:"
 portuguese.settings = "Configurações"
 portuguese.updateinfo = "Mostrar alterações após a atualização"
 portuguese.done = "Pronto"
-portuguese.repe = "escreva br_reset_intro para mostrar a intro de novo."
+portuguese.repe = "escreva br_reset_intro para mostrar a introdução novamente."
 
 portuguese.author = "Autor"
 portuguese.helper = "Assistente"
@@ -407,8 +417,8 @@ portuguese.originator = "Colaborador"
 portuguese.updates = {
 	"portuguese",
 	"Notas de atualização",
-	"Notas de atualização %s estão indisponiveis",
-	"Server version",
+	"Notas de atualização %s estão indisponíveis",
+	"Versão do Servidor",
 }
 
 ALLLANGUAGES.portuguese = portuguese
