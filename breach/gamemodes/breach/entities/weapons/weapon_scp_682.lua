@@ -33,8 +33,8 @@ SWEP.ISSCP 		= true
 SWEP.Teams			= { 1 }
 SWEP.droppable		= false
 
-SWEP.SantasHatPositionOffset = Vector( 16, -5, 3.5 )
-SWEP.SantasHatAngleOffset = Angle( -10, 180, -20 )
+--SWEP.SantasHatPositionOffset = Vector( 16, -5, 3.5 )
+--SWEP.SantasHatAngleOffset = Angle( -10, 180, -20 )
 
 function SWEP:Deploy()
 	self.Owner:DrawViewModel( false )
@@ -52,13 +52,13 @@ function SWEP:Initialize()
 		self.Instructions	= self.Lang.instructions
 	end
 	self:SetHoldType(self.HoldType)
-	if CLIENT then
+	/*if CLIENT then
 		if !self.SantasHat then
 			self.SantasHat = ClientsideModel( "models/cloud/kn_santahat.mdl" )
 			self.SantasHat:SetModelScale( 1.8 )
 			self.SantasHat:SetNoDraw( true )
 		end
-	end
+	end*/
 end
 
 function SWEP:Holster()
@@ -66,19 +66,12 @@ function SWEP:Holster()
 end
 
 function SWEP:OnRemove()
-	self.Owner:SetModelScale( 1 )
-	if CLIENT and IsValid( self.SantasHat ) then
-		self.SantasHat:Remove()
+	if IsValid( self.Owner ) then
+		self.Owner:SetModelScale( 1 )
 	end
-end
-
-function SWEP:HUDShouldDraw( element )
-	local hide = {
-		CHudAmmo = true,
-		CHudSecondaryAmmo = true,
-	}
-	if hide[element] then return false end
-	return true
+	/*if CLIENT and IsValid( self.SantasHat ) then
+		self.SantasHat:Remove()
+	end*/
 end
 
 SWEP.NextAttackW	= 0
@@ -164,12 +157,11 @@ function SWEP:SecondaryAttack()
 end
 
 hook.Add("EntityTakeDamage", "AcidDamage", function(target, dmg)
-	if not target:IsPlayer() then return end
-	if not target:Alive() then return end
+	if !target or !target:IsPlayer() or !target:Alive() then return end
 	if !IsValid( target:GetActiveWeapon() ) or target:GetActiveWeapon():GetClass() != "weapon_scp_682" then return end
 	if dmg:GetDamageType() == DMG_ACID then
 		if preparing then return true end
-		dmg:ScaleDamage( 2.5 )
+		dmg:ScaleDamage( 3 )
 	end
 end)
 
@@ -195,12 +187,12 @@ function SWEP:DrawHUD()
 end
 
 function SWEP:DrawWorldModel()
-	if !IsValid( self.SantasHat ) then return end
+	/*if !IsValid( self.SantasHat ) then return end
 	local boneid = self.Owner:LookupBone( "Bip01_Head" )
 	if not boneid then
-		/*for i=0, self.Owner:GetBoneCount()-1 do
+		for i=0, self.Owner:GetBoneCount()-1 do
 			print( i, self.Owner:GetBoneName( i ) )
-		end*/
+		end
 		return
 	end
 
@@ -214,5 +206,5 @@ function SWEP:DrawWorldModel()
 	self.SantasHat:SetPos( newpos )
 	self.SantasHat:SetAngles( newang )
 	self.SantasHat:SetupBones()
-	self.SantasHat:DrawModel()
+	self.SantasHat:DrawModel()*/
 end

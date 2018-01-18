@@ -290,7 +290,7 @@ function SpawnAllItems()
 
 	------XMAS PART------
 
-	for k, v in pairs( XMAS_TREES ) do
+	/*for k, v in pairs( XMAS_TREES ) do
 		local tree = ents.Create( "prop_physics" )
 		tree:SetModel( "models/unconid/xmas/xmas_tree.mdl" )
 		tree:SetPos( v )
@@ -323,7 +323,7 @@ function SpawnAllItems()
 			phys:Wake()
 			phyas:EnableMotion( false )
 		end
-	end
+	end*/
 
 	---------------------
 

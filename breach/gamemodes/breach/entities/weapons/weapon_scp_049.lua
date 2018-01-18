@@ -39,17 +39,17 @@ SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Automatic	= false
 SWEP.NextAttackW			= 0
 
-SWEP.SantasHatPositionOffset = Vector( 1.5, 2.2, 1.1 )
-SWEP.SantasHatAngleOffset = Angle( -40, -90, -10 )
+--SWEP.SantasHatPositionOffset = Vector( 1.5, 2.2, 1.1 )
+--SWEP.SantasHatAngleOffset = Angle( -40, -90, -10 )
 
 function SWEP:Deploy()
 	self.Owner:DrawViewModel( false )
 end
 
 function SWEP:Remove()
-	if CLIENT and IsValid( self.SantasHat ) then
+	/*if CLIENT and IsValid( self.SantasHat ) then
 		self.SantasHat:Remove()
-	end
+	end*/
 end
 
 SWEP.Lang = nil
@@ -73,13 +73,13 @@ function SWEP:Initialize()
 			sound = "scp/049/attack"..i..".ogg"
 		} )
 	end
-	if CLIENT then
+	/*if CLIENT then
 		if !self.SantasHat then
 			self.SantasHat = ClientsideModel( "models/cloud/kn_santahat.mdl" )
 			self.SantasHat:SetModelScale( 1 )
 			self.SantasHat:SetNoDraw( true )
 		end
-	end
+	end*/
 end
 
 function SWEP:Think()
@@ -164,13 +164,13 @@ function SWEP:DrawHUD()
 	surface.DrawLine( x, y + length, x, y + gap )
 end
 
-function SWEP:DrawWorldModel()
+/*function SWEP:DrawWorldModel()
 	if !IsValid( self.SantasHat ) then return end
 	local boneid = self.Owner:LookupBone( "ValveBiped.Bip01_Head1" )
 	if not boneid then
-		/*for i=0, self.Owner:GetBoneCount()-1 do
+		for i=0, self.Owner:GetBoneCount()-1 do
 			print( i, self.Owner:GetBoneName( i ) )
-		end*/
+		end
 		return
 	end
 
@@ -185,4 +185,4 @@ function SWEP:DrawWorldModel()
 	self.SantasHat:SetAngles( newang )
 	self.SantasHat:SetupBones()
 	self.SantasHat:DrawModel()
-end
+end*/

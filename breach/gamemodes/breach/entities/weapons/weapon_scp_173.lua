@@ -36,8 +36,8 @@ SWEP.Secondary.DefaultClip	= 0
 SWEP.Secondary.Automatic	= false
 SWEP.NextAttackW			= 0
  
-SWEP.SantasHatPositionOffset = Vector( -3, 47, 1 )
-SWEP.SantasHatAngleOffset = Angle( -90, -20, -20 )
+--SWEP.SantasHatPositionOffset = Vector( -3, 47, 1 )
+--SWEP.SantasHatAngleOffset = Angle( -90, -20, -20 )
 
 function SWEP:Deploy()
 	self.Owner:DrawViewModel( false )
@@ -56,19 +56,19 @@ function SWEP:Initialize()
 		self.Instructions	= self.Lang.instructions
 	end
 	self:SetHoldType(self.HoldType)
-	if CLIENT then
+	/*if CLIENT then
 		if !self.SantasHat then
 			self.SantasHat = ClientsideModel( "models/cloud/kn_santahat.mdl" )
 			self.SantasHat:SetModelScale( 1.2 )
 			self.SantasHat:SetNoDraw( true )
 		end
-	end
+	end*/
 end
 
 function SWEP:Remove()
-	if CLIENT and IsValid( self.SantasHat ) then
+	/*if CLIENT and IsValid( self.SantasHat ) then
 		self.SantasHat:Remove()
-	end
+	end*/
 end
 
 function SWEP:IsLookingAt( ply )
@@ -268,7 +268,7 @@ function SWEP:DrawHUD()
 	surface.DrawLine( x, y + length, x, y + gap )
 end
 
-function SWEP:DrawWorldModel()
+/*function SWEP:DrawWorldModel()
 	if !IsValid( self.SantasHat ) then return end
 	local boneid = self.Owner:LookupBone( "joint1" )
 	if not boneid then
@@ -286,4 +286,4 @@ function SWEP:DrawWorldModel()
 	self.SantasHat:SetAngles( newang )
 	self.SantasHat:SetupBones()
 	self.SantasHat:DrawModel()
-end
+end*/

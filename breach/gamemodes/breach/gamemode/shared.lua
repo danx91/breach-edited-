@@ -88,10 +88,10 @@ function GetLangRole(rl)
 end
 
 SPCS = {
-	{name = "SCP SANTA-J",
+	/*{name = "SCP SANTA-J",
 	func = function(pl)
 		pl:SetSCPSantaJ()
-	end},
+	end},*/
 	{name = "SCP 173",
 	func = function(pl)
 		pl:SetSCP173()
@@ -164,13 +164,6 @@ SPCS = {
 	func = function(pl)
 		pl:SetSCP076()
 	end}
-}
-
-EVENT_SCPS = {
-	{name = "SCP SANTA-J",
-	func = function(pl)
-		pl:SetSCPSantaJ()
-	end},
 }
 
 ROLES = {}
@@ -333,15 +326,19 @@ function GM:EntityFireBullets( ent, data )
 			if !SERVER then return end
 			local vic = tr.Entity
 			if IsValid( vic ) then
-				info:SetDamage( damage )
-				gamemode.Call( "ScalePlayerDamage", vic, nil, info )
-				local scaleddamge = info:GetDamage()
-				local force = info:GetDamageForce():GetNormalized()
-				local antiforce = GetConVar( "br_experimental_antiknockback_force" ):GetInt() * -1
-				info:SetDamage( 0 )
-				info:SetDamageForce( Vector( 0 ) )
-				vic:TakeDamage( scaleddamge, ent, ent )
-				vic:SetVelocity( force * scaleddamge * antiforce )
+				if vic:IsPlayer() then
+					info:SetDamage( damage )
+					gamemode.Call( "ScalePlayerDamage", vic, nil, info )
+					local scaleddamge = info:GetDamage()
+					local force = info:GetDamageForce():GetNormalized()
+					local antiforce = GetConVar( "br_experimental_antiknockback_force" ):GetInt() * -1
+					info:SetDamage( 0 )
+					info:SetDamageForce( Vector( 0 ) )
+					vic:TakeDamage( scaleddamge, ent, ent )
+					vic:SetVelocity( force * scaleddamge * antiforce )
+				else
+					vic:TakeDamage( info:GetDamage(), ent, ent )
+				end
 			end
 		end
 		return true

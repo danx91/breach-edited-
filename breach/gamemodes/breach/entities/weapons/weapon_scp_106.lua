@@ -34,7 +34,9 @@ SWEP.Secondary.Automatic	= false
 SWEP.NextAttackW			= 0
 
 function SWEP:OnRemove()
-	self.Owner:SetCustomCollisionCheck( false )
+	if IsValid( self.Owner ) then
+		self.Owner:SetCustomCollisionCheck( false )
+	end
 end
 
 function SWEP:Deploy()

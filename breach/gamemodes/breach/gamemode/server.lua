@@ -271,7 +271,6 @@ end )
 
 function SetupPlayers(pltab)
 	local allply = GetActivePlayers()
-	local usespecial = false
 	
 	// SCPS
 	local spctab = table.Copy(SPCS)
@@ -282,19 +281,11 @@ function SetupPlayers(pltab)
 		end
 		local pl = table.Random(allply)
 		if IsValid(pl) == false then continue end
-		if math.random( 1, 100 ) < 20 and !usespecial then
-			usespecial = true
-			local scp = table.Random( EVENT_SCPS )
-			scp["func"](pl)
-			print("assigning " .. pl:Nick() .. " to scps")
-			table.RemoveByValue(allply, pl)
-		else
-			local scp = table.Random(spctab)
-			scp["func"](pl)
-			print("assigning " .. pl:Nick() .. " to scps")
-			table.RemoveByValue(spctab, scp)
-			table.RemoveByValue(allply, pl)
-		end
+		local scp = table.Random(spctab)
+		scp["func"](pl)
+		print("assigning " .. pl:Nick() .. " to scps")
+		table.RemoveByValue(spctab, scp)
+		table.RemoveByValue(allply, pl)
 	end
 	
 	// Class D Personell
