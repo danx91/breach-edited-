@@ -241,10 +241,15 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 				end
 			end
 			if candrop then
-				local wep = ents.Create( v:GetClass() )
+				local class = v:GetClass()
+				local wep = ents.Create( class )
 				if IsValid( wep ) then
 					wep:SetPos( pos )
 					wep:Spawn()
+					if class == "br_keycard" then
+						local cardtype = v.KeycardType or v:GetNWString( "K_TYPE", "safe" )
+						wep:SetKeycardType( cardtype )
+					end
 					local atype = v:GetPrimaryAmmoType()
 					if atype > 0 then
 						wep.SavedAmmo = v:Clip1()
@@ -520,6 +525,11 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 		for k,v in pairs( ply:GetWeapons() ) do
 			if ( string.starts( v:GetClass(), "cw_" ) and string.starts( wep:GetClass(), "cw_" )) then return false end
 		end
+
+		if table.Count( ply:GetWeapons() ) >= 8 then
+			return false
+		end
+
 		ply.gettingammo = wep.SavedAmmo
 		return true
 	else
@@ -547,9 +557,8 @@ function GM:PlayerUse( ply, ent )
 	if ply.lastuse == nil then ply.lastuse = 0 end
 	if ply.lastuse > CurTime() then return end
 	for k,v in pairs(MAPBUTTONS) do
-		if v["pos"] == ent:GetPos() then
-			//print("Found a button: " .. v["name"])
-			if v.clevel != nil then
+		if v.pos == ent:GetPos() then
+			/*if v.clevel != nil then
 				if ply:CLevel() >= v.clevel or ( v.levelOverride and v.levelOverride( ply ) ) then
 					if v.usesounds == true then
 						ply:EmitSound("KeycardUse1.ogg")
@@ -565,18 +574,56 @@ function GM:PlayerUse( ply, ent )
 					ply:PrintMessage(HUD_PRINTCENTER, "You need to have " .. v.clevel .. " clearance level to open this door.")
 					return false
 				end
+			end*/
+			if v.access then
+				if v.levelOverride then
+					return v.levelOverride( ply )
+				end
+				local wep = ply:GetActiveWeapon()
+				if wep and wep:GetClass() == "br_keycard" then
+					local keycard = wep
+					if IsValid( keycard ) then
+						if bit.band( keycard.Access, v.access ) > 0 then
+							if !v.nosound then
+								ply:EmitSound( "KeycardUse1.ogg" )
+							end
+							ply.lastuse = CurTime() + 1
+							ply:PrintMessage( HUD_PRINTCENTER, v.custom_access or "Access granted to "..v.name )
+							if v.custom_access_granted then
+								return v.custom_access_granted( ply ) or false
+							else
+								return true
+							end
+						else
+							if !v.nosound then
+								ply:EmitSound( "KeycardUse2.ogg" )
+							end
+							ply.lastuse = CurTime() + 1
+							ply:PrintMessage( HUD_PRINTCENTER, v.custom_deny or "You cannot operate this door with this keycard" )
+							return false
+						end
+					end
+				else
+					ply.lastuse = CurTime() + 1
+					ply:PrintMessage( HUD_PRINTCENTER, v.custom_nocard or "A keycard is required to operate this door" )
+					return false
+				end
 			end
 			if v.canactivate != nil then
 				local canactivate = v.canactivate(ply, ent)
 				if canactivate then
-					if v.usesounds == true then
+					if !v.nosound then
 						ply:EmitSound("KeycardUse1.ogg")
 					end
 					ply.lastuse = CurTime() + 1
-					ply:PrintMessage(HUD_PRINTCENTER, "Access granted to " .. v["name"])
+					if v.customaccesmsg then
+						ply:PrintMessage(HUD_PRINTCENTER, v.customaccesmsg)
+					else
+						ply:PrintMessage(HUD_PRINTCENTER, "Access granted to " .. v["name"])
+					end
 					return true
 				else
-					if v.usesounds == true then
+					if !v.nosound then
 						ply:EmitSound("KeycardUse2.ogg")
 					end
 					ply.lastuse = CurTime() + 1

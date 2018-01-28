@@ -34,6 +34,8 @@ english.voteresult = "Voting result against %s is... %s"
 english.votes = "From %s players %s voted for punish and %s for forgive"
 english.votecancel = "Last punish vote was canceled by admin"
 
+english.eq_tip = "LMB - Select | RMB - Drop"
+
 english.starttexts = {
 	ROLE_SCPSantaJ = {
 		"You are the SCP-SANTA-J",

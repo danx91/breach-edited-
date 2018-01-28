@@ -161,8 +161,8 @@ function SWEP:SecondaryAttack()
 		self.Owner:SetHealth( self.Owner:Health() - 5 )
 		self.NextSecondary = CurTime() + 0.15
 		self.Speed = true
-		self.Owner:SetWalkSpeed(230)
-		self.Owner:SetRunSpeed(230)
+		self.Owner:SetWalkSpeed(250)
+		self.Owner:SetRunSpeed(250)
 	end
 end
 

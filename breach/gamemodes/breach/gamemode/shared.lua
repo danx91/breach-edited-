@@ -4,8 +4,8 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
-VERSION = "0.25"
-DATE = "28/12/2017"
+VERSION = "0.26"
+DATE = "28/01/2018"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
@@ -390,6 +390,26 @@ function GM:PlayerShouldTakeDamage( ply, attacker )
 	
 end
 */
+
+function GM:PlayerButtonDown( ply, button )
+	if CLIENT and IsFirstTimePredicted() then
+		local bind = _G[ "KEY_"..string.upper( input.LookupBinding( "+menu" ) ) ] or KEY_Q
+		if button == bind then
+			if CanShowEQ() then
+				ShowEQ()
+			end
+		end
+	end
+end
+
+function GM:PlayerButtonUp( ply, button )
+	if CLIENT and IsFirstTimePredicted() then
+		local bind = _G[ "KEY_"..string.upper( input.LookupBinding( "+menu" ) ) ] or KEY_Q
+		if button == bind and IsEQVisible() then
+			HideEQ()
+		end
+	end
+end
 
 function GM:EntityTakeDamage( target, dmginfo )
 	if target:IsPlayer() and target:HasWeapon( "item_scp_500" ) then

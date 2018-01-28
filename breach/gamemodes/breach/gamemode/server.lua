@@ -1,5 +1,6 @@
 util.AddNetworkString("PlayerBlink")
 util.AddNetworkString("DropWeapon")
+util.AddNetworkString("DropCurWeapon")
 --util.AddNetworkString("RequestGateA")
 util.AddNetworkString("RequestEscorting")
 util.AddNetworkString("PrepStart")
@@ -33,6 +34,15 @@ util.AddNetworkString("PlayerReady")
 util.AddNetworkString("RecheckPremium")
 util.AddNetworkString("CancelPunish")
 util.AddNetworkString("689")
+util.AddNetworkString( "UpdateKeycard" )
+util.AddNetworkString( "SendSound" )
+
+net.Receive( "DropWeapon", function( len, ply )
+	local class = net.ReadString()
+	if class then
+		ply:ForceDropWeapon( class )
+	end
+end )
 
 net.Receive( "CancelPunish", function( len, ply )
 	if ply:IsSuperAdmin() then
@@ -186,7 +196,7 @@ net.Receive( "ExplodeRequest", function( len, ply )
 	end
 end )
 
-net.Receive( "DropWeapon", function( len, ply )
+net.Receive( "DropCurWeapon", function( len, ply )
 	local wep = ply:GetActiveWeapon()
 	if ply:GTeam() == TEAM_SPEC then return end
 	if IsValid(wep) and wep != nil and IsValid(ply) then

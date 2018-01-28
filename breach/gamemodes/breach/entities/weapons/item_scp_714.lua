@@ -72,7 +72,7 @@ function SWEP:Think()
 	if not IsFirstTimePredicted() then return end
 	if !self.InUse then return end
 	if self.LastTime > CurTime() then return end
-	self.LastTime = CurTime() + 1.2
+	self.LastTime = CurTime() + 0.45
 	self.Durability = self.Durability - 1
 	if SERVER then
 		if self.Durability > 0 then

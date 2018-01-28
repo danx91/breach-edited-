@@ -64,10 +64,12 @@ lang.SCP_106 = {
 	author = "Kanade",
 	contact = "Look at this gamemode in workshop and search for creators",
 	purpose = "Kill",
-	instructions = "LMB to teleport someone to pocket dimension",
+	instructions = "LMB to teleport someone to pocket dimension\nRMB to place teleport\nR to teleport yourself to marked position",
 	HUD = {
 		attackReady = "Ready to attack",
 		attackCD = "Next attack in",
+		teleportReady = "Teleport ready",
+		teleportCD = "Next teleport in"
 	},
 }
 
@@ -297,46 +299,39 @@ lang.SNAV_ULT = {
 	items = "Detected items:"
 }
 
-lang.KEYCARD_1 = {
-	author = "Kanade",
+lang.KEYCARD = {
+	author = "danx91",
 	contact = "Look at this gamemode in workshop and search for creators",
-	purpose = "Open certain doors",
-	instructions = "If you hold it, you can open doors with level 1",
-}
-
-lang.KEYCARD_2 = {
-	author = "Kanade",
-	contact = "Look at this gamemode in workshop and search for creators",
-	purpose = "Open certain doors",
-	instructions = "If you hold it, you can open doors with level 2",
-}
-
-lang.KEYCARD_3 = {
-	author = "Kanade",
-	contact = "Look at this gamemode in workshop and search for creators",
-	purpose = "Open certain doors",
-	instructions = "If you hold it, you can open doors with level 3",
-}
-
-lang.KEYCARD_4 = {
-	author = "Kanade",
-	contact = "Look at this gamemode in workshop and search for creators",
-	purpose = "Open certain doors",
-	instructions = "If you hold it, you can open doors with level 4",
-}
-
-lang.KEYCARD_5 = {
-	author = "Kanade",
-	contact = "Look at this gamemode in workshop and search for creators",
-	purpose = "Open certain doors",
-	instructions = "If you hold it, you can open doors with level 5",
-}
-
-lang.KEYCARD_OMNI = {
-	author = "Kanade",
-	contact = "Look at this gamemode in workshop and search for creators",
-	purpose = "Open all doors",
-	instructions = "If you hold it, you can open doors with every level",
+	purpose = "Opens doors which requires keycard (Hold reload key to see where card have access)",
+	instructions = "Access:",
+	ACC = {
+		"SAFE",
+		"EUCLID",
+		"KETER",
+		"Checkpoints",
+		"OMEGA Warhead",
+		"Portal Obs.",
+		"Gate A",
+		"Gate B",
+		"Armory",
+		"Femur Breaker",
+		"EC",
+	},
+	STATUS = {
+		"ACCESS",
+		"NO ACCESS",
+	},
+	NAMES = {
+		"Keycard Level 1",
+		"Keycard Level 2",
+		"Keycard Level 3",
+		"Researcher Keycard",
+		"MTF Guard Keycard",
+		"MTF Commander Keycard",
+		"Keycard Level OMNI",
+		"Checkpoint Security Keycard",
+		"Hacked CI Keycard",
+	},
 }
 
 lang.ZEUS = {

@@ -98,6 +98,29 @@ function Sprint( ply )
 	end
 end
 
+if CLIENT then
+	function mply:DropWeapon( class )
+		net.Start( "DropWeapon" )
+			net.WriteString( class )
+		net.SendToServer()
+	end
+
+	function mply:SelectWeapon( class )
+		if ( !self:HasWeapon( class ) ) then return end
+		self.DoWeaponSwitch = self:GetWeapon( class )
+	end
+	
+	hook.Add( "CreateMove", "WeaponSwitch", function( cmd )
+		if !IsValid( LocalPlayer().DoWeaponSwitch ) then return end
+
+		cmd:SelectWeapon( LocalPlayer().DoWeaponSwitch )
+
+		if LocalPlayer():GetActiveWeapon() == LocalPlayer().DoWeaponSwitch then
+			LocalPlayer().DoWeaponSwitch = nil
+		end
+	end )
+end
+
 function OnTick()
 	if CLIENT then
 		Sprint( LocalPlayer() )

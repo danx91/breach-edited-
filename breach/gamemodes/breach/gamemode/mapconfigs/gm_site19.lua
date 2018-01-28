@@ -507,123 +507,159 @@ BUTTONS = {
 		name = "Security Room Doors",
 		pos = Vector(-1928.00, 3551.00, 53.00),
 		canactivate = function(pl, ent) return !preparing end,
+		nosound = true,
 	},
 	{
 		name = "173 Control Room Doors",
 		pos = Vector(193.000000, 1768.000000, 309.000000),
 		canactivate = function(pl, ent) return !preparing end,
-		clevel = 3
+		access = bit.lshift( 1, 1 ),
 	},
 	{
 		name = "173 Doors",
 		pos = Vector(393.000000, 1288.000000, 181.000000),
-		canactivate = function(pl, ent) return !preparing end
+		canactivate = function(pl, ent) return !preparing end,
+		nosound = true,
 	},
 	{
 		name = "106 Doors",
 		pos = Vector(2280.000000, 3959.000000, 53.000000),
-		canactivate = function(pl, ent) return !preparing end
+		canactivate = function(pl, ent) return !preparing end,
+		nosound = true,
 	},
 	{
 		name = "457 Doors",
 		pos = Vector(2441.000000, 1896.000000, 53.000000),
-		canactivate = function(pl, ent) return !preparing end
+		canactivate = function(pl, ent) return !preparing end,
+		nosound = true,
 	},
 	{
 		name = "HCZ-LCZ CHECKPOINT 1",
 		pos = Vector(2816.00, -192.00, 53.00),
-		usesounds = true,
-		clevel = 3
+		access = bit.lshift( 1, 3 ),
 	},
 	{
 		name = "HCZ-LCZ CHECKPOINT 2",
 		pos = Vector(2816.00, 1088.00, 53.00),
-		usesounds = true,
-		clevel = 3
+		access = bit.lshift( 1, 3 ),
 	},
 	{
 		name = "HCZ-EZ CHECKPOINT 1",
 		pos = Vector(2176.00, 2368.00, 53.00),
-		usesounds = true,
-		clevel = 3
+		access = bit.lshift( 1, 3 ),
 	},
 	{
 		name = "HCZ-EZ CHECKPOINT 2",
 		pos = Vector(1536.00, 3648.00, 53.00),
-		usesounds = true,
-		clevel = 3
+		access = bit.lshift( 1, 3 ),
 	},
 	{
 		name = "Control room",
 		pos = Vector(-2328.000000, 3775.000000, 53.000000),
-		clevel = 4
+		access = bit.lshift( 1, 10 ),
 	},
 	{
 		name = "Gate A",
 		pos = Vector(-321.000000, 4784.000000, 53.000000),
-		clevel = 4
+		access = bit.lshift( 1, 6 ),
 	},
 	{
 		name = "Gate B",
 		pos = Vector(-3790.500000, 2472.500000, 53.000000),
-		clevel = 5
+		access = bit.lshift( 1, 7 ),
 	},
 	{
 		name = "Armory room",
 		pos = Vector(1801.000000, -1432.000000, 53.000000),
-		usesounds = true,
-		clevel = 4
+		access = bit.lshift( 1, 8 ),
 	},
 	{
 		name = "Cells Control Room",
 		pos = Vector(-2239.000000, 1832.000000, 181.000000),
-		clevel = 2
+		access = bit.lshift( 1, 3 ),
+	},
+	{
+		name = "Femur Breaker",
+		pos = Vector( 2176.00, 5244.50, -201.00 ),
+		access = bit.lshift( 1, 9 ),
+		custom_access = "Activaiting Femur Breaker",
+		custom_deny = "You cannot activate Femur Breaker with this keycard",
+		custom_nocard = "A keycard is required to activate this device",
+		custom_access_granted = function( ply )
+			return Recontain106( ply )
+		end
+	},
+	{
+		name = "ELO-IID",
+		pos = Vector( 2048.000000, 5244.009766, -202.139999 ),
+		custom_access = "",
+		custom_deny = "",
+		custom_nocard = "",
+		customdenymsg = "",
+		customaccesmsg = "",
+		nosound = true,
+		canactivate = function( pl, ent )
+			return !Recontain106Used
+		end,
+	},
+	{
+		name = "ELO-IID",
+		pos = Vector( 2088.000000, 5243.990234, -201.860001 ),
+		custom_access = "",
+		custom_deny = "",
+		custom_nocard = "",
+		customdenymsg = "",
+		customaccesmsg = "",
+		nosound = true,
+		canactivate = function( pl, ent )
+			return !Recontain106Used
+		end,
 	},
 	{
 		name = "SCP 372",
 		pos = Vector(-944.000000, -705.500000, 53.000000),
-		usesounds = true,
-		clevel = 3
+		access = bit.lshift( 1, 1 ),
 	},
 	{
 		name = "Room 13",
 		pos = Vector(1393.000000, 728.000000, 53.000000),
-		clevel = 2
+		access = bit.lshift( 1, 0 ),
 	},
 	{
 		name = "SCP 860, 1025",
 		pos = Vector(2072.000000, 1185.000000, 53.000000),
-		clevel = 2
+		access = bit.lshift( 1, 0 ),
 	},
 	{
 		name = "SCP 178",
 		pos = Vector(393.000000, -152.000000, 53.000000),
-		clevel = 2
+		access = bit.lshift( 1, 1 ),
 	},
 	{
 		name = "SCP 1123",
 		pos = Vector(737.000000, -1240.000000, 53.000000),
-		clevel = 2
+		access = bit.lshift( 1, 0 ),
 	},
 	{
 		name = "SCP 714",
 		pos = Vector(2225.00, 920.00, 53.00),
-		clevel = 3
+		access = bit.lshift( 1, 0 ),
 	},
 	{
 		name = "SCP 914",
 		pos = Vector(1264.000000, -958.500000, 53.000000),
-		clevel = 2
+		access = bit.lshift( 1, 0 ),
 	},
 	{
 		name = "SCP 079",
 		pos = Vector(3723.50, -1162.00, -75.00),
-		clevel = 3
+		access = bit.lshift( 1, 1 ),
 	},
 	{
 		name = "914 Button",
 		pos = POS_914BUTTON,
 		customdenymsg = "",
+		nosound = true,
 		canactivate = function(pl, ent)
 			Use914(ent)
 			return false
@@ -633,6 +669,7 @@ BUTTONS = {
 		name = "914 Button 2",
 		pos = POS_914B_BUTTON,
 		customdenymsg = "",
+		nosound = true,
 		canactivate = function(pl, ent)
 			Use914B(pl, ent)
 			return false
@@ -641,43 +678,37 @@ BUTTONS = {
 	{
 		name = "SCP 1162",
 		pos = Vector(1569.000000, 892.000000, 53.000000),
-		clevel = 2
+		access = bit.lshift( 1, 1 ),
 	},
 	{
 		name = "Checkpoint 1",
 		pos = Vector(2968.000000, 273.000000, 53.000000),
-		usesounds = true,
-		clevel = 3
+		access = bit.lshift( 1, 3 ),
 	},
 	{
 		name = "Checkpoint 2",
 		pos = Vector(2616.000000, 641.000000, 53.000000),
-		usesounds = true,
-		clevel = 3
+		access = bit.lshift( 1, 3 ),
 	},
 	{
 		name = "Checkpoint 3",
 		pos = Vector(792.000000, 3977.000000, 53.000000),
-		usesounds = true,
-		clevel = 3
+		access = bit.lshift( 1, 3 ),
 	},
 	{
 		name = "Portal observation room",
 		pos = Vector(1289.000000, 2055.989990, 53.000000),
-		usesounds = true,
-		clevel = 5
+		access = bit.lshift( 1, 5 ),
 	},
 	{
 		name = "Portal observation room",
 		pos = Vector(1673.000000, 2055.989990, 53.000000),
-		usesounds = true,
-		clevel = 5
+		access = bit.lshift( 1, 5 ),
 	},
 	{
 		name = "Portal",
 		pos = Vector(1289.000000, 2216.000000, 53.000000),
-		usesounds = true,
-		clevel = 3,
+		access = bit.lshift( 1, 0 ),
 		levelOverride = function( ply )
 			if ply:GetNClass() == ROLES.ROLE_SCP8602 then
 				return true
@@ -687,8 +718,7 @@ BUTTONS = {
 	{
 		name = "Portal",
 		pos = Vector(1673.000000, 2216.000000, 53.000000),
-		usesounds = true,
-		clevel = 3,
+		access = bit.lshift( 1, 0 ),
 		levelOverride = function( ply )
 			if ply:GetNClass() == ROLES.ROLE_SCP8602 then
 				return true
@@ -698,8 +728,7 @@ BUTTONS = {
 	{
 		name = "Melon room",
 		pos = Vector(3664.000000, 2156.000000, 59.000000),
-		usesounds = true,
-		clevel = 6
+		access = bit.lshift( 1, 7 ),
 --		canactivate = function(pl, ent)
 --			return false
 --		end
@@ -759,6 +788,16 @@ OrderVectors( POCKETD_MINS, POCKETD_MAXS )
 FORCE_USE = {}
 FORCE_DESTROY = {}
 
+ELO_IID_NAME = "magnet_lever_106"
+SOUND_TRANSMISSION_NAME = "sound_lever_106"
+CAGE_INSIDE = Vector( 2498.16, 4482.72, -402.50 )
+CAGE_DOWN_POS = Vector( 2488.00, 4488.00, -307.00 )
+CAGE_BOUNDS = {
+	MINS = Vector( 2325.47, 4651.63, -194.53 ),
+	MAXS = Vector( 2611.38, 4363.59, -402.59 )
+}
+OrderVectors( CAGE_BOUNDS.MINS, CAGE_BOUNDS.MAXS )
+
 DOOR_RESTRICT106 = {
 	Vector( 2190.00, 3968.00, 55.50 ),
 	Vector( 2688.00, 4040.00, -456.00 ),
@@ -784,6 +823,7 @@ DOOR_RESTRICT106 = {
 	Vector( 2496.00, 132.50, -712.50 ),
 	Vector( 1324.00, -795.97, 50.00 ),
 	Vector( 1324.00, -868.00, 50.00 ),
+	Vector( 2344.00, 4488.00, -360.00 ),
 }
 
 function OUTSIDE_BUFF( pos )

@@ -45,6 +45,7 @@ AddCSLuaFile( "cl_splash.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "ulx.lua" )
 AddCSLuaFile( "cl_minigames.lua" )
+AddCSLuaFile( "cl_eq.lua" )
 include( "server.lua" )
 include( "rounds.lua" )
 include( "class_breach.lua" )
@@ -524,7 +525,7 @@ function SpawnAllItems()
 		end
 	end
 	
-	for k,v in pairs(SPAWN_KEYCARD2) do
+	/*for k,v in pairs(SPAWN_KEYCARD2) do
 		local item = ents.Create( "keycard_level2" )
 		if IsValid( item ) then
 			item:Spawn()
@@ -546,7 +547,7 @@ function SpawnAllItems()
 			item:Spawn()
 			item:SetPos( table.Random(v) )
 		end
-	end
+	end*/
 	
 	local resps_items = table.Copy(SPAWN_MISCITEMS)
 	local resps_melee = table.Copy(SPAWN_MELEEWEPS)
@@ -758,9 +759,11 @@ function Use914(ent)
 	ForceUse(ent, 0, 1)
 	local pos = ENTER914
 	local pos2 = EXIR914
-	timer.Create("914Use", 4, 1, function()
-		for k,v in pairs(ents.FindInSphere( pos, 80 )) do
-			if v.betterone != nil or v.GetBetterOne != nil then
+	timer.Create( "914Use", 4, 1, function()
+		for k, v in pairs( ents.FindInSphere( pos, 80 ) ) do
+			if v.HandleUpgrade then
+				v:HandleUpgrade( buttonstatus, pos2 )
+			elseif v.betterone != nil or v.GetBetterOne != nil then
 				local useb
 				if v.betterone then useb = v.betterone end
 				if v.GetBetterOne then useb = v:GetBetterOne() end
@@ -898,6 +901,18 @@ function CreateRagdollPL(victim, attacker, dmgtype)
 	end
 end
 
+function ServerSound( file, ent, filter )
+	ent = ent or game.GetWorld()
+	if !filter then
+		filter = RecipientFilter()
+		filter:AddAllPlayers()
+	end
+
+	local sound = CreateSound( ent, file, filter )
+
+	return sound
+end
+
 inUse = false
 function explodeGateA( ply )
 	if !isInTable( ply, ents.FindInSphere(POS_EXPLODE_A, 250) ) then return end
@@ -933,7 +948,7 @@ function explodeGateA( ply )
 			BroadcastLua( 'surface.PlaySound("ambient/explosions/exp2.wav")' )
 			local explosion = ents.Create( "env_explosion" ) // Creating our explosion
 			explosion:SetKeyValue( "spawnflags", 210 ) //Setting the key values of the explosion 
-			explosion:SetPos(POS_MIDDLE_GATE_A)
+			explosion:SetPos( POS_MIDDLE_GATE_A )
 			explosion:Spawn()
 			explosion:Fire( "explode", "", 0 )
 			destroyGate()
@@ -941,7 +956,6 @@ function explodeGateA( ply )
 			ply:AddExp(100, true)
 		end
 	end )
-	
 end
 
 function takeDamage( ent, ply )
@@ -977,6 +991,97 @@ function isGateAOpen()
 			if isInTable( v:GetPos(), POS_GATE_A_DOORS ) then return false end
 		end
 	end
+	return true
+end
+
+function Recontain106( ply )
+	if Recontain106Used then
+		ply:PrintMessage( HUD_PRINTCENTER, "SCP 106 recontain procedure can be triggered only once per round" )
+		return false
+	end
+
+	local cage
+	for k, v in pairs( ents.GetAll() ) do
+		if v:GetPos() == CAGE_DOWN_POS then
+			cage = v
+			break
+		end
+	end
+	if !cage then
+		ply:PrintMessage( HUD_PRINTCENTER, "Power down ELO-IID electromagnet in order to start SCP 106 recontain procedure" )
+		return false
+	end
+
+	local e = ents.FindByName( SOUND_TRANSMISSION_NAME )[1]
+	if e:GetAngles().roll == 0 then
+		ply:PrintMessage( HUD_PRINTCENTER, "Enable sound transmission in order to start SCP 106 recontain procedure" )
+		return false
+	end
+
+	local fplys = ents.FindInBox( CAGE_BOUNDS.MINS, CAGE_BOUNDS.MAXS )
+	local plys = {}
+	for k, v in pairs( fplys ) do
+		if IsValid( v ) and v:IsPlayer() and v:GTeam() != TEAM_SPEC and v:GTeam() != TEAM_SCP then
+			table.insert( plys, v )
+		end
+	end
+
+	if #plys < 1 then
+		ply:PrintMessage( HUD_PRINTCENTER, "Living human in cage is required in order to start SCP 106 recontain procedure" )
+		return false
+	end
+
+	local scps = {}
+	for k, v in pairs( player.GetAll() ) do
+		if IsValid( v ) and v:GTeam() == TEAM_SCP and v:GetNClass() == ROLES.ROLE_SCP106 then
+			table.insert( scps, v )
+		end
+	end
+
+	if #scps < 1 then
+		ply:PrintMessage( HUD_PRINTCENTER, "SCP 106 is already recontained" )
+		return false
+	end
+
+	Recontain106Used = true
+
+	timer.Simple( 6, function()
+		if postround or !Recontain106Used then return end
+		for k, v in pairs( plys ) do
+			if IsValid( v ) then
+				v:Kill()
+				--print( "KILL: ", v )
+			end
+		end
+
+		for k, v in pairs( scps ) do
+			if IsValid( v ) then
+				local swep = v:GetActiveWeapon()
+				if IsValid( swep ) and swep:GetClass() == "weapon_scp_106" then
+					swep:TeleportSequence( CAGE_INSIDE )
+				end
+			end
+		end
+
+		timer.Simple( 11, function()
+			if postround or !Recontain106Used then return end
+			for k, v in pairs( scps ) do
+				if IsValid( v ) then
+					v:Kill()
+					--print( "KILL: ", v )
+				end
+			end
+			local eloiid = ents.FindByName( ELO_IID_NAME )[1]
+			eloiid:Use( game.GetWorld(), game.GetWorld(), USE_TOGGLE, 1 )
+			if IsValid( ply ) then
+				ply:PrintMessage(HUD_PRINTTALK, "You've been awarded with 10 points for recontaining SCP 106!")
+				ply:AddFrags( 10 )
+			end
+		end )
+
+
+	end )
+
 	return true
 end
 

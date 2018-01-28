@@ -21,6 +21,7 @@ function CleanUp()
 		timer.Create("CheckEscape", 1, 0, CheckEscape)
 	end
 	game.CleanUpMap()
+	Recontain106Used = false
 	nextgateaopen = 0
 	spawnedntfs = 0
 	roundstats = {
@@ -112,12 +113,12 @@ function RoundRestart()
 	RoundTypeUpdate()
 	SetupCollide()
 	SetupAdmins( player.GetAll() )
-	activeRound:setup()
+	activeRound.setup()
 	print( "round: setup end" )	
 	net.Start("UpdateRoundType")
 		net.WriteString(activeRound.name)
 	net.Broadcast()	
-	activeRound:init()	
+	activeRound.init()	
 	print( "round: int end / preparation start" )	
 	gamestarted = true
 	BroadcastLua('gamestarted = true')
@@ -145,7 +146,7 @@ function RoundRestart()
 		end
 		preparing = false
 		postround = false		
-		activeRound:roundstart()		
+		activeRound.roundstart()
 		net.Start("RoundStart")
 			net.WriteInt(GetRoundTime(), 12)
 		net.Broadcast()
@@ -155,7 +156,7 @@ function RoundRestart()
 			postround = false
 			postround = true	
 			print( "post init: good" )
-			activeRound:postround()		
+			activeRound.postround()		
 			GiveExp()	
 			print( "post functions: good" )
 			print( "round: post" )			
@@ -381,7 +382,7 @@ end
 function WinCheck()
 	if postround then return end
 	if !activeRound then return end
-	activeRound:endcheck()
+	activeRound.endcheck()
 	if roundEnd > 0 and roundEnd < CurTime() then
 		roundEnd = 0
 	--	endround = true
@@ -411,7 +412,7 @@ function WinCheck()
 			net.WriteInt(GetPostTime(), 6)
 			net.WriteInt(2, 4)
 		net.Broadcast()
-		activeRound:postround()	
+		activeRound.postround()	
 		GiveExp()
 		endround = false
 		--print( debug.traceback() )  

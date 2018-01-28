@@ -34,6 +34,8 @@ polski.voteresult = "Wynik głosowania przeciwko %s... %s"
 polski.votes = "Z %s graczy %s zagłosowało nad karą, a %s nad przebaczeniem"
 polski.votecancel = "Ostatnie głosowanie zostało przerwane przez administratora"
 
+polski.eq_tip = "LPM - Wybierz | PPM - Wyrzuć"
+
 polski.starttexts = {
 	ROLE_SCPSantaJ = {
 		"Jesteś SCP-SANTA-J",

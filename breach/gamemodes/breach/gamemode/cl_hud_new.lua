@@ -3,7 +3,8 @@ local hide = {
 	CHudBattery = true,
 	CHudAmmo = true,
 	CHudSecondaryAmmo = true,
-	CHudDeathNotice = true
+	CHudDeathNotice = true,
+	CHudWeaponSelection = true
 }
 
 hook.Add( "HUDShouldDraw", "HideHUDElements", function( name )

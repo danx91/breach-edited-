@@ -43,13 +43,15 @@ lang.SCP_096 = {
 }
 
 lang.SCP_106 = {
-	author = "Kanade",
+	author = "Kanade, edytowane przez danx91",
 	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
 	purpose = "Zabijaj",
-	instructions = "LPM aby kogoś wysłać do wymiaru łzowego",
+	instructions = "LPM aby kogoś wysłać do wymiaru łzowego\nPPM aby rozstawić teleport\nR aby się teleportować",
 	HUD = {
 		attackReady = "Atak gotowy",
 		attackCD = "Następny atak za",
+		teleportReady = "Teleportacja gotowa",
+		teleportCD = "Następna teleportacja za"
 	},
 }
 
@@ -297,46 +299,39 @@ lang.SNAV_ULT = {
 	items = "Wykryte przedmioty:"
 }
 
-lang.KEYCARD_1 = {
-	author = "Kanade",
+lang.KEYCARD = {
+	author = "danx91",
 	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
-	purpose = "Otwiera niektóre drzwi",
-	instructions = "Jeżeli ją trzymasz to możesz otworzyć drzwi poziomu 1",
-}
-
-lang.KEYCARD_2 = {
-	author = "Kanade",
-	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
-	purpose = "Otwiera niektóre drzwi",
-	instructions = "Jeżeli ją trzymasz to możesz otworzyć drzwi poziomu 2",
-}
-
-lang.KEYCARD_3 = {
-	author = "Kanade",
-	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
-	purpose = "Otwiera niektóre drzwi",
-	instructions = "Jeżeli ją trzymasz to możesz otworzyć drzwi poziomu 3",
-}
-
-lang.KEYCARD_4 = {
-	author = "Kanade",
-	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
-	purpose = "Otwiera niektóre drzwi",
-	instructions = "Jeżeli ją trzymasz to możesz otworzyć drzwi poziomu 4",
-}
-
-lang.KEYCARD_5 = {
-	author = "Kanade",
-	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
-	purpose = "Otwiera niektóre drzwi",
-	instructions = "Jeżeli ją trzymasz to możesz otworzyć drzwi poziomu 5",
-}
-
-lang.KEYCARD_OMNI = {
-	author = "Kanade",
-	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
-	purpose = "Otwiera wszystkie drzwi",
-	instructions = "Jeżeli ją trzymasz to możesz otworzyć wszystkie drzwi",
+	purpose = "Otwiera drzwim które do działania wymagają karty (Przytrzymaj R aby robaczyć obsługiwane drzwi)",
+	instructions = "Obsługiwane drzwi:",
+	ACC = {
+		"SAFE",
+		"EUCLID",
+		"KETER",
+		"Pkt. kontrolne",
+		"Głowica OMEGA",
+		"Obs. portalu",
+		"Brama A",
+		"Brama B",
+		"Zbrojownia",
+		"Femur Breaker",
+		"EC",
+	},
+	STATUS = {
+		"DOSTĘP",
+		"BRAK DOSTĘPU",
+	},
+	NAMES = {
+		"Karta poziomu 1",
+		"Karta poziomu 2",
+		"Karta poziomu 3",
+		"Karta naukowca",
+		"Karta strażnika MTF",
+		"Karta dowódcy MTF",
+		"Karta poziomu OMNI",
+		"Karta ochrony pkt. kontrolnych",
+		"Zhakowana karta CI",
+	},
 }
 
 lang.ZEUS = {

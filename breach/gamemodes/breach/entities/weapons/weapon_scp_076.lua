@@ -65,8 +65,8 @@ function SWEP:Think()
 		self.Freeze = false
 		self.Owner:SetCrouchedWalkSpeed(0.6)
 		self.Owner:SetJumpPower(210)
-		self.Owner:SetWalkSpeed(250)
-		self.Owner:SetRunSpeed(250)
+		self.Owner:SetWalkSpeed(225)
+		self.Owner:SetRunSpeed(225)
 	end
 	if self.NextIdle > CurTime() then return end
 	self.NextIdle = CurTime() + self:SequenceDuration( ACT_VM_IDLE )

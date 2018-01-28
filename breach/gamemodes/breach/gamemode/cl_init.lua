@@ -13,6 +13,7 @@ include( "cl_headbob.lua" )
 include( "cl_font.lua" )
 include( "ulx.lua" )
 include( "cl_minigames.lua" )
+include( "cl_eq.lua" )
 								  
 surface.CreateFont( "173font", {
 	font = "TargetID",
@@ -139,9 +140,7 @@ function LoadLang( lang )
 	else
 		wltu = WEPLANG.english
 	end
-	for k, v in pairs( wltu ) do
-		finalweplang[k] = v
-	end
+	AddTables( finalweplang, wltu )
 	cwlang = finalweplang
 end
 
@@ -332,6 +331,13 @@ net.Receive( "UpdateTime", function( len )
 	cltime = tonumber(net.ReadString())
 	StartTime()
 end)
+
+net.Receive( "UpdateKeycard", function( len )
+	local keycard = LocalPlayer():GetWeapon( "br_keycard" )
+	if IsValid( keycard ) then
+		keycard:Think()
+	end
+end )
 
 net.Receive( "OnEscaped", function( len )
 	local nri = net.ReadInt(4)
@@ -613,22 +619,26 @@ end )
 
 local dropnext = 0
 function GM:PlayerBindPress( ply, bind, pressed )
-	if bind == "+menu" then
-		if dropnext > CurTime() then return true end
-		dropnext = CurTime() + 0.5
-		net.Start("DropWeapon")
-		net.SendToServer()
-		if LocalPlayer().channel != nil then
-			LocalPlayer().channel:EnableLooping( false )
-			LocalPlayer().channel:Stop()
-			LocalPlayer().channel = nil
-		end
-		return true
+	if bind == "menu" then
+		print( pressed )
 	elseif bind == "gm_showteam" then
 		OpenClassMenu()
 	elseif bind == "+menu_context" then
 		thirdpersonenabled = !thirdpersonenabled
 	end
+end
+
+function DropCurrentWeapon()
+	if dropnext > CurTime() then return true end
+	dropnext = CurTime() + 0.5
+	net.Start("DropCurWeapon")
+	net.SendToServer()
+	if LocalPlayer().channel != nil then
+		LocalPlayer().channel:EnableLooping( false )
+		LocalPlayer().channel:Stop()
+		LocalPlayer().channel = nil
+	end
+	return true
 end
 
 concommand.Add("br_requestescort", function()
@@ -721,6 +731,17 @@ end
 hook.Add( "CalcView", "CalcView3DPerson", CalcView3DPerson )
 */
 
+/*function GM:HUDDrawPickupHistory()
+
+end*/
+
+/*function GM:HUDWeaponPickedUp( weapon )
+end*/
+
+hook.Add( "HUDWeaponPickedUp", "DonNotShowCards", function( weapon )
+	if weapon:GetClass() == "br_keycard" then return end
+end )
+
 function GM:CalcView( ply, origin, angles, fov )
 	local data = {}
 	data.origin = origin
@@ -758,8 +779,35 @@ function GetWeaponLang()
 	end
 end
 
+local PrecachedSounds = {}
+function ClientsideSound( file, ent )
+	ent = ent or game.GetWorld()
+	local sound
+	if !PrecachedSounds[file] then
+		sound = CreateSound( ent, file, nil )
+		PrecachedSounds[file] = sound
+		return sound
+	else
+		sound = PrecachedSounds[file]
+		sound:Stop()
+		return sound
+	end
+end
+
+net.Receive( "SendSound", function( len )
+	local com = net.ReadInt( 2 )
+	local f = net.ReadString()
+	if com == 1 then
+		local snd = ClientsideSound( f )
+		snd:SetSoundLevel( 0 )
+		snd:Play()
+	elseif com == 0 then
+		ClientsideSound( f )
+	end
+end )
+
 concommand.Add( "br_dropweapon", function( ply )
-		net.Start("DropWeapon")
+		net.Start("DropCurWeapon")
 		net.SendToServer()
 end )
 
@@ -770,7 +818,7 @@ if !file.Exists( "breach", "DATA" ) then
 end
 
 if !file.Exists( "breach/intro.dat", "DATA" ) then
-	PlayIntro()
+	PlayIntro( 2 )
 else
 	if GetConVar( "br_force_showupdates" ):GetInt() != 0 then
 		showupdates = true
