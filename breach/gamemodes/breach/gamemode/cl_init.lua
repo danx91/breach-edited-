@@ -286,8 +286,10 @@ timefromround = 0
 
 timer.Create( "Credits", 180, 0, function() 
 	print("Breach(edited) by danx91 [ZGFueDkx] update "..VERSION.." [patch "..DATE.."]")
+	if GetConVar( "br_new_eq" ):GetInt() == 1 then
+		LocalPlayer():PrintMessage( HUD_PRINTTALK, clang.eq_open )
+	end
 end )
-
 --------------------------------------------------------------------
 
 timer.Create("HeartbeatSound", 2, 0, function()
@@ -619,8 +621,10 @@ end )
 
 local dropnext = 0
 function GM:PlayerBindPress( ply, bind, pressed )
-	if bind == "menu" then
-		print( pressed )
+	if bind == "+menu" then
+		if GetConVar( "br_new_eq" ):GetInt() != 1 then
+			DropCurrentWeapon()
+		end
 	elseif bind == "gm_showteam" then
 		OpenClassMenu()
 	elseif bind == "+menu_context" then
@@ -739,7 +743,8 @@ end*/
 end*/
 
 hook.Add( "HUDWeaponPickedUp", "DonNotShowCards", function( weapon )
-	if weapon:GetClass() == "br_keycard" then return end
+	EQHUD.weps = LocalPlayer():GetWeapons()
+	if weapon:GetClass() == "br_keycard" then return false end
 end )
 
 function GM:CalcView( ply, origin, angles, fov )

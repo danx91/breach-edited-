@@ -963,8 +963,13 @@ function mply:SetInfectD()
 	self:SetNoTarget( false )
 	self:Give("br_holster")
 	self:Give("br_id")
-	self:Give("keycard_level2")
-	self:SelectWeapon("br_holster")
+
+	local card = self:Give( "br_keycard" )
+	if card then
+		card:SetKeycardType( "safe" )
+	end
+	self:SelectWeapon( "br_keycard" )
+
 	self.BaseStats = nil
 	self.UsingArmor = nil
 end
@@ -979,7 +984,7 @@ function mply:SetInfectMTF()
 	self:RemoveAllAmmo()
 	self:SetGTeam(TEAM_GUARD)
 	self:SetNClass(ROLES.ROLE_INFECTMTF)
-	self:SetModel( table.Random( RESEARCHERMODELS ) )
+	self:SetModel( table.Random( SECURITYMODELS ) )
 	self:SetHealth(150)
 	self:SetMaxHealth(150)
 	self:SetArmor(0)
@@ -996,10 +1001,15 @@ function mply:SetInfectMTF()
 	self:SetNoTarget( false )
 	self:Give("br_holster")
 	self:Give("br_id")
-	self:Give("keycard_level3")
 	self:Give("cw_ar15")
 	self:GiveAmmo( 60, "5.56x45MM" )
-	self:SelectWeapon("br_holster")
+
+	local card = self:Give( "br_keycard" )
+	if card then
+		card:SetKeycardType( "euclid" )
+	end
+	self:SelectWeapon( "br_keycard" )
+
 	self.BaseStats = nil
 	self.UsingArmor = nil
 	self:ApplyArmor("armor_mtfcom")

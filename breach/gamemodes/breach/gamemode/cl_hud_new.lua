@@ -4,10 +4,12 @@ local hide = {
 	CHudAmmo = true,
 	CHudSecondaryAmmo = true,
 	CHudDeathNotice = true,
-	CHudWeaponSelection = true
 }
 
 hook.Add( "HUDShouldDraw", "HideHUDElements", function( name )
+	if name == "CHudWeaponSelection" and GetConVar( "br_new_eq" ):GetInt() == 1 then
+		return false
+	end
 	if hide[ name ] then return false end
 end )
 

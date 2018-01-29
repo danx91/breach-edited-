@@ -35,6 +35,7 @@ polski.votes = "Z %s graczy %s zagłosowało nad karą, a %s nad przebaczeniem"
 polski.votecancel = "Ostatnie głosowanie zostało przerwane przez administratora"
 
 polski.eq_tip = "LPM - Wybierz | PPM - Wyrzuć"
+polski.eq_open = "Naciśńij 'Q' aby otworzyć nowy ekwipunek!"
 
 polski.starttexts = {
 	ROLE_SCPSantaJ = {

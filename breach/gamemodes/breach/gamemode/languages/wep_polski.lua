@@ -302,7 +302,7 @@ lang.SNAV_ULT = {
 lang.KEYCARD = {
 	author = "danx91",
 	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
-	purpose = "Otwiera drzwim które do działania wymagają karty (Przytrzymaj R aby robaczyć obsługiwane drzwi)",
+	purpose = "Otwiera drzwi które do działania wymagają karty (Przytrzymaj R aby zobaczyć obsługiwane drzwi)",
 	instructions = "Obsługiwane drzwi:",
 	ACC = {
 		"SAFE",

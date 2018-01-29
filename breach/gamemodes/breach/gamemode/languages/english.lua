@@ -35,6 +35,7 @@ english.votes = "From %s players %s voted for punish and %s for forgive"
 english.votecancel = "Last punish vote was canceled by admin"
 
 english.eq_tip = "LMB - Select | RMB - Drop"
+english.eq_open = "Press 'Q' to open new EQ!"
 
 english.starttexts = {
 	ROLE_SCPSantaJ = {

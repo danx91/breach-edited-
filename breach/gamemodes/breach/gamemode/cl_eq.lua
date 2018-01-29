@@ -106,7 +106,7 @@ function DrawEQ()
 				if !name or name == "" then
 					name = EQHUD.weps[i + 1]:GetClass()
 				end 
-				DrawScreenTip( name )
+				DrawScreenTip( name, EQHUD.weps[i + 1] )
 			end )
 			QuickButton( x, y, EQHUD.c_dim, EQHUD.c_dim, function()
 				LocalPlayer():SelectWeapon( EQHUD.weps[i + 1]:GetClass() )
@@ -137,7 +137,10 @@ end
 
 function CanShowEQ()
 	local t = LocalPlayer():GTeam()
-	return t != TEAM_SPEC and t != TEAM_SCP
+	local enabled = GetConVar( "br_new_eq" ):GetInt() == 1
+
+	--return t != TEAM_SPEC and t != TEAM_SCP and enabled
+	return t != TEAM_SPEC and enabled
 end
 
 function IsEQVisible()
@@ -150,10 +153,11 @@ local screen_tip = {
 	time = 0
 }
 
-function DrawScreenTip( txt )
+function DrawScreenTip( txt, wep )
 	screen_tip.text = txt
 	screen_tip.pos = { input.GetCursorPos() }
 	screen_tip.time = CurTime() + 0.1
+	screen_tip.wep = wep
 end
 
 function PaintScreenTip()
@@ -176,37 +180,105 @@ function PaintScreenTip()
 		xalign = TEXT_ALIGN_LEFT,
 		yalign = TEXT_ALIGN_TOP,
 	})
+
+	DrawInfoBox( w, h )
 end
 hook.Add( "DrawOverlay", "DrawScreenTip", PaintScreenTip )
 
-function MatrixTest()
+function DrawInfoBox( w, h )
+	local lang = screen_tip.wep.Lang
 
-	/*local scale = 0.8
+	local author, contact, purpose, instructions
 
-	local w, h = ScrW(), ScrH()
+	if lang then
+		author = lang.author
+		contact = lang.contact
+		purpose = lang.purpose
+		instructions = lang.instructions
+	else
+		author = screen_tip.wep.Author
+		contact = screen_tip.wep.Contact
+		purpose = screen_tip.wep.Purpose
+		instructions = screen_tip.wep.Instructions
+	end
 
-	local x, y = w * 0.567, h * 0.2
+	if !author and !contact and !purpose and !instructions then return end
 
-	surface.SetDrawColor( Color( 0, 255, 0, 175 ) )
-	surface.DrawRect( x - 8, y - 8, 16, 16 )
+	local texts = { author, contact, purpose, instructions }
 
-	surface.SetDrawColor( Color( 0, 255, 0, 5 ) )
-	surface.DrawRect( 0, 0, w, h )
+	for k, v in pairs( texts ) do
+		if v == "" then
+			texts[k] = nil
+		end
+	end
 
-	local mx = Matrix()
-	mx:Scale( Vector( scale, scale, 1 ) )
-	mx:Translate( Vector( w * 0.567 * 0.249, h * 0.2 * (1 - 0.5 / scale) ) )
-	cam.PushModelMatrix( mx )	
+	local tops = { "Author:", "Contact:", "Purpose:", "Instructions:" }
 
-	local x, y = w * 0.567, h * 0.2
+	local verts = {
+		{ x = screen_tip.pos[1] + w + 24, y = screen_tip.pos[2] },
+		{ x = screen_tip.pos[1] + w + 72, y = screen_tip.pos[2] + h + 8 },
+		{ x = screen_tip.pos[1] + w + 24, y = screen_tip.pos[2] + h + 8 },
+	}
 
-		surface.SetDrawColor( Color( 0, 0, 255, 175 ) )
-		surface.DrawRect( x - 8, y - 8, 16, 16 )
+	local maxwidth = ScrW() * 0.2
 
-	surface.SetDrawColor( Color( 0, 0, 255, 5 ) )
-	surface.DrawRect( 0, 0, w, h )
+	draw.NoTexture()
+	surface.SetDrawColor( Color( 75, 75, 75, 225 ) )
+	surface.DrawPoly( verts )
 
-	cam.PopModelMatrix()*/
+	local height = 0
+	for i, v in ipairs( texts ) do
+		local txts = string.Split( v, "\n" )
+		local prevh = height
 
+		for _, t in ipairs( txts ) do
+			surface.SetFont( "173font" )
+			local w, h = surface.GetTextSize( t )
+
+			local ppl = w / string.len( t )
+			local segs = math.ceil( w / maxwidth )
+			--local maxi = math.ceil( string.len( t ) / segs )
+			local maxi = math.ceil( maxwidth / ppl )
+			local subtx = {}
+			local curtx = t
+
+			repeat
+				if string.len( curtx ) > maxi then
+					for k = maxi, 0, -1 do
+						if string.sub( curtx, k, k ) == " " then
+							table.insert( subtx, string.sub( curtx, 0, k ) )
+							curtx = string.sub( curtx, k + 1, string.len( curtx ) )
+							break
+						end
+					end
+				else
+					table.insert( subtx, curtx )
+					curtx = ""
+				end
+			until curtx == ""
+
+			surface.SetDrawColor( Color( 75, 75, 75, 225 ) )
+			surface.DrawRect( screen_tip.pos[1] + 8, screen_tip.pos[2] + h + 8 + height, maxwidth + 16, h * #subtx + h + 16 )
+
+			for pos, tx in ipairs( subtx ) do	
+				draw.Text( {
+					text = tx,
+					pos = { screen_tip.pos[1] + 16, screen_tip.pos[2] + h * ( pos + 1 ) + 8 + height },
+					font = "173font",
+					color = Color( 200, 200, 200 ),
+					xalign = TEXT_ALIGN_LEFT,
+					yalign = TEXT_ALIGN_TOP,
+				})
+			end	
+			height = height + h * ( #subtx + 1 ) + 16
+		end	
+		draw.Text( {
+			text = tops[i],
+			pos = { screen_tip.pos[1] + 16, screen_tip.pos[2] + h + 8 + prevh },
+			font = "173font",
+			color = Color( 200, 150, 200 ),
+			xalign = TEXT_ALIGN_LEFT,
+			yalign = TEXT_ALIGN_TOP,
+		})
+	end
 end
-hook.Add( "DrawOverlay", "test", MatrixTest )

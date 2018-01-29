@@ -7,8 +7,8 @@ end
 
 SWEP.ViewModelFOV	= 62
 SWEP.ViewModelFlip	= false
-SWEP.ViewModel		= "models/breach/keycard.mdl"
-SWEP.WorldModel		= "models/breach/keycard.mdl"
+SWEP.ViewModel		= "models/breach/keycard_new.mdl"
+SWEP.WorldModel		= "models/breach/keycard_new.mdl"
 SWEP.PrintName		= ""
 SWEP.Slot			= 1
 SWEP.SlotPos		= 1
