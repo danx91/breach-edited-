@@ -202,7 +202,6 @@ end )
 nextgateaopen = 0
 function RequestOpenGateA(ply)
 	if preparing or postround then return end
-	if ply:CLevelGlobal() < 4 then return end
 	if !(ply:GTeam() == TEAM_GUARD or ply:GTeam() == TEAM_CHAOS) then return end
 	if nextgateaopen > CurTime() then
 		ply:PrintMessage(HUD_PRINTTALK, "You cannot open Gate A now, you must wait " .. math.Round(nextgateaopen - CurTime()) .. " seconds")

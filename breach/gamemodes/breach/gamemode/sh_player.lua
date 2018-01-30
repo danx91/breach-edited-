@@ -1,7 +1,7 @@
 
 local mply = FindMetaTable( "Player" )
 
-function mply:CLevelGlobal()
+/*function mply:CLevelGlobal()
 	local biggest = 1
 	for k,wep in pairs(self:GetWeapons()) do
 		if IsValid(wep) then
@@ -23,7 +23,7 @@ function mply:CLevel()
 		end
 	end
 	return 1
-end 
+end*/
 
 function mply:GetKarma()
 	if not self.GetNKarma then

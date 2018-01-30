@@ -434,34 +434,6 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 			if wep.Slot == v.Slot then return false end
 		end
 	end
-	if wep.clevel != nil then
-		for k,v in pairs(ply:GetWeapons()) do
-			if v.clevel then return false end
-		end
-	end
-	/*
-	if ply:GTeam() == TEAM_SCP then
-		if ply:GetNClass() == ROLES.ROLE_SCP173 then
-			return wep:GetClass() == "weapon_scp_173"
-		elseif ply:GetNClass() == ROLES.ROLE_SCP106 then
-			return wep:GetClass() == "weapon_scp_106"
-		elseif ply:GetNClass() == ROLES.ROLE_SCP049 then
-			return wep:GetClass() == "weapon_scp_049"
-		elseif ply:GetNClass() == ROLES.ROLE_SCP096 then
-			return wep:GetClass() == "weapon_scp_096"
-		elseif ply:GetNClass() == ROLES.ROLE_SCP0492 then
-			return wep:GetClass() == "weapon_br_zombie"
-		elseif ply:GetNClass() == ROLES.ROLE_SCP457 then
-			return wep:GetClass() == "weapon_scp_457"
-		elseif ply:GetNClass() == ROLES.ROLE_SCP0082 then
-			return wep:GetClass() == "weapon_br_zombie_infect"
-		elseif ply:GetNClass() == ROLES.ROLE_SCP0966 then
-			return wep:GetClass() == "weapon_scp_966"
-		else
-			return false
-		end
-	end
-	*/
 	if ply:GTeam() == TEAM_SCP then
 		if not wep.ISSCP then
 			return false
@@ -473,38 +445,6 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 			end
 		end
 	end
-	/*
-	if ply:GetNClass() != ROLES.ROLE_SCP173 then
-		if wep:GetClass() == "weapon_scp_173" then
-			return false
-		end
-	end
-	if ply:GetNClass() != ROLES.ROLE_SCP106 then
-		if wep:GetClass() == "weapon_scp_106" then
-			return false
-		end
-	end
-	if ply:GetNClass() != ROLES.ROLE_SCP049 then
-		if wep:GetClass() == "weapon_scp_049" then
-			return false
-		end
-	end
-	if ply:GetNClass() != ROLES.ROLE_SCP096 then
-		if wep:GetClass() == "weapon_scp_096" then
-			return false
-		end
-	end
-	if ply:GetNClass() != ROLES.ROLE_SCP0966 then
-		if wep:GetClass() == "weapon_scp_966" then
-			return false
-		end
-	end
-	if ply:GetNClass() != ROLES.ROLE_SCP0492 then
-		if wep:GetClass() == "weapon_br_zombie" then
-			return false
-		end
-	end
-	*/
 	if ply:GTeam() != TEAM_SPEC then
 		if wep.teams then
 			local canuse = false
@@ -558,23 +498,6 @@ function GM:PlayerUse( ply, ent )
 	if ply.lastuse > CurTime() then return end
 	for k,v in pairs(MAPBUTTONS) do
 		if v.pos == ent:GetPos() then
-			/*if v.clevel != nil then
-				if ply:CLevel() >= v.clevel or ( v.levelOverride and v.levelOverride( ply ) ) then
-					if v.usesounds == true then
-						ply:EmitSound("KeycardUse1.ogg")
-					end
-					ply.lastuse = CurTime() + 1
-					ply:PrintMessage(HUD_PRINTCENTER, "Access granted to " .. v["name"])
-					return true
-				else
-					if v.usesounds == true then
-						ply:EmitSound("KeycardUse2.ogg")
-					end
-					ply.lastuse = CurTime() + 1
-					ply:PrintMessage(HUD_PRINTCENTER, "You need to have " .. v.clevel .. " clearance level to open this door.")
-					return false
-				end
-			end*/
 			if v.access then
 				if v.levelOverride then
 					return v.levelOverride( ply )

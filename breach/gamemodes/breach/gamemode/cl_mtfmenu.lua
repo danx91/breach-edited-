@@ -31,7 +31,6 @@ function OpenMenu()
 	if IsValid(MTFMenuFrame) then return end
 	local ply = LocalPlayer()
 	if !(ply:GTeam() == TEAM_GUARD or ply:GTeam() == TEAM_CHAOS) then return end
-	local clevel = LocalPlayer():CLevelGlobal()
 	
 	MTFMenuFrame = vgui.Create( "DFrame" )
 	MTFMenuFrame:SetTitle( "" )
@@ -59,19 +58,18 @@ function OpenMenu()
 		draw.RoundedBox( 2, 1, 1, w - 2, h - 2, Color(90, 90, 95) )
 	end
 	
-	if clevel > 3 then
-		local button_gatea = vgui.Create( "DButton", MTFMenuFrame )
-		button_gatea:SetText( "Request Gate A Open" )
-		button_gatea:Dock( TOP )
-		button_gatea:SetFont("MTF_Main")
-		button_gatea:SetContentAlignment( 5 )
-		button_gatea:DockMargin( 0, 5, 0, 0	)
-		button_gatea:SetSize(0,32)
-		button_gatea.DoClick = function()
-			RunConsoleCommand("br_requestgatea")
-			MTFMenuFrame:Close()
-		end
+	local button_gatea = vgui.Create( "DButton", MTFMenuFrame )
+	button_gatea:SetText( "Destroy Gate A Open" )
+	button_gatea:Dock( TOP )
+	button_gatea:SetFont("MTF_Main")
+	button_gatea:SetContentAlignment( 5 )
+	button_gatea:DockMargin( 0, 5, 0, 0	)
+	button_gatea:SetSize(0,32)
+	button_gatea.DoClick = function()
+		RunConsoleCommand("br_destroygatea")
+		MTFMenuFrame:Close()
 	end
+
 	local button_escort = vgui.Create( "DButton", MTFMenuFrame )
 	button_escort:SetText( "Request Escorting" )
 	button_escort:Dock( TOP )

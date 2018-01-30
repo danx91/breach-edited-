@@ -140,6 +140,7 @@ function RoundRestart()
 	net.Broadcast()
 	UseAll()
 	DestroyAll()
+	timer.Destroy("PostTime") -----?????
 	timer.Create("PreparingTime", GetPrepTime(), 1, function()
 		for k,v in pairs(player.GetAll()) do
 			v:Freeze(false)

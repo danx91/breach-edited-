@@ -651,13 +651,6 @@ concommand.Add("br_requestescort", function()
 	net.SendToServer()
 end)
 
---concommand.Add("br_requestgatea", function()
---	if !((LocalPlayer():GTeam() == TEAM_GUARD or LocalPlayer():GTeam() == TEAM_CHAOS) or LocalPlayer():GTeam() == TEAM_CHAOS) then return end
---	if LocalPlayer():CLevelGlobal() < 4 then return end
---	net.Start("RequestGateA")
---	net.SendToServer()
---end)
-
 concommand.Add("br_requestNTFspawn", function( ply, cmd, args )
 	if ply:IsSuperAdmin() then
 		net.Start("NTFRequest")

@@ -180,8 +180,9 @@ function PaintScreenTip()
 		xalign = TEXT_ALIGN_LEFT,
 		yalign = TEXT_ALIGN_TOP,
 	})
-
-	DrawInfoBox( w, h )
+	if screen_tip.wep then
+		DrawInfoBox( w, h )
+	end
 end
 hook.Add( "DrawOverlay", "DrawScreenTip", PaintScreenTip )
 
@@ -220,7 +221,7 @@ function DrawInfoBox( w, h )
 		{ x = screen_tip.pos[1] + w + 24, y = screen_tip.pos[2] + h + 8 },
 	}
 
-	local maxwidth = ScrW() * 0.2
+	local maxwidth = math.max( ScrW() * 0.2, 300 )
 
 	draw.NoTexture()
 	surface.SetDrawColor( Color( 75, 75, 75, 225 ) )
@@ -236,16 +237,20 @@ function DrawInfoBox( w, h )
 			local w, h = surface.GetTextSize( t )
 
 			local ppl = w / string.len( t )
-			local segs = math.ceil( w / maxwidth )
+			--local segs = math.ceil( w / maxwidth )
 			--local maxi = math.ceil( string.len( t ) / segs )
-			local maxi = math.ceil( maxwidth / ppl )
+			local max = math.ceil( maxwidth / ppl )
 			local subtx = {}
 			local curtx = t
 
+			local stack = 0
 			repeat
-				if string.len( curtx ) > maxi then
-					for k = maxi, 0, -1 do
-						if string.sub( curtx, k, k ) == " " then
+				if string.len( curtx ) > max then
+					for k = max, 0, -1 do
+						if k == 0 then
+							table.insert( subtx, curtx )
+							curtx = ""
+						elseif string.sub( curtx, k, k ) == " " then
 							table.insert( subtx, string.sub( curtx, 0, k ) )
 							curtx = string.sub( curtx, k + 1, string.len( curtx ) )
 							break
@@ -254,6 +259,10 @@ function DrawInfoBox( w, h )
 				else
 					table.insert( subtx, curtx )
 					curtx = ""
+				end
+				stack = stack + 1
+				if stack > 1000 then
+					error( "Stackoverflow!" )
 				end
 			until curtx == ""
 
