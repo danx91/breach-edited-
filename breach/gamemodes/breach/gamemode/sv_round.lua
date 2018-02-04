@@ -22,6 +22,8 @@ function CleanUp()
 	end
 	game.CleanUpMap()
 	Recontain106Used = false
+	OMEGAEnabled = false
+	OMEGADoors = false
 	nextgateaopen = 0
 	spawnedntfs = 0
 	roundstats = {

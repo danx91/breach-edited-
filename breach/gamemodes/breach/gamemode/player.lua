@@ -156,7 +156,7 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 	if attacker:IsPlayer() then
 		print("[KILL] " .. attacker:Nick() .. " [" .. attacker:GetNClass() .. "] killed " .. victim:Nick() .. " [" .. victim:GetNClass() .. "]")
 	end
-	if victim:GetNClass() == ROLES.ROLE_SCP076 and IsValid( SCP0761 ) then
+	if victim:GetNClass() == ROLES.ROLE_SCP076 and IsValid( SCP0761 ) and !postround then
 		victim.n076nextspawn = CurTime() + 10
 		return
 	end
@@ -491,14 +491,43 @@ function GM:AllowPlayerPickup( ply, ent )
 	return ply:GTeam() != TEAM_SPEC or ply:GetNClass() == ROLES.ADMIN
 end
 // usesounds = true,
+function IsInTolerance( spos, dpos, tolerance )
+	if spos == dpos then return true end
+
+	if isnumber( tolerance ) then
+		tolerance = { x = tolerance, y = tolerance, z = tolerance }
+	end
+
+	local allaxes = { "x", "y", "z" }
+	for k, v in pairs( allaxes ) do
+		if spos[v] != dpos[v] then
+			if tolerance[v] then
+				if math.abs( dpos[v] - spos[v] ) > tolerance[v] then
+					return false
+				end
+			else
+				return false
+			end
+		end
+	end
+
+	return true
+end
+
 function GM:PlayerUse( ply, ent )
 	if ply:GTeam() == TEAM_SPEC and ply:GetNClass() != ROLES.ADMIN then return false end
 	if ply:GetNClass() == ROLES.ADMIN then return true end
 	if ply.lastuse == nil then ply.lastuse = 0 end
 	if ply.lastuse > CurTime() then return end
-	for k,v in pairs(MAPBUTTONS) do
-		if v.pos == ent:GetPos() then
+	for k, v in pairs( MAPBUTTONS ) do
+		if v.pos == ent:GetPos() or v.tolerance then
+			if v.tolerance and !IsInTolerance( v.pos, ent:GetPos(), v.tolerance ) then
+				continue
+			end
 			if v.access then
+				if OMEGADoors then
+					return true
+				end
 				if v.levelOverride then
 					return v.levelOverride( ply )
 				end
@@ -513,7 +542,7 @@ function GM:PlayerUse( ply, ent )
 							ply.lastuse = CurTime() + 1
 							ply:PrintMessage( HUD_PRINTCENTER, v.custom_access or "Access granted to "..v.name )
 							if v.custom_access_granted then
-								return v.custom_access_granted( ply ) or false
+								return v.custom_access_granted( ply, ent ) or false
 							else
 								return true
 							end
@@ -533,34 +562,34 @@ function GM:PlayerUse( ply, ent )
 				end
 			end
 			if v.canactivate != nil then
-				local canactivate = v.canactivate(ply, ent)
+				local canactivate = v.canactivate( ply, ent )
 				if canactivate then
 					if !v.nosound then
-						ply:EmitSound("KeycardUse1.ogg")
+						ply:EmitSound( "KeycardUse1.ogg" )
 					end
 					ply.lastuse = CurTime() + 1
-					if v.customaccesmsg then
-						ply:PrintMessage(HUD_PRINTCENTER, v.customaccesmsg)
+					if v.customaccessmsg then
+						ply:PrintMessage( HUD_PRINTCENTER, v.customaccessmsg )
 					else
-						ply:PrintMessage(HUD_PRINTCENTER, "Access granted to " .. v["name"])
+						ply:PrintMessage( HUD_PRINTCENTER, "Access granted to " .. v["name"] )
 					end
 					return true
 				else
 					if !v.nosound then
-						ply:EmitSound("KeycardUse2.ogg")
+						ply:EmitSound( "KeycardUse2.ogg" )
 					end
 					ply.lastuse = CurTime() + 1
 					if v.customdenymsg then
-						ply:PrintMessage(HUD_PRINTCENTER, v.customdenymsg)
+						ply:PrintMessage( HUD_PRINTCENTER, v.customdenymsg )
 					else
-						ply:PrintMessage(HUD_PRINTCENTER, "Access denied")
+						ply:PrintMessage( HUD_PRINTCENTER, "Access denied" )
 					end
 					return false
 				end
 			end
 		end
 	end
-	if ( GetConVar("br_scp_cars"):GetInt() == 0 ) then
+	if ( GetConVar( "br_scp_cars" ):GetInt() == 0 ) then
 		if ( ply:GTeam() == TEAM_SCP ) then
 			if ( ent:GetClass() == "prop_vehicle_jeep" ) then
 				return false
@@ -579,8 +608,8 @@ function GM:CanPlayerSuicide( ply )
 	return false
 end
 
-function string.starts(String, Start)
-   return string.sub(String,1,string.len( Start )) == Start
+function string.starts( String, Start )
+   return string.sub( String, 1, string.len( Start ) ) == Start
 end
 
 

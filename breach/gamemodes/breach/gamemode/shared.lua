@@ -4,8 +4,8 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
-VERSION = "0.26"
-DATE = "28/01/2018"
+VERSION = "0.27"
+DATE = "04/02/2018"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
@@ -30,6 +30,8 @@ team.SetUp( TEAM_SPEC, "Spectators", Color(141, 186, 160) )
 team.SetUp( TEAM_SCI, "Scientists", Color(66, 188, 244) )
 team.SetUp( TEAM_CHAOS, "Chaos Insurgency", Color(0, 100, 255) )
 */
+
+game.AddDecal( "Decal106", "decals/decal106" )
 
 surface = surface or  {}
 
@@ -272,6 +274,7 @@ if !ConVarExists("br_allow_ineye_spectate") then CreateConVar("br_allow_ineye_sp
 if !ConVarExists("br_allow_roaming_spectate") then CreateConVar("br_allow_roaming_spectate", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
 if !ConVarExists("br_scale_bullet_damage") then CreateConVar("br_scale_bullet_damage", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Bullet damage scale" ) end
 if !ConVarExists("br_new_eq") then CreateConVar("br_new_eq", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Enables new EQ" ) end
+if !ConVarExists("br_enable_warhead") then CreateConVar("br_enable_warhead", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "Enables OMEGA Warhead" ) end
 
 MINPLAYERS = GetConVar("br_min_players"):GetInt()
 

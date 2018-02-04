@@ -77,7 +77,7 @@ function AddToIDS(ply)
 	lastidcheck = CurTime() + 0.7
 end
 
-buttonstatus = "rough"
+--buttonstatus = "rough"
 
 clang = nil
 cwlang = nil
@@ -314,7 +314,7 @@ end
 
 endinformation = {}
 
-net.Receive( "Update914B", function( len )
+/*net.Receive( "Update914B", function( len )
 	local sstatus = net.ReadInt(6)
 	if sstatus == 0 then
 		buttonstatus = "rough"
@@ -327,7 +327,7 @@ net.Receive( "Update914B", function( len )
 	elseif sstatus == 4 then
 		buttonstatus = "very fine"
 	end
-end)
+end)*/
 
 net.Receive( "UpdateTime", function( len )
 	cltime = tonumber(net.ReadString())

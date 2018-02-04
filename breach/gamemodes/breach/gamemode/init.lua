@@ -129,9 +129,9 @@ end
 
 function WakeEntity(ent)
 	local phys = ent:GetPhysicsObject()
-	if ( phys:IsValid() ) then
+	if phys:IsValid() then
 		phys:Wake()
-		phys:SetVelocity(Vector(0,0,25))
+		phys:SetVelocity( Vector( 0, 0, 25 ) )
 	end
 end
 
@@ -723,70 +723,67 @@ function OpenGateA()
 	end
 end
 
+SCP914InUse = false
+function Use914( ent )
+	if SCP914InUse then return false end
+	SCP914InUse = true
 
-buttonstatus = 0
-lasttime914b = 0
-function Use914B(activator, ent)
-	if CurTime() < lasttime914b then return end
-	lasttime914b = CurTime() + 1.3
-	ForceUse(ent, 1, 1)
-	if buttonstatus == 0 then
-		buttonstatus = 1
-		activator:PrintMessage(HUD_PRINTTALK, "Changed to coarse")
-	elseif buttonstatus == 1 then
-		buttonstatus = 2
-		activator:PrintMessage(HUD_PRINTTALK, "Changed to 1:1")
-	elseif buttonstatus == 2 then
-		buttonstatus = 3
-		activator:PrintMessage(HUD_PRINTTALK, "Changed to fine")
-	elseif buttonstatus == 3 then
-		buttonstatus = 4
-		activator:PrintMessage(HUD_PRINTTALK, "Changed to very fine")
-	elseif buttonstatus == 4 then
-		buttonstatus = 0
-		activator:PrintMessage(HUD_PRINTTALK, "Changed to rough")
+	if ent:GetPos() != SCP_914_BUTTON then
+		for k, v in pairs( ents.FindByClass( "func_door" ) ) do
+			if v:GetPos() == SCP_914_DOORS[1] or v:GetPos() == SCP_914_DOORS[2] then
+				v:Fire( "Close" )
+				timer.Create( "914DoorOpen"..v:EntIndex(), 15, 1, function()
+					v:Fire( "Open" )
+				end )
+			end
+		end
 	end
-	net.Start("Update914B")
-		net.WriteInt(buttonstatus, 6)
-	net.Broadcast()
-end
 
-lasttime914 = 0
-function Use914(ent)
-	if CurTime() < lasttime914 then return end
-	lasttime914 = CurTime() + 20
-	ForceUse(ent, 0, 1)
-	local pos = ENTER914
-	local pos2 = EXIR914
-	timer.Create( "914Use", 4, 1, function()
-		for k, v in pairs( ents.FindInSphere( pos, 80 ) ) do
-			if v.HandleUpgrade then
-				v:HandleUpgrade( buttonstatus, pos2 )
-			elseif v.betterone != nil or v.GetBetterOne != nil then
-				local useb
-				if v.betterone then useb = v.betterone end
-				if v.GetBetterOne then useb = v:GetBetterOne() end
-				local betteritem = ents.Create( useb )
-				if IsValid( betteritem ) then
-					betteritem:SetPos( pos2 )
-					betteritem:Spawn()
-					WakeEntity(betteritem)
-					v:Remove()
+	local button = ents.FindByName( SCP_914_STATUS )[1]
+	local angle = button:GetAngles().roll
+	local mode = 0
+
+	if angle == 45 then
+		mode = 1
+	elseif	angle == 90 then
+		mode = 2
+	elseif	angle == 135 then
+		mode = 3
+	elseif	angle == 180 then
+		mode = 4
+	end
+	
+	timer.Create( "SCP914UpgradeEnd", 16, 1, function()
+		SCP914InUse = false
+	end )
+
+	timer.Create( "SCP914Upgrade", 10, 1, function() 
+		local items = ents.FindInBox( SCP_914_INTAKE_MINS, SCP_914_INTAKE_MAXS )
+		for k, v in pairs( items ) do
+			if IsValid( v ) then
+				if v.HandleUpgrade then
+					v:HandleUpgrade( mode, SCP_914_OUTPUT )
+				elseif v.betterone or v.GetBetterOne then
+					local item_class
+					if v.betterone then item_class = v.betterone end
+					if v.GetBetterOne then item_class = v:GetBetterOne( mode ) end
+
+					local item = ents.Create( item_class )
+					if IsValid( item ) then
+						v:Remove()
+						item:SetPos( SCP_914_OUTPUT )
+						item:Spawn()
+						WakeEntity( item )
+					end
 				end
 			end
 		end
-	end)
-	//for k,v in pairs( ents.FindByClass( "func_button" ) ) do
-	//	if v:GetPos() == Vector(1567.000000, -832.000000, 46.000000) then
-			//print("Found ent!")
-			//ForceUse(v, 0, 1)
-			//return
-	//	end
-	//end
+	end )
+
+	return true
 end
 
 function OpenSCPDoors()
-	// hook needed
 	for k, v in pairs( ents.FindByClass( "func_door" ) ) do
 		for k0, v0 in pairs( POS_DOOR ) do
 			if ( v:GetPos() == v0 ) then
@@ -1049,7 +1046,6 @@ function Recontain106( ply )
 		for k, v in pairs( plys ) do
 			if IsValid( v ) then
 				v:Kill()
-				--print( "KILL: ", v )
 			end
 		end
 
@@ -1067,7 +1063,6 @@ function Recontain106( ply )
 			for k, v in pairs( scps ) do
 				if IsValid( v ) then
 					v:Kill()
-					--print( "KILL: ", v )
 				end
 			end
 			local eloiid = ents.FindByName( ELO_IID_NAME )[1]
@@ -1082,6 +1077,110 @@ function Recontain106( ply )
 	end )
 
 	return true
+end
+
+OMEGAEnabled = false
+OMEGADoors = false
+function OMEGAWarhead( ply )
+	if OMEGAEnabled then return end
+
+	local remote = ents.FindByName( OMEGA_REMOTE_NAME )[1]
+	if GetConVar( "br_enable_warhead" ):GetInt() != 1 or remote:GetAngles().pitch == 180 then
+		ply:PrintMessage( HUD_PRINTCENTER, "You inserted keycard but nothing happened" )
+		return
+	end
+
+	OMEGAEnabled = true
+
+	--local alarm = ServerSound( "warhead/alarm.ogg" )
+	--alarm:SetSoundLevel( 0 )
+	--alarm:Play()
+	net.Start( "SendSound" )
+		net.WriteInt( 1, 2 )
+		net.WriteString( "warhead/alarm.ogg" )
+	net.Broadcast()
+
+	timer.Create( "omega_announcement", 3, 1, function()
+		--local announcement = ServerSound( "warhead/announcement.ogg" )
+		--announcement:SetSoundLevel( 0 )
+		--announcement:Play()
+		net.Start( "SendSound" )
+			net.WriteInt( 1, 2 )
+			net.WriteString( "warhead/announcement.ogg" )
+		net.Broadcast()
+
+		timer.Create( "omega_delay", 11, 1, function()
+			for k, v in pairs( ents.FindByClass( "func_door" ) ) do
+				if IsInTolerance( OMEGA_GATE_A_DOORS[1], v:GetPos(), 100 ) or IsInTolerance( OMEGA_GATE_A_DOORS[2], v:GetPos(), 100 ) then
+					v:Fire( "Unlock" )
+					v:Fire( "Open" )
+					v:Fire( "Lock" )
+				end
+			end
+
+			OMEGADoors = true
+
+			--local siren = ServerSound( "warhead/siren.ogg" )
+			--siren:SetSoundLevel( 0 )
+			--siren:Play()
+			net.Start( "SendSound" )
+				net.WriteInt( 1, 2 )
+				net.WriteString( "warhead/siren.ogg" )
+			net.Broadcast()
+			timer.Create( "omega_alarm", 12, 5, function()
+				--siren = ServerSound( "warhead/siren.ogg" )
+				--siren:SetSoundLevel( 0 )
+				--siren:Play()
+				net.Start( "SendSound" )
+					net.WriteInt( 1, 2 )
+					net.WriteString( "warhead/siren.ogg" )
+				net.Broadcast()
+			end )
+
+			timer.Create( "omega_check", 1, 89, function()
+				if !IsValid( remote ) or remote:GetAngles().pitch == 180 or !OMEGAEnabled then
+					WarheadDisabled( siren )
+				end
+			end )
+		end )
+
+		timer.Create( "omega_detonation", 90, 1, function()
+			--local boom = ServerSound( "warhead/explosion.ogg" )
+			--boom:SetSoundLevel( 0 )
+			--boom:Play()
+			net.Start( "SendSound" )
+				net.WriteInt( 1, 2 )
+				net.WriteString( "warhead/explosion.ogg" )
+			net.Broadcast()
+			for k, v in pairs( player.GetAll() ) do
+				v:Kill()
+			end
+		end )
+	end )
+end
+
+function WarheadDisabled( siren )
+	OMEGAEnabled = false
+	OMEGADoors = false
+
+	--if siren then
+		--siren:Stop()
+	--end
+	net.Start( "SendSound" )
+		net.WriteInt( 0, 2 )
+		net.WriteString( "warhead/siren.ogg" )
+	net.Broadcast()
+
+	if timer.Exists( "omega_check" ) then timer.Remove( "omega_check" ) end
+	if timer.Exists( "omega_alarm" ) then timer.Remove( "omega_alarm" ) end
+	if timer.Exists( "omega_detonation" ) then timer.Remove( "omega_detonation" ) end
+	
+	for k, v in pairs( ents.FindByClass( "func_door" ) ) do
+		if IsInTolerance( OMEGA_GATE_A_DOORS[1], v:GetPos(), 100 ) or IsInTolerance( OMEGA_GATE_A_DOORS[2], v:GetPos(), 100 ) then
+			v:Fire( "Unlock" )
+			v:Fire( "Close" )
+		end
+	end
 end
 
 function isInTable( element, tab )

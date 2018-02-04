@@ -100,12 +100,12 @@ hook.Add( "HUDPaint", "Breach_DrawHUD", function()
 	//		end
 	//	end
 	//cam.End3D()
-	if disablehud == true then return end
+	/*if disablehud == true then return end
 	if POS_914B_BUTTON != nil and isstring(buttonstatus) then
 		if LocalPlayer():GetPos():Distance(POS_914B_BUTTON) < 200 then
 			DrawInfo(POS_914B_BUTTON, buttonstatus, Color(255,255,255))
 		end
-	end
+	end*/
 	
 	/*
 	for k,v in pairs(SPAWN_ARMORS) do
@@ -189,7 +189,13 @@ hook.Add( "HUDPaint", "Breach_DrawHUD", function()
 		return
 	end
 	*/
-	
+	if OMEGA_DETONATION then
+		local dist = LocalPlayer():GetPos():DistToSqr( OMEGA_DETONATION )
+		if dist < 90000 and dist > 5625 then
+			DrawInfo( OMEGA_DETONATION + Vector( 0, 0, -5 ), "Remote OMEGA Warhead detonation", Color( 255, 255, 255 ) )
+		end
+	end
+
 	if shoulddrawinfo == true then
 		local getrl = LocalPlayer():GetNClass()
 		for k,v in pairs(ROLES) do

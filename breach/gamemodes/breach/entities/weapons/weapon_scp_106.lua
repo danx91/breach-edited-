@@ -172,7 +172,15 @@ function SWEP:SecondaryAttack()
 
 		self.Owner:EmitSound( "Place" )
 		self.TPPoint = self.Owner:GetPos()
-		--decal
+		
+		local tr = util.TraceLine( {
+			start = self.Owner:GetPos(),
+			endpos = self.Owner:GetPos() - Vector( 0, 0, 100 ),
+			filter = self.Owner
+		} )
+		if tr.Hit then
+			util.Decal( "Decal106", tr.HitPos - tr.HitNormal, tr.HitPos + tr.HitNormal )
+		end
 	end
 end
 
@@ -194,7 +202,14 @@ function SWEP:TeleportSequence( point )
 	self.NextAttackW = CurTime() + 8
 	self.NextPlace = CurTime() + 20
 
-	--decal
+	local tr = util.TraceLine( {
+		start = self.Owner:GetPos(),
+		endpos = self.Owner:GetPos() - Vector( 0, 0, 100 ),
+		filter = self.Owner
+	} )
+	if tr.Hit then
+		util.Decal( "Decal106", tr.HitPos - tr.HitNormal, tr.HitPos + tr.HitNormal )
+	end
 
 	self.Owner:Freeze( true )
 

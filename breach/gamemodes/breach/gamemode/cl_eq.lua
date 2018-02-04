@@ -137,10 +137,11 @@ end
 
 function CanShowEQ()
 	local t = LocalPlayer():GTeam()
+	local adminmode = LocalPlayer():GetNClass() == ROLES.ADMIN
 	local enabled = GetConVar( "br_new_eq" ):GetInt() == 1
 
 	--return t != TEAM_SPEC and t != TEAM_SCP and enabled
-	return t != TEAM_SPEC and enabled
+	return ( t != TEAM_SPEC or  adminmode ) and enabled
 end
 
 function IsEQVisible()

@@ -36,9 +36,9 @@ SWEP.FallbackMat = "models/weapons/csgo/taser"
 SWEP.droppable				= true
 SWEP.teams					= {2,3,5,6}
 
-function SWEP:GetBetterOne()
+function SWEP:GetBetterOne( mode )
 	local rand = math.random(1, 100)
-	if rand < 25 and buttonstatus > 2 then
+	if rand < 25 and mode > 2 then
 		return "weapon_zeus_exp"
 	end
 	return "weapon_zeus"

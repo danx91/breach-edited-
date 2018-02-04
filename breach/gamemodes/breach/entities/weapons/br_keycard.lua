@@ -36,26 +36,6 @@ SWEP.BoneAttachment = "ValveBiped.Bip01_R_Hand"
 SWEP.WorldModelPositionOffset = Vector( 7, -1.5, -2.9 )
 SWEP.WorldModelAngleOffset = Angle( -20, 180, 190 )
 
-/*function SWEP:GetBetterOne()
-	local r = math.random(1,100)
-	if buttonstatus == 3 then
-		if r < 50 then
-			return "keycard_level2"
-		else
-			return "keycard_level1"
-		end
-	elseif buttonstatus == 4 then
-		if r < 20 then
-			return "keycard_level3"
-		elseif r < 40 then
-			return "keycard_level2"
-		else
-			return "keycard_level1"
-		end
-	end
-	return "keycard_level1"
-end*/
-
 function SWEP:HandleUpgrade( mode, exit )
 	local t = self:GetNWBool( "K_TYPE", nil )
 	if !t then
@@ -65,7 +45,7 @@ function SWEP:HandleUpgrade( mode, exit )
 	local dice = math.random( 0, 99 )
 	if t == "safe" then
 		if mode == 0 or mode == 1 then
-			if dice < 25 then
+			if dice < 50 then
 				self:Remove()
 				return
 			end
@@ -77,7 +57,7 @@ function SWEP:HandleUpgrade( mode, exit )
 		end
 	elseif t == "euclid" then
 		if mode == 0 then
-			if dice < 25 then
+			if dice < 50 then
 				self:Remove()
 				return
 			end
@@ -92,21 +72,21 @@ function SWEP:HandleUpgrade( mode, exit )
 		end
 	elseif t == "keter" then
 		if mode == 0 then
-			if dice < 25 then
+			if dice < 50 then
 				self:Remove()
 				return
 			end
 			self:SetKeycardType( "safe" )
 		elseif mode == 1 then
-			if dice < 75 then self:SetKeycardType( "euclid" ) end
+			self:SetKeycardType( "euclid" )
 		elseif mode == 2 then
 			self:SetKeycardType( "res" )
 		elseif mode == 4 then
-			if dice < 10 then self:SetKeycardType( "com" ) end
-			if dice >= 10 and dice < 30 then
+			if dice < 75 then 
 				self:Remove()
 				return
 			end
+			self:SetKeycardType( "com" )
 		end
 	elseif t == "res" then
 		if mode == 0 then
@@ -116,10 +96,11 @@ function SWEP:HandleUpgrade( mode, exit )
 		elseif mode == 2 then
 			self:SetKeycardType( "keter" )
 		elseif mode == 3 then
-			if dice < 75 then self:SetKeycardType( "csp" ) end
+			if dice < 75 then self:SetKeycardType( "cps" ) end
 		elseif mode == 4 then
 			if dice < 10 then self:SetKeycardType( "com" ) end
 			if dice >= 10 and dice < 25 then self:SetKeycardType( "mtf" ) end
+			if dice >= 25 and dice < 50 then self:SetKeycardType( "cps" ) end
 		end
 	elseif t == "cps" then
 		if mode == 0 then
@@ -129,10 +110,10 @@ function SWEP:HandleUpgrade( mode, exit )
 		elseif mode == 2 then
 			self:SetKeycardType( "res" )
 		elseif mode == 3 then
-			if dice < 40 then self:SetKeycardType( "mtf" ) end
+			if dice < 50 then self:SetKeycardType( "mtf" ) end
 		elseif mode == 4 then
 			if dice < 20 then self:SetKeycardType( "ci" ) end
-			if dice >= 20 and dice < 50 then self:SetKeycardType( "mtf" ) end
+			if dice >= 20 and dice < 40 then self:SetKeycardType( "mtf" ) end
 		end
 	elseif t == "mtf" then
 		if mode == 0 then
@@ -143,7 +124,7 @@ function SWEP:HandleUpgrade( mode, exit )
 		elseif mode == 2 then
 			self:SetKeycardType( "res" )
 		elseif mode == 3 then
-			if dice < 40 then self:SetKeycardType( "com" ) end
+			if dice < 50 then self:SetKeycardType( "com" ) end
 		elseif mode == 4 then
 			if dice < 20 then self:SetKeycardType( "ci" ) end
 			if dice >= 20 and dice < 40 then self:SetKeycardType( "com" ) end
@@ -346,16 +327,15 @@ function SWEP:OnRemove()
 end
 
 SWEP.C_Init = false
-SWEP.CurType = ""
 SWEP.LThink = 0
 function SWEP:Think()
 	if self.LThink > CurTime() then return end
 	self.LThink = CurTime() + 0.5
 	local t = self:GetNWBool( "K_TYPE", nil )
-	if CLIENT and ( !self.C_Init or self.CurType != t ) then
+	if CLIENT and ( !self.C_Init or self.KeycardType != t ) then
 		if t then
 			self.C_Init = true
-			self.CurType = t
+			self.KeycardType = t
 			self:SetKeycardType( t )
 		end
 	end

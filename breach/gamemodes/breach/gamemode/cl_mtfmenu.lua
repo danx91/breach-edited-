@@ -59,7 +59,7 @@ function OpenMenu()
 	end
 	
 	local button_gatea = vgui.Create( "DButton", MTFMenuFrame )
-	button_gatea:SetText( "Destroy Gate A Open" )
+	button_gatea:SetText( "Destroy Gate A" )
 	button_gatea:Dock( TOP )
 	button_gatea:SetFont("MTF_Main")
 	button_gatea:SetContentAlignment( 5 )

@@ -166,12 +166,6 @@ SPAWN_420 = {
 
 OUTSIDE_966 = Vector(4165.00, 2375.00, 50.00)
 
-ENTER914 = Vector(1648.743164, -601.740234, 59.760605)
-EXIR914 = Vector(1651.584229, -1052.149902, 7.470211)
-
-POS_914BUTTON = Vector(1567.000000, -832.000000, 46.000000)
-POS_914B_BUTTON = Vector(1563.000000, -832.000000, 62.000000)
-
 OUTSIDESOUNDS = Vector(-94.663620, 5188.103027, 860.134155)
 
 MTF_DEBUG = Vector(-1687.640503, 3431.133057, 25.667625)
@@ -502,6 +496,7 @@ SPAWN_ELECTROPROOFARMOR = {
 	Vector(4254.336426, 3033.336182, 5.031250),
 
 }
+
 BUTTONS = {
 	{
 		name = "Security Room Doors",
@@ -592,24 +587,18 @@ BUTTONS = {
 	{
 		name = "ELO-IID",
 		pos = Vector( 2048.000000, 5244.009766, -202.139999 ),
-		custom_access = "",
-		custom_deny = "",
-		custom_nocard = "",
 		customdenymsg = "",
-		customaccesmsg = "",
+		customaccessmsg = "",
 		nosound = true,
 		canactivate = function( pl, ent )
 			return !Recontain106Used
 		end,
 	},
 	{
-		name = "ELO-IID",
+		name = "Sound Transmission",
 		pos = Vector( 2088.000000, 5243.990234, -201.860001 ),
-		custom_access = "",
-		custom_deny = "",
-		custom_nocard = "",
 		customdenymsg = "",
-		customaccesmsg = "",
+		customaccessmsg = "",
 		nosound = true,
 		canactivate = function( pl, ent )
 			return !Recontain106Used
@@ -656,23 +645,24 @@ BUTTONS = {
 		access = bit.lshift( 1, 1 ),
 	},
 	{
-		name = "914 Button",
-		pos = POS_914BUTTON,
+		name = "914 Upgrade Button",
+		pos = Vector( 1567.000000, -832.000000, 46.000000 ),
+		tolerance = { x = 5 },
 		customdenymsg = "",
+		customaccessmsg = "",
 		nosound = true,
-		canactivate = function(pl, ent)
-			Use914(ent)
-			return false
+		canactivate = function( ply, ent )
+			return Use914( ent )
 		end
 	},
 	{
-		name = "914 Button 2",
-		pos = POS_914B_BUTTON,
+		name = "914 Mode Button",
+		pos = Vector( 1563.000000, -832.000000, 62.000000 ),
 		customdenymsg = "",
+		customaccessmsg = "",
 		nosound = true,
-		canactivate = function(pl, ent)
-			Use914B(pl, ent)
-			return false
+		canactivate = function( ply, ent )
+			return !SCP914InUse
 		end
 	},
 	{
@@ -732,8 +722,46 @@ BUTTONS = {
 --		canactivate = function(pl, ent)
 --			return false
 --		end
-	}
+	},
+	{
+		name = "OMEGA Warhead Remote Detonation",
+		pos = Vector( -2317.50, 6476.50, 2625.00 ),
+		access = bit.lshift( 1, 4 ),
+		custom_access = "",
+		custom_deny = "You cannot detonate OMEGA Warhead with this keycard",
+		custom_nocard = "A keycard is required to activate this device",
+		custom_access_granted = function( ply )
+			OMEGAWarhead( ply )
+			return false
+		end,
+	},
 }
+
+SCP_914_STATUS = "bt_914_4"
+
+SCP_914_INTAKE_MINS = Vector( 1677.00, -549.00, 0.00 )
+SCP_914_INTAKE_MAXS = Vector( 1600.00, -683.00, 128.00 )
+OrderVectors( SCP_914_INTAKE_MINS, SCP_914_INTAKE_MAXS )
+
+SCP_914_OUTPUT = Vector(1651.584229, -1052.149902, 7.470211)
+SCP_914_DOORS = {
+	Vector( 1604.50, -571.00, 55.50 ),
+	Vector( 1604.50, -1019.00, 55.50 )
+}
+SCP_914_BUTTON = Vector( 1567.000000, -832.000000, 46.000000 )
+
+OMEGA_GATE_A_DOORS = {
+	Vector( -484.00, 4836.00, 50.25 ),
+	Vector( -412.00, 4836.00, 50.25 ),
+}
+/*OMEGA_GATE_A_OPEN_DOORS = {
+	Vector( -540.00, 4836.00, 50.25 ),
+	Vector( -356.00, 4836.00, 50.25 )
+}*/
+
+OMEGA_DETONATION = Vector( -2317.50, 6476.50, 2625.00 )
+OMEGA_REMOTE_NAME = "omega_lever_room2nuke"
+
 
 POS_GATEA = Vector(-6563.0942382813, -704.70709228516, 1803.7766113281)
 POS_GATEABUTTON = Vector(-321.000000, 4784.000000, 53.000000)
