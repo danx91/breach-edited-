@@ -659,7 +659,7 @@ function SpawnNTFS()
 	for k, v in pairs( roles ) do
 		v.plys = {}
 		for _, ply in pairs( player.GetAll() ) do
-			if v:GTeam() == TEAM_SPEC and v.ActivePlayer then
+			if ply:GTeam() == TEAM_SPEC and ply.ActivePlayer then
 				if ply:GetLevel() >= v.level and ( v.customcheck and c.customcheck( ply ) or true ) then
 					table.insert( v.plys, ply )
 				end
