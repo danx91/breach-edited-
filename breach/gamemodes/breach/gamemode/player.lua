@@ -228,36 +228,9 @@ function GM:PlayerDeath( victim, inflictor, attacker )
 	local wasteam = victim:GTeam()
 	victim:SetTeam(TEAM_SPEC)
 	victim:SetGTeam(TEAM_SPEC)
-	if GetConVar( "br_dropvestondeath" ):GetInt() != 0 then
-		victim:UnUseArmor()
-	end
-	if #victim:GetWeapons() > 0 then
-		local pos = victim:GetPos()
-		for k,v in pairs(victim:GetWeapons()) do
-			local candrop = true
-			if v.droppable != nil then
-				if v.droppable == false then
-					candrop = false
-				end
-			end
-			if candrop then
-				local class = v:GetClass()
-				local wep = ents.Create( class )
-				if IsValid( wep ) then
-					wep:SetPos( pos )
-					wep:Spawn()
-					if class == "br_keycard" then
-						local cardtype = v.KeycardType or v:GetNWString( "K_TYPE", "safe" )
-						wep:SetKeycardType( cardtype )
-					end
-					local atype = v:GetPrimaryAmmoType()
-					if atype > 0 then
-						wep.SavedAmmo = v:Clip1()
-					end
-				end
-			end
-		end
-	end
+	
+	victim:DropAllWeapons()
+
 	WinCheck()
 	if !postround then
 		if !IsValid( attacker ) or !attacker.GTeam then return end

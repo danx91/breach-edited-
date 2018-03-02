@@ -44,6 +44,7 @@ SWEP.NextAttackW			= 0
 
 function SWEP:Deploy()
 	self.Owner:DrawViewModel( false )
+	self.Owner:DrawWorldModel( false )
 end
 
 function SWEP:Remove()

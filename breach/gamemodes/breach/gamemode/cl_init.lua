@@ -151,7 +151,7 @@ include(mapfile)
 
 include("cl_hud.lua")
 include("cl_hud_new.lua")
-include( "cl_splash.lua" )
+--include( "cl_splash.lua" )
 
 RADIO4SOUNDSHC = {
 	{"chatter1", 39},
@@ -336,7 +336,7 @@ end)
 
 net.Receive( "UpdateKeycard", function( len )
 	local keycard = LocalPlayer():GetWeapon( "br_keycard" )
-	if IsValid( keycard ) then
+	if IsValid( keycard ) and keycard.Think then
 		keycard:Think()
 	end
 end )
@@ -809,9 +809,7 @@ concommand.Add( "br_dropweapon", function( ply )
 		net.SendToServer()
 end )
 
-print("cl_init loads")
-
-if !file.Exists( "breach", "DATA" ) then
+/*if !file.Exists( "breach", "DATA" ) then
 	file.CreateDir( "breach" )
 end
 
@@ -842,6 +840,11 @@ end )
 
 concommand.Add( "br_show_update", function( ply )
 	PlayIntro( 5 )
-end ) 
+end ) */
+
+timer.Simple( 1, function()
+	net.Start( "PlayerReady" )
+	net.SendToServer()
+end )
 
 print( "client ready" )

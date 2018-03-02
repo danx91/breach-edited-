@@ -41,7 +41,7 @@ AddCSLuaFile( "cl_targetid.lua" )
 AddCSLuaFile( "classes.lua" )
 AddCSLuaFile( "cl_classmenu.lua" )
 AddCSLuaFile( "cl_headbob.lua" )
-AddCSLuaFile( "cl_splash.lua" )
+--AddCSLuaFile( "cl_splash.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "ulx.lua" )
 AddCSLuaFile( "cl_minigames.lua" )
@@ -524,29 +524,41 @@ function SpawnAllItems()
 		end
 	end
 	
-	/*for k,v in pairs(SPAWN_KEYCARD2) do
-		local item = ents.Create( "keycard_level2" )
-		if IsValid( item ) then
-			item:Spawn()
-			item:SetPos( table.Random(v) )
+	for k, v in pairs( KEYCARDS or {} ) do
+		local spawns = table.Copy( v.spawns )
+		local cards = table.Copy( v.ents )
+		local dices = {}
+
+		local n = 0
+		for _, dice in pairs( v.ents ) do
+			local d = {
+				min = n,
+				max = n + dice[2],
+				ent = dice[1]
+			}
+			table.insert( dices, d )
+			n = n + dice[2]
+		end
+		for i = 1, math.min( v.ammount, #spawns ) do
+			local spawn = table.remove( spawns, math.random( 1, #spawns ) )
+			local dice = math.random( 0, n - 1 )
+			local ent
+			for _, d in pairs( dices ) do
+				if d.min <= dice and d.max > dice then
+					ent = d.ent
+					break
+				end
+			end
+			if ent then
+				local keycard = ents.Create( "br_keycard" )
+				if IsValid( keycard ) then
+					keycard:Spawn()
+					keycard:SetPos( spawn )
+					keycard:SetKeycardType( ent )
+				end
+			end
 		end
 	end
-	
-	for k,v in pairs(SPAWN_KEYCARD3) do
-		local item = ents.Create( "keycard_level3" )
-		if IsValid( item ) then
-			item:Spawn()
-			item:SetPos( table.Random(v) )
-		end
-	end
-	
-	for k,v in pairs(SPAWN_KEYCARD4) do
-		local item = ents.Create( "keycard_level4" )
-		if IsValid( item ) then
-			item:Spawn()
-			item:SetPos( table.Random(v) )
-		end
-	end*/
 	
 	local resps_items = table.Copy(SPAWN_MISCITEMS)
 	local resps_melee = table.Copy(SPAWN_MELEEWEPS)
@@ -628,86 +640,70 @@ end
 
 function SpawnNTFS()
 	if disableNTF then return end
-	local usablesupport = {}
-	local activeplayers = {}
-	for k,v in pairs(gteams.GetPlayers(TEAM_SPEC)) do
-		if v.ActivePlayer == true then
-			table.ForceInsert(activeplayers, v)
+
+	local usechaos = math.random( 1, 100 ) <= GetConVar("br_ci_percentage"):GetInt()
+	local roles = {}
+
+	for k, v in pairs( ALLCLASSES.support.roles ) do
+		if usechaos then
+			if v.team == TEAM_CHAOS then
+				table.insert( roles, v )
+			end
+		else
+			if v.team == TEAM_GUARD then
+				table.insert( roles, v )
+			end
 		end
 	end
-	for k,v in pairs(ALLCLASSES["support"]["roles"]) do
-		table.ForceInsert(usablesupport, {
-			role = v,
-			list = {}
-		})
-	end
-	for _,rl in pairs(usablesupport) do
-		for k,v in pairs(activeplayers) do
-			if rl.role.level <= v:GetLevel() then
-				local can = true
-				if rl.role.customcheck != nil then
-					if rl.role.customcheck(v) == false then
-						can = false
-					end
-				end
-				if can == true then
-					table.ForceInsert(rl.list, v)
+
+	for k, v in pairs( roles ) do
+		v.plys = {}
+		for _, ply in pairs( player.GetAll() ) do
+			if v:GTeam() == TEAM_SPEC and v.ActivePlayer then
+				if ply:GetLevel() >= v.level and ( v.customcheck and c.customcheck( ply ) or true ) then
+					table.insert( v.plys, ply )
 				end
 			end
 		end
-	end
-	local usechaos = math.random(1,100)
-	if usechaos <= GetConVar("br_ci_percentage"):GetInt() then
-		usechaos = true
-	else
-		usechaos = false
-	end
-	if usechaos == true then
-		local chaosnum = 0
-		for _,rl in pairs(usablesupport) do
-			if rl.role.team == TEAM_CHAOS then
-				chaosnum = chaosnum + #rl.list
-			end
-		end
-		if chaosnum > 1 then
-			local cinum = 0
-			for _,rl in pairs(usablesupport) do
-				if rl.role.team == TEAM_CHAOS then
-					for k,v in pairs(rl.list) do
-						if cinum > 4 then return end
-						cinum = cinum + 1
-						v:SetupNormal()
-						v:ApplyRoleStats(rl.role)
-						v:SetPos(SPAWN_OUTSIDE[cinum])
-					end
-				end
-			end
-			return
+		if #v.plys < 1 then
+			roles[k] = nil
 		end
 	end
-	local used = 0
-	for _,rl in pairs(usablesupport) do
-		if rl.role.team == TEAM_GUARD then
-			for k,v in pairs(rl.list) do
-				if used > 4 then printMessage( 1 ) return end
-				used = used + 1
-				v:SetupNormal()
-				v:ApplyRoleStats(rl.role)
-				v:SetPos(SPAWN_OUTSIDE[used])
-			end
+
+	if #roles < 1 then
+		return
+	end
+
+	for i = 1, 5 do
+		local role = table.Random( roles )
+		local ply = table.remove( role.plys, math.random( 1, #role.plys ) )
+
+		ply:SetupNormal()
+		ply:ApplyRoleStats( role )
+		ply:SetPos( SPAWN_OUTSIDE[i] )
+
+		if #role.plys < 1 then
+			table.RemoveByValue( roles, role )
+		end
+		if #roles < 1 then
+			break
 		end
 	end
-	printMessage( used )
+
+	if !usechaos then
+		PrintMessage( HUD_PRINTTALK, "MTF Units NTF has entered the facility" )
+		BroadcastLua( 'surface.PlaySound( "EneteredFacility.ogg" )' )
+	end
 end
 
-function printMessage( num )
+/*(function printMessage( num )
 	if num > 0 then
 		PrintMessage(HUD_PRINTTALK, "MTF Units NTF has entered the facility.")
 		BroadcastLua('surface.PlaySound("EneteredFacility.ogg")')
 	end
-end
+end*/
 
-function ForceUse(ent, on, int)
+function ForceUse(ent, on, int) --this function is tottaly bullshit and shouldn't exist at all
 	for k,v in pairs(player.GetAll()) do
 		if v:Alive() then
 			ent:Use(v,v,on, int)

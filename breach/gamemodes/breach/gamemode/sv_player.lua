@@ -19,6 +19,42 @@ function mply:ForceDropWeapon( class )
 	end
 end
 
+function mply:DropAllWeapons( strip )
+	if GetConVar( "br_dropvestondeath" ):GetInt() != 0 then
+		self:UnUseArmor()
+	end
+	if #self:GetWeapons() > 0 then
+		local pos = self:GetPos()
+		for k, v in pairs( self:GetWeapons() ) do
+			local candrop = true
+			if v.droppable != nil then
+				if v.droppable == false then
+					candrop = false
+				end
+			end
+			if candrop then
+				local class = v:GetClass()
+				local wep = ents.Create( class )
+				if IsValid( wep ) then
+					wep:SetPos( pos )
+					wep:Spawn()
+					if class == "br_keycard" then
+						local cardtype = v.KeycardType or v:GetNWString( "K_TYPE", "safe" )
+						wep:SetKeycardType( cardtype )
+					end
+					local atype = v:GetPrimaryAmmoType()
+					if atype > 0 then
+						wep.SavedAmmo = v:Clip1()
+					end
+				end
+			end
+			if strip then
+				v:Remove()
+			end
+		end
+	end
+end
+
 // just for finding a bad spawns :p
 function mply:FindClosest(tab, num)
 	local allradiuses = {}
@@ -846,8 +882,9 @@ function mply:SetSCP0082( hp, speed, spawn )
 	if spawn then
 		self:Spawn()
 	end
-	self:SetGTeam(TEAM_SCP)
+	self:DropAllWeapons( true )
 	self:SetModel("models/player/zombie_classic.mdl")
+	self:SetGTeam(TEAM_SCP)
 	self:SetHealth(hp)
 	self:SetMaxHealth(hp)
 	self:SetArmor(0)
@@ -870,18 +907,6 @@ function mply:SetSCP0082( hp, speed, spawn )
 	self:SetNoTarget( true )
 	net.Start("RolesSelected")
 	net.Send(self)
-	if #self:GetWeapons() > 0 then
-		local pos = self:GetPos()
-		for k,v in pairs(self:GetWeapons()) do
-			local wep = ents.Create( v:GetClass() )
-			if IsValid( wep ) then
-				wep:SetPos( pos )
-				wep:Spawn()
-				wep:SetClip1(v:Clip1())
-			end
-			self:StripWeapon(v:GetClass())
-		end
-	end
 	self:Give("weapon_br_zombie_infect")
 	self:SelectWeapon("weapon_br_zombie_infect")
 	self.BaseStats = nil
@@ -894,8 +919,9 @@ function mply:SetSCP0492()
 	self.handsmodel = nil
 	self:UnSpectate()
 	self:GodDisable()
-	self:SetGTeam(TEAM_SCP)
+	self:DropAllWeapons( true )
 	self:SetModel("models/player/zombie_classic.mdl")
+	self:SetGTeam(TEAM_SCP)
 	local hzom = math.Clamp(1000 - (#player.GetAll() * 14), 300, 800)
 	self:SetHealth(hzom)
 	self:SetMaxHealth(hzom)
@@ -917,18 +943,6 @@ function mply:SetSCP0492()
 	self:SetNoTarget( true )
 	net.Start("RolesSelected")
 	net.Send(self)
-	if #self:GetWeapons() > 0 then
-		local pos = self:GetPos()
-		for k,v in pairs(self:GetWeapons()) do
-			local wep = ents.Create( v:GetClass() )
-			if IsValid( wep ) then
-				wep:SetPos( pos )
-				wep:Spawn()
-				wep:SetClip1(v:Clip1())
-			end
-			self:StripWeapon(v:GetClass())
-		end
-	end
 	self:Give("weapon_br_zombie")
 	self:SelectWeapon("weapon_br_zombie")
 	self.BaseStats = nil
@@ -1074,6 +1088,8 @@ function mply:SetupAdmin()
 	self:Give( "br_entity_remover" )
 	self:Give( "weapon_physgun" )
 end
+
+
 
 function mply:ApplyRoleStats( role )
 	self:SetNClass( role.name )
