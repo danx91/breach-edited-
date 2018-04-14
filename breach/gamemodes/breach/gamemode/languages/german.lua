@@ -1,3 +1,8 @@
+---------------------------------------------
+---------- Translated by KiwontaTv ----------
+-- https://steamcommunity.com/id/KiwontaTv --
+---------------------------------------------
+
 german = {}
 
 german.roundtype = "Runden typ: {type}"
@@ -13,7 +18,7 @@ german.lang_dcaptured = "Die Chaos Insurgency hat {num} D-Klassen zum Ausbruch v
 german.lang_rescorted = "Die MTF's haben {num} Wissenschaftler gerettet"
 german.lang_teleported = "SCP-106 hat {num} Opfer in seine Dimension geschickt "
 german.lang_snapped = "{num} Nacken wurden von SCP-173 gebrochen"
-german.lang_zombies = 'SCP-049 hat {num} "geheilt"'
+german.lang_zombies = 'SCP-049 hat {num} Leute "geheilt"'
 german.lang_secret_found = "Easteregg wurde gefunden"
 german.lang_secret_nfound = "Easteregg wurde nicht gefunden"
 
@@ -34,20 +39,23 @@ german.voteresult = "Das ergebnis für %s lautet... %s"
 german.votes = "Von %s Spielern haben %s für eine Bestrafung und %s für die Vergebung gevoted."
 german.votecancel = "Der Vote wurde durch einen Admin abgebrochen."
 
+german.eq_tip = "LMB - Auswählen | RMB - Droppen"
+german.eq_open = "Drücke 'Q' um das neue Inventar zu öffnen!"
+
 german.starttexts = {
 	ROLE_SCPSantaJ = {
 		"Du bist SCP-Santa-J",
 		{"Deine Aufgabe ist es, aus der Foundation zu entkommen.",
 		"Du bist der Weihnachtsmann! Also gib den Leuten Geschenke.",
 		"Fröhliche Weihnachten und ein guten Rutsch!",
-		"Dieses SCP ist ein spezial SCP und nur an Weihnachten da."}
+		"Dieses SCP ist ein spezial SCP und ist nur an Weihnachten da."}
 	},
 	ROLE_SCP173 = {
 		"Du bist SCP-173",
 		{"Deine Aufgabe ist es, aus der Foundation zu entkommen.",
 		"Du kannst dich nicht bewegen, wenn dich jemand ansieht.",
 		"Nicht vergessen, Menschen blinzeln.",
-		"Du hats mit der Rechten Maustaste eine Spezialfähigkeit um andere Spieler zu erblinden"}
+		"Du hast mit der Rechten Maustaste eine Spezialfähigkeit um andere Spieler zu erblinden"}
 	},
 	ROLE_SCP096 = {
 		"Du bist SCP-096",
@@ -85,7 +93,7 @@ german.starttexts = {
 		"Du bist SCP-457",
 		{"Deine Aufgabe ist es, aus der Foundation zu entkommen.",
 		"Du brennst durchgehend.",
-		"Wenn du nah an einer Person bist, verbrennst du sie."}
+		"Wenn du nahe an einer Person bist, verbrennst du sie."}
 	},
 	ROLE_SCP049 = {
 		"Du bist SCP-049",
@@ -137,7 +145,7 @@ german.starttexts = {
 		"Du bist SCP-1048-A",
 		{"Deine Aufgabe ist es, aus der Foundation zu entkommen.",
 		"Du siehst aus wie 1048, bist aber aus Menschliche Ohren gebaut.",
-		"Su gibst einen lehr lauten Ton von dir."}
+		"Du gibst einen sehr lauten Ton von dir."}
 	},
 	ROLE_SCP1048B = {
 		"Du bist SCP-1048-B",
@@ -148,7 +156,7 @@ german.starttexts = {
 		"Du bist SCP-860-2",
 		{"Deine Aufgabe ist es, aus der Foundation zu entkommen.",
 		"Du bist das Wald Monster",
-		"Wenn du ejmanden in deinem Wald angrefst, lädst du dich an ihm auf"}
+		"Wenn du jmanden in deinem Wald angrefst, lädst du dich an ihm auf"}
 	},
 	ROLE_SCP0492 = {
 		"Du bist SCP-049-2",
@@ -401,7 +409,7 @@ german.credits_edit = "Überarbeitet und repariert von:"
 german.settings = "Einstellungen"
 german.updateinfo = "Änderungen nach Update einsehen"
 german.done = "bereit"
-german.repe = "Write br_reset_intro to show intro again"
+german.repe = "Schreibe br_reset_intro in die Konsole, um das Intro zu wiederholen."
 
 german.author = "Autor"
 german.helper = "Assistent"
@@ -409,8 +417,8 @@ german.originator = "Mitarbeiter"
 
 german.updates = {
 	"german",
-	"Update notes",
-	"Update notes of version %s are unavailable",
+	"Update Information",
+	"Update Information der Version %s ist nicht verfügbar.",
 	"Server version",
 }
 

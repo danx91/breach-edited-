@@ -1,4 +1,3 @@
-
 local mply = FindMetaTable( "Player" )
 
 /*function mply:CLevelGlobal()

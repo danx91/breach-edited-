@@ -13,6 +13,20 @@ hook.Add( "HUDShouldDraw", "HideHUDElements", function( name )
 	if hide[ name ] then return false end
 end )
 
+local MATS = {
+	menublack = Material("hud_scp/menublack.png"),
+	blanc = Material("hud_scp/texture_blanc.png"),
+	meter = Material("hud_scp/meter.png"),
+	time = Material("hud_scp/timeicon.png"),
+	user = Material("hud_scp/user.png"),
+	scp = Material("hud_scp/scp.png"),
+	ammo = Material("hud_scp/ammoicon.png"),
+	mag = Material("hud_scp/magicon.png"),
+	blink = Material("hud_scp/blinkicon.png"),
+	hp = Material("hud_scp/hpicon.png"),
+	sprint = Material("hud_scp/sprinticon.png"),
+}
+
 hook.Add( "HUDPaint", "Breach_HUD", function()
 	if playing then return end
 	local scale = hudScale
@@ -21,7 +35,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 	local offset = ScrH() - height
 	local ply = LocalPlayer()
 	if ply:Alive() == false then return end
-	
+
 	if IsValid( ply ) then
 		--spect box
 		if ply:GTeam() == TEAM_SPEC then
@@ -30,7 +44,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 				if ent:IsPlayer() then
 					local w, h = 350, 35
 					surface.SetDrawColor(255,255,255,255)
-					surface.SetMaterial(Material("hud_scp/menublack.png"))
+					surface.SetMaterial( MATS.menublack )
 					surface.DrawTexturedRect( width / 2 - w / 2 , 0, w, h )
 					draw.TextShadow( {
 						text = string.sub(ent:Nick(), 1, 17),
@@ -73,35 +87,35 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		end
 		--white bcg
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/texture_blanc.png"))
+		surface.SetMaterial(MATS.blanc)
 		surface.DrawTexturedRect( width * 0.015, height * 0.765 + offset, width * 0.3, height * 0.22)
 		--main panel
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/menublack.png"))
+		surface.SetMaterial(MATS.menublack)
 		surface.DrawTexturedRect( width * 0.016, height * 0.767 + offset, width * 0.198, height * 0.071)
 		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/menublack.png"))
+		surface.SetMaterial(MATS.menublack)
 		surface.DrawTexturedRect( width * 0.016, height * 0.839 + offset, width * 0.198, height * 0.071)
 		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/menublack.png"))
+		surface.SetMaterial(MATS.menublack)
 		surface.DrawTexturedRect( width * 0.016, height * 0.912 + offset, width * 0.198, height * 0.071)
 		--left panel
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/menublack.png"))
+		surface.SetMaterial(MATS.menublack)
 		surface.DrawTexturedRect( width * 0.215, height * 0.767 + offset, width * 0.099, height * 0.050)
 		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/menublack.png"))
+		surface.SetMaterial(MATS.menublack)
 		surface.DrawTexturedRect( width * 0.215, height * 0.819 + offset, width * 0.099, height * 0.045)
 		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/menublack.png"))
+		surface.SetMaterial(MATS.menublack)
 		surface.DrawTexturedRect( width * 0.215, height * 0.865 + offset, width * 0.099, height * 0.045)
 		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/menublack.png"))
+		surface.SetMaterial(MATS.menublack)
 		surface.DrawTexturedRect( width * 0.215, height * 0.912 + offset, width * 0.099, height * 0.072)
 		--info
 		local timel = tostring( string.ToMinutesSeconds( cltime ) )
@@ -117,7 +131,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		end
 		--time
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/timeicon.png"))
+		surface.SetMaterial(MATS.time)
 		surface.DrawTexturedRect( width * 0.23, height * 0.778 + offset, height * 0.03, height * 0.03)
 		
 		draw.Text( {
@@ -130,7 +144,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		})
 		--player name
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/user.png"))
+		surface.SetMaterial(MATS.user)
 		surface.DrawTexturedRect( width * 0.26, height * 0.825 + offset, height * 0.02, height * 0.02)
 		draw.Text( {
 			text = string.sub(name, 1, 23),
@@ -142,7 +156,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		})
 		--role
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/scp.png"))
+		surface.SetMaterial(MATS.scp)
 		surface.DrawTexturedRect( width * 0.26, height * 0.87 + offset, height * 0.02, height * 0.02)
 		local ft = "HUDFontLittle"
 		if string.len(role) > 25 then ft = "HUDFont" end
@@ -156,7 +170,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		})
 		--ammo
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/ammoicon.png"))
+		surface.SetMaterial(MATS.ammo)
 		surface.DrawTexturedRect( width * 0.22, height * 0.915 + offset, height * 0.028, height * 0.028)
 		if ammo < 0 then ammo = 0 end
 		draw.Text( {
@@ -169,7 +183,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		})
 		--mag
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/magicon.png"))
+		surface.SetMaterial(MATS.mag)
 		surface.DrawTexturedRect( width * 0.22, height * 0.95 + offset, height * 0.028, height * 0.028)
 		if mag < 0 then mag = 0 end
 		draw.Text( {
@@ -182,11 +196,11 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		})
 		--blink icon & bar		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/blinkicon.png"))
+		surface.SetMaterial(MATS.blink)
 		surface.DrawTexturedRect( width * 0.025, height * 0.785 + offset, height * 0.035, height * 0.035)
 		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/texture_blanc.png"))
+		surface.SetMaterial(MATS.blanc)
 		surface.DrawTexturedRect( width * 0.05, height * 0.785 + offset, width * 0.1525, height * 0.035)
 		
 		surface.SetDrawColor(0, 0, 0, 255)
@@ -195,7 +209,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		local bbars = blink / bd * 15
 		if bbars > 15 then bbars = 15 end
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/meter.png"))
+		surface.SetMaterial(MATS.meter)
 		for i=1, bbars do
 			surface.DrawTexturedRect( width * 0.052 + width * 0.01 * (i - 1), height * 0.7875 + offset, width * 0.009, height * 0.029)
 		end
@@ -211,11 +225,11 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		})
 		--HP icon & bar		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/hpicon.png"))
+		surface.SetMaterial(MATS.hp)
 		surface.DrawTexturedRect( width * 0.025, height * 0.857 + offset, height * 0.035, height * 0.035)
 		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/texture_blanc.png"))
+		surface.SetMaterial(MATS.blanc)
 		surface.DrawTexturedRect( width * 0.05, height * 0.857 + offset, width * 0.1525, height * 0.035)
 		
 		surface.SetDrawColor(0, 0, 0, 255)
@@ -223,7 +237,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		local hpb = math.Round(hp / maxhp * 15)
 		if hpb > 15 then hpb = 15 end
 		surface.SetDrawColor(255, 0, 0, 255)
-		surface.SetMaterial(Material("hud_scp/meter.png"))
+		surface.SetMaterial(MATS.meter)
 		for i=1, hpb do
 			surface.DrawTexturedRect( width * 0.052 + width * 0.01 * (i - 1), height * 0.8595 + offset, width * 0.009, height * 0.029)
 		end
@@ -237,11 +251,11 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		})
 		--stamina icon/bar		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/sprinticon.png"))
+		surface.SetMaterial(MATS.sprint)
 		surface.DrawTexturedRect( width * 0.025, height * 0.929 + offset, height * 0.035, height * 0.035)
 		
 		surface.SetDrawColor(255, 255, 255, 255)
-		surface.SetMaterial(Material("hud_scp/texture_blanc.png"))
+		surface.SetMaterial(MATS.blanc)
 		surface.DrawTexturedRect( width * 0.05, height * 0.929 + offset, width * 0.1525, height * 0.035)
 		
 		surface.SetDrawColor(0, 0, 0, 255)
@@ -250,7 +264,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		if staminab > 15 then staminab = 15 end
 		surface.SetDrawColor(0, 255, 0, 255)
 		if exhausted then surface.SetDrawColor(160, 175, 75, 255) end
-		surface.SetMaterial(Material("hud_scp/meter.png"))
+		surface.SetMaterial(MATS.meter)
 		for i=1, staminab do
 			surface.DrawTexturedRect( width * 0.052 + width * 0.01 * (i - 1), height * 0.9315 + offset, width * 0.009, height * 0.029)
 		end
