@@ -25,7 +25,7 @@ function ENT:Initialize()
 end
 
 function ENT:Use(ply)
-	if ply:GTeam() == TEAM_SPEC or ply:GTeam() == TEAM_SCP or ply:Alive() == false then return end
+	if ply:GTeam() == TEAM_SPEC or ( ply:GTeam() == TEAM_SCP and ply:GetNClass() != ROLES.ROLE_SCP9571 ) or ply:Alive() == false then return end
 	if ply.UsingArmor != nil then
 		ply:PrintMessage(HUD_PRINTTALK, 'You already have a vest, type "dropvest" in the chat to drop it')
 		return

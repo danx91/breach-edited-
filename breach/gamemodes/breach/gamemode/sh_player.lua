@@ -24,17 +24,6 @@ function mply:CLevel()
 	return 1
 end*/
 
-function mply:GetKarma()
-	if not self.GetNKarma then
-		player_manager.RunClass( self, "SetupDataTables" )
-	end
-	if not self.GetNKarma then
-		return 999
-	else
-		return self:GetNKarma()
-	end
-end
-
 function mply:GetExp()
 	if not self.GetNEXP then
 		player_manager.RunClass( self, "SetupDataTables" )

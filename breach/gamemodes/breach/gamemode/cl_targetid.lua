@@ -14,7 +14,7 @@ function GM:HUDDrawTargetID()
 	if ply:IsPlayer() then
 		if ply:Alive() == false then return end
 		if ply:GetPos():Distance(LocalPlayer():GetPos()) > 500 then return end
-		if not ply.GetNClass then
+		if not ply.GetNClass or not ply.GetLastRole then
 			player_manager.RunClass( ply, "SetupDataTables" )
 		end
 		if ply:GTeam() == TEAM_SPEC then return end
@@ -30,7 +30,13 @@ function GM:HUDDrawTargetID()
 			end
 			if hide == true then return end
 		end
-		if ply:GTeam() == TEAM_SCP then
+		if ply:GetNClass() == ROLES.ROLE_SCP9571 and LocalPlayer():GTeam() != TEAM_SCP then
+			text = GetLangRole(ply:GetLastRole())
+			clr = gteams.GetColor(ply:GetLastTeam())
+			if !text or text == "" then
+				text = clang.class_unknown or "Unknown"
+			end
+		elseif ply:GTeam() == TEAM_SCP then
 			text = GetLangRole(ply:GetNClass())
 			clr = gteams.GetColor(ply:GTeam())
 		else
@@ -53,11 +59,11 @@ function GM:HUDDrawTargetID()
 	
 	local x = ScrW() / 2
 	local y = ScrH() / 2 + 30
-	
-	
-	
+
+	local health = math.ceil( ply:Health() * 100 / math.max( 1, ply:GetMaxHealth() ) )
+
 	draw.Text( {
-		text = ply:Nick() .. " (" .. ply:Health() .. "%)",
+		text = ply:Nick() .. " (" .. health .. "%)",
 		pos = { x, y },
 		font = "TargetID",
 		color = clr2,

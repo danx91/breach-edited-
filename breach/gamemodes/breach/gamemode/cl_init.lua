@@ -39,11 +39,16 @@ function AddToIDS(ply)
 	if lastidcheck > CurTime() then return end
 	local sid = nil
 	local wep = ply:GetActiveWeapon()
-	if not ply.GetNClass then
+	if not ply.GetNClass or not ply.GetLastRole then
 		player_manager.RunClass( ply, "SetupDataTables" )
 	end
 	if ply:GTeam() == TEAM_SCP then
-		sid = ply:GetNClass()
+		if ply:GetNClass() == ROLES.ROLE_SCP9571 then
+			sid = ply:GetLastRole()
+			if sid == "" then sid = nil end
+		else
+			sid = ply:GetNClass()
+		end
 	else
 		if IsValid(wep) then
 			if wep:GetClass() == "br_id" then
@@ -65,6 +70,7 @@ function AddToIDS(ply)
 		end
 	end
 	table.ForceInsert(SAVEDIDS, {pl = ply, id = sid})
+	print( #SAVEDIDS )
 	
 	// messaging
 	if sid == nil then
@@ -841,6 +847,66 @@ end )
 concommand.Add( "br_show_update", function( ply )
 	PlayIntro( 5 )
 end ) */
+
+
+function  GM:SetupWorldFog()
+	if LocalPlayer():GetNClass() == ROLES.ROLE_SCP9571 then
+		if OUTSIDE_BUFF and OUTSIDE_BUFF( ply:GetPos() ) then return end
+		render.FogMode( MATERIAL_FOG_LINEAR )
+		render.FogColor( 0, 0, 0 )
+		render.FogStart( 250 )
+		render.FogEnd( 500 )
+		render.FogMaxDensity( 1 )
+		return true
+	end
+
+	if !Effect957 then return end
+
+	if Effect957Mode == 0 then
+		if Effect957Density < 1 then
+			Effect957Density = math.Clamp( math.abs( Effect957 - CurTime() ), 0, 1 )
+		elseif Effect957Density >= 1 then
+			Effect957 = CurTime() + 3
+			Effect957Mode = 1
+		end
+	elseif Effect957Mode == 1 then
+		Effect957Density = 1
+		if Effect957 < CurTime() then
+			Effect957 = CurTime() + 1
+			Effect957Mode = 2
+		end
+	else
+		Effect957Density = math.Clamp( Effect957 - CurTime(), 0, 1 )
+		if Effect957Density == 0 then
+			Effect957 = false
+			Effect957Mode = 0
+		end
+	end
+
+
+
+	render.FogMode( MATERIAL_FOG_LINEAR )
+	render.FogColor( 0, 0, 0 )
+	render.FogStart( 50 )
+	render.FogEnd( 250 )
+	render.FogMaxDensity( Effect957Density )
+	return true
+end
+
+Effect957 = false
+Effect957Density = 0
+Effect957Mode = 0
+net.Receive( "957Effect", function( len )
+	local status = net.ReadBool()
+	if status then
+		Effect957 = CurTime()
+		Effect957Mode = 0
+	elseif Effect957 then
+		//Effect957 = false
+		Effect957Mode = 2
+		Effect957 = CurTime() + 1
+	end
+end )
 
 timer.Simple( 1, function()
 	net.Start( "PlayerReady" )

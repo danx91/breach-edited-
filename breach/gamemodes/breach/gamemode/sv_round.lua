@@ -53,13 +53,15 @@ function CleanUpPlayers()
 		v:Freeze(false)
 		v.MaxUses = nil
 		v.blinkedby173 = false
+		v.scp173allow = false
 		v.usedeyedrops = false
 		v.isescaping = false
-		v:AddKarma(KarmaRound())
-		v:UpdateNKarma()
 		v:SendLua( "CamEnable = false" )
 	end
 	net.Start("Effect")
+		net.WriteBool( false )
+	net.Broadcast()
+	net.Start("957Effect")
 		net.WriteBool( false )
 	net.Broadcast()
 end

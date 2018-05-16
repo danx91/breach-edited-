@@ -252,12 +252,6 @@ function ShowScoreBoard()
 			size = panelwidth
 		}
 	}
-	if KarmaEnabled() then
-		table.ForceInsert(sbpanels, {
-			name = "Karma",
-			size = panelwidth
-		})
-	end
 	if RanksEnabled() then
 		table.ForceInsert(sbpanels, {
 			name = "Group",
@@ -320,16 +314,6 @@ function ShowScoreBoard()
 						size = panelwidth
 					},
 				}
-				if KarmaEnabled() then
-					local tkarma = v:GetKarma()
-					if tkarma == nil then tkarma = 999 end
-					table.ForceInsert(panels, {
-						name = "Karma",
-						text = v:GetKarma(),
-						color = color_white,
-						size = panelwidth
-					})
-				end
 				local rank = v:GetUserGroup()
 				rank = firstToUpper(rank)
 				if RanksEnabled() then
@@ -346,7 +330,7 @@ function ShowScoreBoard()
 				scroll_panel:SetSize(0,width)
 				//scroll_panel.clr = gteams.GetColor(v:GTeam())
 				scroll_panel.clr = tab.color
-				if not v.GetNClass then
+				if not v.GetNClass or not v.GetLastTeam then
 					player_manager.RunClass( v, "SetupDataTables" )
 				end
 				scroll_panel.Paint = function( self, w, h )
@@ -359,9 +343,18 @@ function ShowScoreBoard()
 					local tcolor2 = tab.color2
 					LocalPlayer().known = true
 					if v.known == true then
-						tcolor = gteams.GetColor(v:GTeam())
+						if v:GetNClass() == ROLES.ROLE_SCP9571 then
+							txt = GetLangRole( v:GetLastRole() )
+							if txt == "" then
+								txt = clang.class_unknown or "Unknown"
+							else
+								tcolor = gteams.GetColor(v:GetLastTeam())
+							end
+						else
+							tcolor = gteams.GetColor(v:GTeam())
+							txt = GetLangRole(v.knownrole)
+						end
 					end
-					txt = GetLangRole(v.knownrole)
 					if ranks.author.check( v ) then	
 						tcolor = Color(114, 9, 53)
 						tcolor2 = color_white

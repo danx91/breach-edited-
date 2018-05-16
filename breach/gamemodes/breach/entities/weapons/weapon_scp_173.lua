@@ -100,6 +100,9 @@ function SWEP:Think()
 			if tr_eyes.Entity == self.Owner or tr_center.Entity == self.Owner then
 				//self.Owner:PrintMessage(HUD_PRINTTALK, tostring(tr_eyes.Entity) .. " : " .. tostring(tr_center.Entity) .. " : " .. tostring(tr_center.Entity))
 				if self:IsLookingAt( v ) and v.isblinking == false then
+					if v.scp173allow and self.Owner:GetPos():DistToSqr( v:GetPos() ) > 62500 then
+						continue
+					end
 					watching = watching + 1
 					//if self:GetPos():Distance(v:GetPos()) > 100 then
 						//self.Owner:PrintMessage(HUD_PRINTTALK, v:Nick() .. " is looking at you")

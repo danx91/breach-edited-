@@ -4,8 +4,8 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
-VERSION = "0.28"
-DATE = "02/03/2018"
+VERSION = "0.29"
+DATE = "16/05/2018"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
@@ -165,6 +165,10 @@ SPCS = {
 	{name = "SCP 076-2",
 	func = function(pl)
 		pl:SetSCP076()
+	end},
+	{name = "SCP 957",
+	func = function(pl)
+		pl:SetSCP957()
 	end}
 }
 
@@ -194,6 +198,8 @@ ROLES.ROLE_SCP1048B = "SCP-1048-B"
 ROLES.ROLE_SCP0492 = "SCP-049-2"
 ROLES.ROLE_SCP0082 = "SCP-008-2"
 ROLES.ROLE_SCP8602 = "SCP-860-2"
+ROLES.ROLE_SCP957 = "SCP-957"
+ROLES.ROLE_SCP9571 = "SCP-957-1"
 
 // Researchers
 ROLES.ROLE_RES = "Researcher"
@@ -235,12 +241,6 @@ if !ConVarExists("br_time_ntfenter") then CreateConVar( "br_time_ntfenter", "360
 if !ConVarExists("br_time_blink") then CreateConVar( "br_time_blink", "0.25", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Blink timer" ) end
 if !ConVarExists("br_time_blinkdelay") then CreateConVar( "br_time_blinkdelay", "5", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Delay between blinks" ) end
 if !ConVarExists("br_spawnzombies") then CreateConVar( "br_spawnzombies", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Do you want zombies?" ) end
-if !ConVarExists("br_karma") then CreateConVar( "br_karma", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Do you want to enable karma system?" ) end
-if !ConVarExists("br_karma_max") then CreateConVar( "br_karma_max", "1200", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Max karma" ) end
-if !ConVarExists("br_karma_starting") then CreateConVar( "br_karma_starting", "1000", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Starting karma" ) end
-if !ConVarExists("br_karma_save") then CreateConVar( "br_karma_save", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Do you want to save the karma?" ) end
-if !ConVarExists("br_karma_round") then CreateConVar( "br_karma_round", "120", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "How much karma to add after a round" ) end
-if !ConVarExists("br_karma_reduce") then CreateConVar( "br_karma_reduce", "30", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "How much karma to reduce after damaging someone" ) end
 if !ConVarExists("br_scoreboardranks") then CreateConVar( "br_scoreboardranks", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
 if !ConVarExists("br_defaultlanguage") then CreateConVar( "br_defaultlanguage", "english", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
 if !ConVarExists("br_expscale") then CreateConVar( "br_expscale", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
@@ -277,30 +277,6 @@ if !ConVarExists("br_new_eq") then CreateConVar("br_new_eq", "1", {FCVAR_SERVER_
 if !ConVarExists("br_enable_warhead") then CreateConVar("br_enable_warhead", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "Enables OMEGA Warhead" ) end
 
 MINPLAYERS = GetConVar("br_min_players"):GetInt()
-
-function KarmaReduce()
-	return GetConVar("br_karma_reduce"):GetInt()
-end
-
-function KarmaRound()
-	return GetConVar("br_karma_round"):GetInt()
-end
-
-function SaveKarma()
-	return GetConVar("br_karma_save"):GetInt()
-end
-
-function MaxKarma()
-	return GetConVar("br_karma_max"):GetInt()
-end
-
-function StartingKarma()
-	return GetConVar("br_karma_starting"):GetInt()
-end
-
-function KarmaEnabled()
-	return GetConVar("br_karma"):GetBool()
-end
 
 function GetPrepTime()
 	return GetConVar("br_time_preparing"):GetInt()
@@ -449,6 +425,9 @@ function GM:EntityTakeDamage( target, dmginfo )
 			end
 		end
 	end
+	if at:IsPlayer() and target:IsPlayer() and at:GetNClass() == ROLES.ROLE_SCP9571 and target:GTeam() == TEAM_SCP then
+		return true
+	end
 end
 
 function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
@@ -465,7 +444,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		local wep = attacker:GetActiveWeapon()
 		if IsValid(wep) then
 			if wep:GetClass() == "weapon_crowbar" then
-			dmginfo:ScaleDamage(0.3)
+				dmginfo:ScaleDamage(0.3)
 			elseif wep:GetClass() == "weapon_stunstick" then
 				dmginfo:ScaleDamage(0.5)
 			end
@@ -511,9 +490,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 					end
 				end
 				if postround == false then
-					if rdm then
-						at:ReduceKarma(KarmaReduce())
-					else
+					if !rdm then
 						at:AddExp( math.Round(dmginfo:GetDamage() / 2) )
 					end
 				end
@@ -543,20 +520,27 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		mul = 1
 	end
 	if SERVER then
-		if at:IsPlayer() then
-			if at.GetNKarma then
-				mul = mul * (at:GetNKarma() / StartingKarma())
-			end
-		end
+		/*if at:IsPlayer() then -- GET THE FUCK OUT
+			if at.GetNKarma then -- GET THE FUCK OUT
+				mul = mul * (at:GetNKarma() / StartingKarma()) -- GET THE FUCK OUT
+			end -- GET THE FUCK OUT
+		end*/ -- GET THE FUCK OUT
+
 		mul = mul * armormul
-		//mul = math.Round(mul)
-		//print("mul: " .. mul)
 		dmginfo:ScaleDamage(mul)
 		if ply:GTeam() == TEAM_SCP and OUTSIDE_BUFF( ply:GetPos() ) then
 			dmginfo:ScaleDamage( 0.75 )
 		end
 		local scale = math.Clamp( GetConVar( "br_scale_bullet_damage" ):GetFloat(), 0.1, 2 )
 		dmginfo:ScaleDamage( scale )
+
+		if ply:GetNClass() == ROLES.ROLE_SCP957 then
+			dmginfo:ScaleDamage( 0.2 )
+		end
+
+		if at:GetNClass() == ROLES.ROLE_SCP9571 and ply:GTeam() == TEAM_SCP then
+			return true
+		end
 	end
 end
 
@@ -574,3 +558,115 @@ function GM:Move( ply, mv )
 		mv:SetVelocity( vel )
 	end
 end
+
+--Better timers
+_TimersCache = {}
+
+Timer = {}
+Timer.__index = Timer
+
+Timer.name = ""
+Timer.repeats = 0
+Timer.current = 0
+Timer.time = 0
+Timer.ncall = 0
+Timer.alive = false
+Timer.destroyed = false
+
+function Timer:Create( name, time, repeats, callback, endcallback, noactivete, nocache )
+	if !name or !time or !repeats or !callback then return end
+	local t = setmetatable( {}, Timer )
+	t.name = name
+	t.time = time
+	t.repeats = repeats
+	t.callback = callback
+	t.endcallback = endcallback
+
+	t.Create = nil
+
+	if !nocache then
+		_TimersCache[name] = t
+	end
+
+	if !noactivate then
+		t:Start()
+	end
+
+	return t
+end
+
+function Timer:GetName()
+	if self.destroyed then return end
+	return self.name
+end
+
+function Timer:Stop()
+	if self.destroyed then return end
+	self.alive = false
+end
+
+function Timer:Start()
+	if self.destroyed then return end
+	self.alive = true
+	self.ncall = CurTime()
+end
+
+function Timer:Reset()
+	if self.destroyed then return end
+	self.current = 0
+end
+
+function Timer:Change( time, repeats )
+	if self.destroyed then return end
+	if time then
+		self.time = time
+	end
+	if repeats then
+		self.repeats = repeats
+	end
+end
+
+function Timer:StopReset()
+	if self.destroyed then return end
+	self:Stop()
+	self:Reset()
+end
+
+function Timer:Destroy()
+	if self.destroyed then return end
+	_TimersCache[self.name] = nil
+	self:Stop()
+	self.destroyed = true
+end
+
+function Timer:Tick()
+	if self.destroyed then return end
+
+	self.ncall = self.ncall + self.time
+
+	self.current = self.current + 1
+	self.callback( self, self.current )
+
+	if self.repeats > 0 then
+		if self.current >= self.repeats then
+			self:Destroy()
+			if self.endcallback then
+				self.endcallback()
+			end
+		end
+	end
+end
+
+setmetatable( Timer, { __call = Timer.Create } )
+
+function GetTimer( name )
+	return _TimersCache[name]
+end
+
+hook.Add( "Tick", "TimersTick", function()
+	for k, v in pairs( _TimersCache ) do
+		if v.ncall <= CurTime() then
+			v:Tick()
+		end
+	end
+end )

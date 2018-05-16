@@ -122,9 +122,7 @@ function GetNotActivePlayers()
 end
 
 function GM:ShutDown()
-	for k,v in pairs(player.GetAll()) do
-		v:SaveKarma()
-	end
+	--
 end
 
 function WakeEntity(ent)

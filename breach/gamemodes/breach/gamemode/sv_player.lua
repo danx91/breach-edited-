@@ -85,34 +85,6 @@ function mply:GiveRandomWep(tab)
 	self:GiveAmmo((getwep.Primary.ClipSize * 4), getwep.Primary.Ammo, false)
 end
 
-function mply:ReduceKarma(amount)
-	if KarmaEnabled() == false then return end
-	self.Karma = math.Clamp((self.Karma - amount), 1, MaxKarma())
-end
-
-function mply:AddKarma(amount)
-	if KarmaEnabled() == false then return end
-	self.Karma = math.Clamp((self.Karma + amount), 1, MaxKarma())
-end
-
-function mply:SetKarma(amount)
-	if KarmaEnabled() == false then return end
-	self.Karma = math.Clamp(amount, 1, MaxKarma())
-end
-
-function mply:UpdateNKarma()
-	if KarmaEnabled() == false then return end
-	if self.SetNKarma != nil then
-		self:SetNKarma(self.Karma)
-	end
-end
-
-function mply:SaveKarma()
-	if KarmaEnabled() == false then return end
-	if SaveKarma() == false then return end
-	self:SetPData( "breach_karma", self.Karma )
-end
-
 function mply:GiveNTFwep()
 	self:GiveRandomWep({"cw_ump45", "cw_mp5"})
 end
@@ -818,6 +790,57 @@ function mply:SetSCP8602()
 	self:SelectWeapon("weapon_scp_8602")
 	self.BaseStats = nil
 	self.UsingArmor = nil
+end
+
+function mply:SetSCP957()
+	self:Flashlight( false )
+	self.handsmodel = nil
+	self:UnSpectate()
+	self:GodDisable()
+	self:Spawn()
+	self:SetPos( table.Random( SPAWN_957 ) )
+	self:StripWeapons()
+	self:RemoveAllAmmo()
+	self:SetGTeam( TEAM_SCP )
+	self:SetNClass( ROLES.ROLE_SCP957 )
+	self:SetModel( "models/immigrant/outlast/walrider_pm.mdl" )
+	self:SetHealth(1500)
+	self:SetMaxHealth(1500)
+	self:SetArmor(0)
+	self:SetWalkSpeed(180)
+	self:SetRunSpeed(180)
+	self:SetMaxSpeed(180)
+	self:SetJumpPower(200)
+	self:SetNoDraw(false)
+	self.Active = true
+	self:SetupHands()
+	self.canblink = false
+	self.noragdoll = false
+	self:AllowFlashlight( false )
+	self.WasTeam = TEAM_SCP
+	self:SetNoTarget( true )
+	self:Give("weapon_scp_957")
+	self:SelectWeapon("weapon_scp_957")
+	self.BaseStats = nil
+	self.UsingArmor = nil
+end
+
+function mply:SetSCP9571()
+	if !self.SetLastRole or !self.SetLastTeam then
+		player_manager.RunClass( self, "SetupDataTables" )
+	end
+
+	self:SetHealth( 1000 )
+	self:SetMaxHealth( 1000 )
+
+	self:SetLastRole( self:GetNClass() )
+	self:SetLastTeam( self:GTeam() )
+	self:SetGTeam( TEAM_SCP )
+	self:SetNClass( ROLES.ROLE_SCP9571 )
+	self.canblink = false
+
+	net.Start( "RolesSelected" )
+	net.Send( self )
 end
 
 function mply:SetSCP076()

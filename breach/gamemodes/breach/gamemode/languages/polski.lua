@@ -164,6 +164,20 @@ polski.starttexts = {
 		"Jesteś szybki i masz mało zdrowia",
 		"Będziesz się odradzać dopóki ktoś nie zniszczy SCP-076-1"}
 	},
+	ROLE_SCP957 = {
+		"Jesteś SCP-957",
+		{"Twoim celem jest ucieczka z placówki",
+		"Jesteś odporniejszy na ataki, ale śmierć SCP-957-1 zada ci obrażenia",
+		"Użyj LPM aby zadać obszarowe obrażenia w czasie",
+		"Po zaatakowaniu kogoś ty i SCP-957-1 zostaniecie lekko uzrdowieni"}
+	},
+	ROLE_SCP9571 = {
+		"Zostałeś SCP-957-1",
+		{"Twoim celem jest zwabienie twoich towarzyszy do SCP-957",
+		"Twoja wizja jest ograniczona i możesz się komunikować z SCP-957",
+		"Nikt nie wie, że jesteś SCP nie daj się zdemaskować",
+		"Jeżeli zginiesz SCP-957 otrzyma obrażenia"}
+	},
 	ROLE_SCP0082 = {
 		"Jesteś SCP-008-2",
 		{"Twoim celem jest zarażenie wszystkich MTF i D",
@@ -375,6 +389,8 @@ polski.ROLES.ROLE_SCP1471 = "SCP-1471-A"
 polski.ROLES.ROLE_SCP1048A = "SCP-1048-A"
 polski.ROLES.ROLE_SCP1048B = "SCP-1048-B"
 polski.ROLES.ROLE_SCP8602 = "SCP-860-2"
+polski.ROLES.ROLE_SCP957 = "SCP-957"
+polski.ROLES.ROLE_SCP9571 = "SCP-957-1"
 
 polski.ROLES.ROLE_RES = "Naukowiec"
 polski.ROLES.ROLE_MEDIC = "Medyk"

@@ -168,7 +168,7 @@ function SWEP:SecondaryAttack()
 			self.Owner:PrintMessage( HUD_PRINTTALK, "You have to wait "..math.ceil( self.NextPlace - CurTime() ).." before next use!" )
 			return
 		end
-		self.NextPlace = CurTime() + 60
+		self.NextPlace = CurTime() + 15
 
 		self.Owner:EmitSound( "Place" )
 		self.TPPoint = self.Owner:GetPos()
@@ -200,7 +200,7 @@ end
 
 function SWEP:TeleportSequence( point )
 	self.NextAttackW = CurTime() + 8
-	self.NextPlace = CurTime() + 20
+	self.NextPlace = CurTime() + 15
 
 	local tr = util.TraceLine( {
 		start = self.Owner:GetPos(),

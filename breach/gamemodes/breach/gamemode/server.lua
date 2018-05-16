@@ -36,6 +36,7 @@ util.AddNetworkString("CancelPunish")
 util.AddNetworkString("689")
 util.AddNetworkString( "UpdateKeycard" )
 util.AddNetworkString( "SendSound" )
+util.AddNetworkString( "957Effect" )
 
 net.Receive( "DropWeapon", function( len, ply )
 	local class = net.ReadString()
@@ -120,7 +121,7 @@ net.Receive( "Sound_Lost", function( len, ply )
 end)
 
 net.Receive( "DropCurrentVest", function( len, ply )
-	if ply:GTeam() != TEAM_SPEC and ply:GTeam() != TEAM_SCP and ply:Alive() then
+	if ply:GTeam() != TEAM_SPEC and ( ply:GTeam() != TEAM_SCP or ply:GetNClass() == ROLES.ROLE_SCP9571 ) and ply:Alive() then
 		if ply.UsingArmor != nil then
 			ply:UnUseArmor()
 		end
@@ -156,9 +157,6 @@ net.Receive( "ClearData", function( len, ply )
 end)
 
 function clearData( ply )
-	ply:SetPData( "breach_karma", GetConVar("br_karma_starting"):GetInt() or 0 )
-	ply.Karma = GetConVar("br_karma_starting"):GetInt() or 0
-	ply:SetNKarma( GetConVar("br_karma_starting"):GetInt() or 0 )
 	ply:SetPData( "breach_exp", 0 )
 	ply:SetNEXP( 0 )
 	ply:SetPData( "breach_level", 0 )
@@ -166,16 +164,13 @@ function clearData( ply )
 end
 
 function clearDataID( id64 )
-	util.RemovePData( id64, "breach_karma" )
 	util.RemovePData( id64, "breach_exp" )
 	util.RemovePData( id64, "breach_level" )
 end
 
 function IsValidSteamID( id )
-	if string.len( id ) == 17 then
-		if tonumber( id ) then
-			return true
-		end
+	if tonumber( id ) then
+		return true
 	end
 	return false
 end

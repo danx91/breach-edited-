@@ -161,6 +161,19 @@ lang.SCP_939 = {
 	},
 }
 
+lang.SCP_957 = {
+	author = "danx91",
+	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",
+	purpose = "Zabijaj",
+	instructions = "LPM aby zadać obrażenia obszarowe",
+	HUD = {
+		rattack = "Atak gotowy",
+		nattack = "Następny atak za",
+		nsummon = "Zamiana SCP-957-1 za",
+		asummon = "SCP-957-1 żyje",
+	},
+}
+
 lang.SCP_966 = {
 	author = "Kanade, edytowane przez danx91",
 	contact = "Popatrz na ten tryb w warsztacie i poszukaj twórców",

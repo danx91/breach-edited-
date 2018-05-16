@@ -161,6 +161,19 @@ lang.SCP_939 = {
 	},
 }
 
+lang.SCP_957 = {
+	author = "danx91",
+	contact = "Look at this gamemode in workshop and search for creators",
+	purpose = "Kill",
+	instructions = "LMB to deal AOE damage",
+	HUD = {
+		rattack = "Attack ready",
+		nattack = "Next attack in",
+		nsummon = "SCP-957-1 transformation in",
+		asummon = "SCP-957-1 is alive",
+	},
+}
+
 lang.SCP_966 = {
 	author = "Kanade, edited by danx91",
 	contact = "Look at this gamemode in workshop and search for creators",

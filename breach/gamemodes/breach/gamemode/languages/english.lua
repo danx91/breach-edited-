@@ -164,6 +164,20 @@ english.starttexts = {
 		"You are fast and you have low HP",
 		"You will be respawning until somebody destroy SCP-076-1"}
 	},
+	ROLE_SCP957 = {
+		"You are the SCP-957",
+		{"Your objective is to escape the facility",
+		"You receive less damage, but on SCP-957-1 death you will receive damage",
+		"Use LMB to deal AOE damage",
+		"After attack, you and SCP-957-1 will receive some health"}
+	},
+	ROLE_SCP9571 = {
+		"You are the SCP-957-1",
+		{"Your objective is bring your friends to SCP-957",
+		"Your vision is limited and you can talk with SCP-957",
+		"Nobody knows that you are SCP, don't get exposed",
+		"If you die, SCP-957 will receive damage"}
+	},
 	ROLE_SCP0082 = {
 		"You are the SCP-008-2",
 		{"Your objective is to infect every MTF and D",

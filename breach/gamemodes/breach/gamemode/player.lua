@@ -68,7 +68,6 @@ function GM:PlayerInitialSpawn( ply )
 	ply.freshspawn = true
 	ply.isblinking = false
 	ply.Premium = false
-	ply.Karma = StartingKarma() or 1000
 	if timer.Exists( "RoundTime" ) == true then
 		net.Start("UpdateTime")
 			net.WriteString(tostring(timer.TimeLeft( "RoundTime" )))
@@ -152,9 +151,24 @@ function GM:PlayerNoClip( ply, desiredState )
 end
 
 function GM:PlayerDeath( victim, inflictor, attacker )
+	net.Start( "Effect" )
+		net.WriteBool( false )
+	net.Send( victim )
+
+	net.Start( "957Effect" )
+		net.WriteBool( false )
+	net.Send( victim )
+
 	victim:SetModelScale( 1 )
 	if attacker:IsPlayer() then
 		print("[KILL] " .. attacker:Nick() .. " [" .. attacker:GetNClass() .. "] killed " .. victim:Nick() .. " [" .. victim:GetNClass() .. "]")
+	end
+	if victim:GetNClass() == ROLES.ROLE_SCP9571 then
+		for k, v in pairs( player.GetAll() ) do
+			if v:GetNClass() == ROLES.ROLE_SCP957 then
+				v:TakeDamage( 500, attacker, inflictor)
+			end
+		end
 	end
 	if victim:GetNClass() == ROLES.ROLE_SCP076 and IsValid( SCP0761 ) and !postround then
 		victim.n076nextspawn = CurTime() + 10
@@ -262,7 +276,6 @@ function GM:PlayerDisconnected( ply )
 		BroadcastLua('gamestarted = false')
 		gamestarted = false
 	 end
-	 ply:SaveKarma()
 	 WinCheck()
 end
 
@@ -296,7 +309,14 @@ end
 function GM:PlayerCanHearPlayersVoice( listener, talker )
 	if talker:Alive() == false then return false end
 	if listener:Alive() == false then return false end
-	if talker:GTeam() == TEAM_SCP and GetConVar( "br_allow_scptovoicechat" ):GetInt() == 0 then
+
+	if talker:GetNClass() == ROLES.ROLE_SCP957 or listener:GetNClass() == ROLES.ROLE_SCP957 then
+		if talker:GetNClass() == ROLES.ROLE_SCP9571 or listener:GetNClass() == ROLES.ROLE_SCP9571 then
+			return true
+		end
+	end
+
+	if talker:GTeam() == TEAM_SCP and talker:GetNClass() != ROLES.ROLE_SCP9571 and GetConVar( "br_allow_scptovoicechat" ):GetInt() == 0 then
 		if talker:GetNClass() == ROLES.ROLE_SCP939 then
 			local wep = talker:GetWeapon("weapon_scp_939")
 			//print("Channel "..wep.Channel)
@@ -407,7 +427,7 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 			if wep.Slot == v.Slot then return false end
 		end
 	end
-	if ply:GTeam() == TEAM_SCP then
+	if ply:GTeam() == TEAM_SCP and ply:GetNClass() != ROLES.ROLE_SCP9571 then
 		if not wep.ISSCP then
 			return false
 		else
@@ -426,7 +446,7 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 					canuse = true
 				end
 			end
-			if canuse == false then
+			if canuse == false and ply:GetNClass() != ROLES.ROLE_SCP9571 then
 				return false
 			end
 		end
@@ -563,13 +583,13 @@ function GM:PlayerUse( ply, ent )
 		end
 	end
 	if ( GetConVar( "br_scp_cars" ):GetInt() == 0 ) then
-		if ( ply:GTeam() == TEAM_SCP ) then
+		if ( ply:GTeam() == TEAM_SCP and ply:GetNClass() != ROLES.ROLE_SCP9571 ) then
 			if ( ent:GetClass() == "prop_vehicle_jeep" ) then
 				return false
 			end
 		end
 	end
-	if ply:GTeam() == TEAM_SCP then
+	if ply:GTeam() == TEAM_SCP and ply:GetNClass() != ROLES.ROLE_SCP9571 then
 		if ent:GetClass() == "cw_ammo_40mm" then
 			return false
 		end
