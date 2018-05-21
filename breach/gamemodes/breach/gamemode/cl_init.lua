@@ -134,7 +134,7 @@ function LoadLang( lang )
 	local finallang = table.Copy( ALLLANGUAGES.english )
 	local ltu = {}
 	if ALLLANGUAGES[lang] then
-		ltu = ALLLANGUAGES[lang]
+		ltu = table.Copy( ALLLANGUAGES[lang] )
 	end
 	AddTables( finallang, ltu )
 	clang = finallang
@@ -144,7 +144,7 @@ function LoadLang( lang )
 	if WEPLANG[lang] then
 		wltu = WEPLANG[lang]
 	else
-		wltu = WEPLANG.english
+		wltu = table.Copy( WEPLANG.english )
 	end
 	AddTables( finalweplang, wltu )
 	cwlang = finalweplang
