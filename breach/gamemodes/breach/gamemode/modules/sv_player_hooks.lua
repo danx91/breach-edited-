@@ -133,7 +133,11 @@ end
 function GM:PlayerDeathThink( ply )
 	if ply:GetNClass() == ROLES.ROLE_SCP076 and IsValid( SCP0761 ) then
 		if ply.n076nextspawn and ply.n076nextspawn < CurTime() then
-			ply:SetSCP076()
+			--ply:SetSCP076()
+			local scp = GetSCP( "SCP076" )
+			if scp then
+				scp:SetupPlayer( ply )
+			end
 		end
 		return
 	end
@@ -310,23 +314,38 @@ function GM:PlayerCanHearPlayersVoice( listener, talker )
 	if talker:Alive() == false then return false end
 	if listener:Alive() == false then return false end
 
+	if !talker.GetNClass then
+		player_manager.SetPlayerClass( talker, "class_breach" )
+		player_manager.RunClass( talker, "SetupDataTables" )
+	end
+
+	if !listener.GetNClass then
+		player_manager.SetPlayerClass( listener, "class_breach" )
+		player_manager.RunClass( listener, "SetupDataTables" )
+	end
+
 	if talker:GetNClass() == ROLES.ROLE_SCP957 or listener:GetNClass() == ROLES.ROLE_SCP957 then
 		if talker:GetNClass() == ROLES.ROLE_SCP9571 or listener:GetNClass() == ROLES.ROLE_SCP9571 then
 			return true
 		end
 	end
 
-	if talker:GTeam() == TEAM_SCP and talker:GetNClass() != ROLES.ROLE_SCP9571 and GetConVar( "br_allow_scptovoicechat" ):GetInt() == 0 then
+	if talker:GTeam() == TEAM_SCP and talker:GetNClass() != ROLES.ROLE_SCP9571 then
+		local omit = false
+
 		if talker:GetNClass() == ROLES.ROLE_SCP939 then
 			local wep = talker:GetWeapon("weapon_scp_939")
-			//print("Channel "..wep.Channel)
-			if wep.Channel == "ALL" and listener:GTeam() == TEAM_SPEC then return false end
-			if wep.Channel == "MTF" and listener:GTeam() != TEAM_GUARD then return false end
-			if wep.Channel == "SCIENT" and listener:GTeam() != TEAM_SCI then return false end
-			if wep.Channel == "D" and listener:GTeam() != TEAM_CLASSD then return false end
-			if wep.Channel == "CI" and listener:GTeam() != TEAM_CHAOS then return false end
-		elseif listener:GTeam() != TEAM_SCP then
-			return false
+			if IsValid( wep ) then
+				if wep.Channel == "ALL" then
+					omit = true
+				end
+			end
+		end
+
+		if !omit and GetConVar( "br_allow_scptovoicechat" ):GetInt() == 0 then
+			if listener:GTeam() != TEAM_SCP then
+				return false
+			end
 		end
 	end
 	if talker:GTeam() == TEAM_SPEC then
@@ -347,7 +366,7 @@ function GM:PlayerCanHearPlayersVoice( listener, talker )
 end
 
 function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, talker )
-	if activevote then
+	if activevote and ( text == "!forgive" or text == "!punish" ) then
 		local votemsg = false
 		if talker.voted == true or talker:SteamID64() == activesuspect then
 			if !talker.timeout then talker.timeout = 0 end
@@ -390,6 +409,18 @@ function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, talker )
 			end
 		end
 	end
+
+	if !talker.GetNClass or !listener.GetNClass then
+		player_manager.SetPlayerClass( ply, "class_breach" )
+		player_manager.RunClass( ply, "SetupDataTables" )
+	end
+
+	if talker:GetNClass() == ROLES.ROLE_SCP957 or listener:GetNClass() == ROLES.ROLE_SCP957 then
+		if talker:GetNClass() == ROLES.ROLE_SCP9571 or listener:GetNClass() == ROLES.ROLE_SCP9571 then
+			return true
+		end
+	end
+
 	if talker:GetNClass() == ROLES.ADMIN or listener:GetNClass() == ROLES.ADMIN then return true end
 	if talker:Alive() == false then return false end
 	if listener:Alive() == false then return false end
@@ -525,7 +556,7 @@ function GM:PlayerUse( ply, ent )
 					return v.levelOverride( ply )
 				end
 				local wep = ply:GetActiveWeapon()
-				if wep and wep:GetClass() == "br_keycard" then
+				if IsValid( wep ) and wep:GetClass() == "br_keycard" then
 					local keycard = wep
 					if IsValid( keycard ) then
 						if bit.band( keycard.Access, v.access ) > 0 then

@@ -45,10 +45,10 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 					local w, h = 350, 35
 					surface.SetDrawColor(255,255,255,255)
 					surface.SetMaterial( MATS.menublack )
-					surface.DrawTexturedRect( width / 2 - w / 2 , 0, w, h )
+					surface.DrawTexturedRect( ScrW() / 2 - w / 2 , 0, w, h )
 					draw.TextShadow( {
 						text = string.sub(ent:Nick(), 1, 17),
-						pos = { width / 2, 15 },
+						pos = { ScrW() / 2, 15 },
 						font = "HealthAmmo",
 						color = Color(255,255,255),
 						xalign = TEXT_ALIGN_CENTER,

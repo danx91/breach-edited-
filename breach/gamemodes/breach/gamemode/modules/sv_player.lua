@@ -10,7 +10,7 @@ function mply:ForceDropWeapon( class )
 			local atype = wep:GetPrimaryAmmoType()
 			if atype > 0 then
 				wep.SavedAmmo = wep:Clip1()
-			end			
+			end	
 			if wep:GetClass() == nil then return end
 			if wep.droppable != nil and !wep.droppable then return end
 			self:DropWeapon( wep )
@@ -191,710 +191,366 @@ function mply:SetSpectator()
 	//self:Spectate(OBS_MODE_IN_EYE)
 end
 
-function mply:SetSCPSantaJ()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos( SPAWN_SANTA )
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam( TEAM_SCP )
-	self:SetNClass( ROLES.ROLE_SCPSantaJ )
-	self:SetModel( "models/player/christmas/santa.mdl" )
-	self:SetHealth( 2250 )
-	self:SetMaxHealth( 2250 )
-	self:SetArmor( 0 )
-	self:SetWalkSpeed( 160 )
-	self:SetRunSpeed( 160 )
-	self:SetMaxSpeed( 160 )
-	self:SetJumpPower( 200 )
-	self:SetNoDraw( false )
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = true
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give( "weapon_scp_santaJ" )
-	self:SelectWeapon("weapon_scp_santaJ")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+--[[-------------------------------------------------------------------------
 
-function mply:SetSCP173()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_173)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP173)
-	self:SetModel("models/breach173.mdl")
-	self:SetHealth(2000)
-	self:SetMaxHealth(2000)
-	self:SetArmor(0)
-	self:SetWalkSpeed(350)
-	self:SetRunSpeed(350)
-	self:SetMaxSpeed(350)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = true
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_173")
-	self:SelectWeapon("weapon_scp_173")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+								READ CAREFULLY!
 
-function mply:SetSCP106()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_106)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP106)
-	--self:SetModel("models/vinrax/player/scp106_player.mdl")
-	self:SetModel("models/scp/106/unity/unity_scp_106_player.mdl")
-	self:SetHealth(2500)
-	self:SetMaxHealth(2500)
-	self:SetArmor(0)
-	self:SetWalkSpeed(180)
-	self:SetRunSpeed(180)
-	self:SetMaxSpeed(160)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_106")
-	self:SelectWeapon("weapon_scp_106")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-	self:SetCustomCollisionCheck( true )
-end
+Now to add SCP you have to call RegisterSCP() inside 'RegisterSCP' hook
+Therefore if you only want to add SCPs, you don't have to reupload gamemode! Use hook instead and
+place files in 'lua/autorun/server/'!
 
-function mply:SetSCP066()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_066)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP066)
-	self:SetModel("models/player/mrsilver/scp_066pm/scp_066_pm.mdl")
-	self:SetHealth(2250)
-	self:SetMaxHealth(2250)
-	self:SetArmor(0)
-	self:SetWalkSpeed(160)
-	self:SetRunSpeed(160)
-	self:SetMaxSpeed(160)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = true
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_066")
-	self:SelectWeapon("weapon_scp_066")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
 
-function mply:SetSCP049()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_049)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP049)
-	self:SetModel("models/vinrax/player/scp049_player.mdl")
-	self:SetHealth(1650)
-	self:SetMaxHealth(1650)
-	self:SetArmor(0)
-	self:SetWalkSpeed(135)
-	self:SetRunSpeed(135)
-	self:SetMaxSpeed(135)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_049")
-	self:SelectWeapon("weapon_scp_049")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+Basic infotmations about RegisterSCP():
+	
 
-function mply:SetSCP457()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_457)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP457)
-	self:SetModel("models/player/corpse1.mdl")
-	//self:SetMaterial( "models/flesh", false )
-	self:SetHealth(2500)
-	self:SetMaxHealth(2500)
-	self:SetArmor(0)
-	self:SetWalkSpeed(135)
-	self:SetRunSpeed(135)
-	self:SetMaxSpeed(135)
-	self:SetJumpPower(190)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_457")
-	self:SelectWeapon("weapon_scp_457")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+	RegisterSCP( name, model, weapon, static_stats, dynamic_stats, callback, post_callback )
 
-function mply:SetSCP966()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_966)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP966)
-	self:SetModel("models/player/mishka/966_new.mdl")
-	//self:SetMaterial("966black/966black", false)
-	self:SetHealth(800)
-	self:SetMaxHealth(800)
-	self:SetArmor(0)
-	self:SetWalkSpeed(140)
-	self:SetRunSpeed(140)
-	self:SetMaxSpeed(140)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_966")
-	self:SelectWeapon("weapon_scp_966")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
 
-function mply:SetSCP096()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_096)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP096)
-	self:SetModel("models/player/scp096.mdl")
-	self:SetHealth(1500)
-	self:SetMaxHealth(1500)
-	self:SetArmor(0)
-	self:SetWalkSpeed(125)
-	self:SetRunSpeed(125)
-	self:SetMaxSpeed(500)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_096")
-	self:SelectWeapon("weapon_scp_096")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+		name (String) - name of SCP, it will be used by most things. This function will automatically add
+			every necessary variablesso you no longer have to care about ROLES table(function will
+			create ROLES.ROLE_name = name). Funtion will look for valid language and spawnpos entries
+			(for language: english.ROLES.ROLE_name and english.starttexts.ROLE_name, for
+			spawnpos: SPAWN_name = Vector or Table of vectors). Function will throw error if something
+			is wrong(See errors section below)
 
-function mply:SetSCP999()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_999)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP999)
-	--self:SetModel("models/scprp/scp-9992.mdl")
-	self:SetModel("models/scp/999/jq/scp_999_pmjq.mdl")
-	self:SetHealth(1750)
-	self:SetMaxHealth(1750)
-	self:SetArmor(0)
-	self:SetWalkSpeed(150)
-	self:SetRunSpeed(150)
-	self:SetMaxSpeed(150)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_999")
-	self:SelectWeapon("weapon_scp_999")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
 
-function mply:SetSCP939()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_939)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP939)
-	--self:SetModel("models/scpbreach/scp939redone/scp_939_redone_pm.mdl")
-	self:SetModel("models/scp/939/unity/unity_scp_939.mdl")
-	self:SetHealth(2150)
-	self:SetMaxHealth(2150)
-	self:SetArmor(0)
-	self:SetWalkSpeed(200)
-	self:SetRunSpeed(200)
-	self:SetMaxSpeed(200)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = true
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_939")
-	self:SelectWeapon("weapon_scp_939")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+		model (String) - full path to model. If you put wrong path you will see error instead of model!
 
-function mply:SetSCP689()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_689)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP689)
-	self:SetModel("models/dwdarksouls/models/darkwraith.mdl")
-	self:SetHealth(2000)
-	self:SetMaxHealth(2000)
-	self:SetArmor(0)
-	self:SetWalkSpeed(75)
-	self:SetRunSpeed(75)
-	self:SetMaxSpeed(75)
-	self:SetJumpPower(125)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_689")
-	self:SelectWeapon("weapon_scp_689")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
 
-function mply:SetSCP682()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_682)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP682)
-	self:SetModel("models/scp_682/scp_682.mdl")
-	self:SetHealth(2750)
-	self:SetMaxHealth(2750)
-	self:SetArmor(0)
-	self:SetWalkSpeed(115)
-	self:SetRunSpeed(115)
-	self:SetMaxSpeed(115)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = true
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_682")
-	self:SelectWeapon("weapon_scp_682")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+		weapon (String) - SWEP call name. If you put wrong name your scp will not receive weapon and you
+			will see red error in console
 
-function mply:SetSCP082()
-	self:Flashlight( false )
-	self.handsmodel = nil--"models/weapons/arms/v_arms_savini.mdl"
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_082)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP082)
-	self:SetModel("models/models/konnie/savini/savini.mdl")
-	self:SetBodygroup(self:FindBodygroupByName( "Mask" ), 1)
-	self:SetHealth(2250)
-	self:SetMaxHealth(2750)
-	self:SetArmor(0)
-	self:SetWalkSpeed(160)
-	self:SetRunSpeed(160)
-	self:SetMaxSpeed(160)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_082")
-	self:SelectWeapon("weapon_scp_082")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
 
-function mply:SetSCP023()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(table.Random(SPAWN_023))
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP023)
-	self:SetModel("models/player/stenli/lycan_werewolf.mdl")
-	self:SetHealth(2200)
-	self:SetMaxHealth(2200)
-	self:SetArmor(0)
-	self:SetWalkSpeed(150)
-	self:SetRunSpeed(150)
-	self:SetMaxSpeed(250)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_023")
-	self:SelectWeapon("weapon_scp_023")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+		static_stats (Table) - this table contain important entries for your SCP. Things specified inside
+			this table are more important than dynamic_stats, so it will overwrite them. These stats cannot
+			be changed in 'scp.txt' file. This table cotains keys and values(key = "value"). List of valid keys is below.
 
-function mply:SetSCP1471()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos( SPAWN_1471 )
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP1471)
-	self:SetModel("models/burd/scp1471/scp1471.mdl")
-	self:SetHealth(3000)
-	self:SetMaxHealth(3000)
-	self:SetArmor(0)
-	self:SetWalkSpeed(165)
-	self:SetRunSpeed(165)
-	self:SetMaxSpeed(165)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_1471")
-	self:SelectWeapon("weapon_scp_1471")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
 
-function mply:SetSCP1048A()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_1048A)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP1048A)
-	self:SetModel("models/1048/tdyear/tdybrownearpm.mdl")
-	self:SetHealth(1500)
-	self:SetMaxHealth(1500)
-	self:SetArmor(0)
-	self:SetWalkSpeed(130)
-	self:SetRunSpeed(130)
-	self:SetMaxSpeed(130)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_1048A")
-	self:SelectWeapon("weapon_scp_1048A")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+		dynamic_stats (Table) - this table contains entries for your SCP that can be accessed and changed in
+			'garrysmod/data/breach/scp.txt' file. So everybody can customize them. These stats will be overwritten
+			by statc_stats. This table cotains keys and values(key = "value") or tables that contains value and
+			clamping info(num values only!)(key = "value" or key = { var = num_value, max = max_value, min_minimum value }).
+			List of valid keys is below. 
 
-function mply:SetSCP1048B()
-	self:Flashlight( false )
-	self.handsmodel = nil--"models/player/teddy_bear/c_arms/teddy_bear.mdl"
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_1048B)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP1048B)
-	self:SetModel("models/player/teddy_bear/teddy_bear.mdl")
-	self:SetHealth(1900)
-	self:SetMaxHealth(1900)
-	self:SetArmor(0)
-	self:SetWalkSpeed(180)
-	self:SetRunSpeed(180)
-	self:SetMaxSpeed(180)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_1048B")
-	self:SelectWeapon("weapon_scp_1048B")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+					Valid entreis for static_stats and dynamic_stats:
+							base_speed - walk speed
+							run_speed - run speed
+							max_speed - maximum speed
+							base_health - starting health
+							max_health - maximum health
+							jump_power - jump power
+							crouch_speed - crouched walk speed
+							no_ragdoll - if true, rgdoll will not appear
+							model_scale - scale of model
+							hands_model - model of hands
+							prep_freeze - if true, SCP will not be able to move during preparing
+							no_spawn - position will not be changed
+							no_model - model will not be changed
+							no_swep - SCP won't have SWEP
+							no_strip - player EQ won't be stripped
+							no_select - SCP won't appear in game
 
-function mply:SetSCP8602()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos(SPAWN_8602)
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP8602)
-	self:SetModel("models/props/forest_monster/forest_monster2.mdl")
-	self:SetHealth(2400)
-	self:SetMaxHealth(2400)
-	self:SetArmor(0)
-	self:SetWalkSpeed(190)
-	self:SetRunSpeed(190)
-	self:SetMaxSpeed(190)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_8602")
-	self:SelectWeapon("weapon_scp_8602")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
 
-function mply:SetSCP957()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	self:SetPos( table.Random( SPAWN_957 ) )
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam( TEAM_SCP )
-	self:SetNClass( ROLES.ROLE_SCP957 )
-	self:SetModel( "models/immigrant/outlast/walrider_pm.mdl" )
-	self:SetHealth(1500)
-	self:SetMaxHealth(1500)
-	self:SetArmor(0)
-	self:SetWalkSpeed(180)
-	self:SetRunSpeed(180)
-	self:SetMaxSpeed(180)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_957")
-	self:SelectWeapon("weapon_scp_957")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+		callback (Function) - called on beginning of SetupPlayer return true to override default actions(post callback will not be called).
+			function( ply, basestats, ... ) - 3 arguments are passed:
+				ply - player
+				basestats - result of static_stats and dynamic_stats
+				... - (varargs) passsed from SetupPlayer
+		
 
-function mply:SetSCP9571()
-	if !self.SetLastRole or !self.SetLastTeam then
-		player_manager.RunClass( self, "SetupDataTables" )
-	end
+		post_callback (Function) - called on end of SetupPlayer. Only player is passed as argument:
+			function( ply )
+				ply - player
 
-	self:SetHealth( 1000 )
-	self:SetMaxHealth( 1000 )
 
-	self:SetLastRole( self:GetNClass() )
-	self:SetLastTeam( self:GTeam() )
-	self:SetGTeam( TEAM_SCP )
-	self:SetNClass( ROLES.ROLE_SCP9571 )
-	self.canblink = false
+To get registered SCP:
+		GetSCP( name ) - global function that returns SCP object
+			arguments:
+				name - name of SCP(same as used in RegisterSCP)
 
-	net.Start( "RolesSelected" )
-	net.Send( self )
-end
+			return:
+				ObjectSCP - (explained below)
 
-function mply:SetSCP076()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:Spawn()
-	SetupSCP0761( self )
-	self:StripWeapons()
-	self:RemoveAllAmmo()
-	self:SetGTeam(TEAM_SCP)
-	self:SetNClass(ROLES.ROLE_SCP076)
-	self:SetModel("models/abel/abel.mdl")
-	self:SetHealth(300)
-	self:SetMaxHealth(300)
-	self:SetArmor(0)
-	self:SetWalkSpeed(225)
-	self:SetRunSpeed(225)
-	self:SetMaxSpeed(225)
-	self:SetJumpPower(210)
-	self:SetNoDraw(false)
-	self.Active = true
-	self:SetupHands()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	self:Give("weapon_scp_076")
-	self:SelectWeapon("weapon_scp_076")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-end
+	ObjectSCP:
+		functions:
+			SCPObject:SetCallback( callback, post ) - used internally by RegisterSCP. Sets callback, if post == true, sets post_callback
+
+			ObjectSCP:SetupPlayer( ply, ... ) - use to set specified player as SCP.
+					ply - player who become SCP
+					... - varargs passed to callback if ObjectSCP has one
+
+---------------------------------------------------------------------------]]
+
+hook.Add( "RegisterSCP", "RegisterBaseSCPs", function()
+	/*RegisterSCP( "SCPSantaJ", "models/player/christmas/santa.mdl", "weapon_scp_santaJ", {
+		jump_power = 200,
+		prep_freeze = true,
+		no_ragdoll = true,
+	}, {
+		base_health = 2500,
+		max_health = 2500,
+		base_speed = 160,
+		run_speed = 160,
+		max_speed = 160,
+	} )*/
+
+	RegisterSCP( "SCP023", "models/Novux/023/Novux_SCP-023.mdl", "weapon_scp_023", {
+		jump_power = 200,
+		prep_freeze = true,
+	}, {
+		base_health = 2000,
+		max_health = 2000,
+		base_speed = 150,
+		run_speed = 250,
+		max_speed = 250,
+	} )
+
+	RegisterSCP( "SCP049", "models/vinrax/player/scp049_player.mdl", "weapon_scp_049", {
+		jump_power = 200,
+	}, {
+		base_health = 1600,
+		max_health = 1600,
+		base_speed = 135,
+		run_speed = 135,
+		max_speed = 135,
+	} )
+
+	RegisterSCP( "SCP0492", "models/player/zombie_classic.mdl", "weapon_br_zombie", {
+		jump_power = 200,
+		no_spawn = true,
+		no_select = true,
+	}, {
+		base_health = 750,
+		max_health = 750,
+		base_speed = 160,
+		run_speed = 160,
+		max_speed = 160,
+	}, nil, function( ply )
+		WinCheck()
+	end )
+
+	RegisterSCP( "SCP066", "models/player/mrsilver/scp_066pm/scp_066_pm.mdl", "weapon_scp_066", {
+		jump_power = 200,
+		no_ragdoll = true,
+		prep_freeze = true,
+	}, {
+		base_health = 2250,
+		max_health = 2250,
+		base_speed = 160,
+		run_speed = 160,
+		max_speed = 160,
+	} )
+
+	RegisterSCP( "SCP076", "models/abel/abel.mdl", "weapon_scp_076", {
+		jump_power = 200,
+		prep_freeze = true,
+	}, {
+		base_health = 300,
+		max_health = 300,
+		base_speed = 220,
+		run_speed = 220,
+		max_speed = 220,
+	}, nil, function( ply )
+		SetupSCP0761( ply )
+	end )
+
+	RegisterSCP( "SCP082", "models/models/konnie/savini/savini.mdl", "weapon_scp_082", {
+		jump_power = 200,
+		prep_freeze = true,
+	}, {
+		base_health = 2300,
+		max_health = 2800,
+		base_speed = 160,
+		run_speed = 160,
+		max_speed = 160,
+	}, nil, function( ply )
+		ply:SetBodygroup( ply:FindBodygroupByName( "Mask" ), 1 )
+	end )
+
+	RegisterSCP( "SCP096", "models/scp096anim/player/scp096pm_raf.mdl", "weapon_scp_096", {
+		jump_power = 200,
+	}, {
+		base_health = 1750,
+		max_health = 1750,
+		base_speed = 120,
+		run_speed = 500,
+		max_speed = 500,
+	} )
+
+	RegisterSCP( "SCP106", "models/scp/106/unity/unity_scp_106_player.mdl", "weapon_scp_106", {
+		jump_power = 200,
+	}, {
+		base_health = 2000,
+		max_health = 2000,
+		base_speed = 170,
+		run_speed = 170,
+		max_speed = 170,
+	} )
+
+	RegisterSCP( "SCP173", "models/breach173.mdl", "weapon_scp_173", {
+		jump_power = 200,
+		no_ragdoll = true,
+	}, {
+		base_health = 3000,
+		max_health = 3000,
+		base_speed = 400,
+		run_speed = 400,
+		max_speed = 400,
+	} )
+
+	RegisterSCP( "SCP457", "models/player/corpse1.mdl", "weapon_scp_457", {
+		jump_power = 200,
+	}, {
+		base_health = 2300,
+		max_health = 2300,
+		base_speed = 135,
+		run_speed = 135,
+		max_speed = 135,
+	} )
+
+	RegisterSCP( "SCP682", "models/scp_682/scp_682.mdl", "weapon_scp_682", {
+		jump_power = 200,
+		no_ragdoll = true,
+	}, {
+		base_health = 2000,
+		max_health = 2000,
+		base_speed = 120,
+		run_speed = 275,
+		max_speed = 275,
+	} )
+
+	RegisterSCP( "SCP689", "models/dwdarksouls/models/darkwraith.mdl", "weapon_scp_689", {
+		jump_power = 200,
+	}, {
+		base_health = 1500,
+		max_health = 1500,
+		base_speed = 75,
+		run_speed = 75,
+		max_speed = 75,
+	} )
+
+	RegisterSCP( "SCP8602", "models/props/forest_monster/forest_monster2.mdl", "weapon_scp_8602", {
+		jump_power = 200,
+		prep_freeze = true,
+	}, {
+		base_health = 2250,
+		max_health = 2250,
+		base_speed = 190,
+		run_speed = 190,
+		max_speed = 190,
+	} )
+
+	RegisterSCP( "SCP939", "models/scp/939/unity/unity_scp_939.mdl", "weapon_scp_939", {
+		jump_power = 200,
+		prep_freeze = true,
+	}, {
+		base_health = 2000,
+		max_health = 2000,
+		base_speed = 190,
+		run_speed = 190,
+		max_speed = 190,
+	} )
+
+	RegisterSCP( "SCP957", "models/immigrant/outlast/walrider_pm.mdl", "weapon_scp_957", {
+		jump_power = 200,
+		prep_freeze = true,
+	}, {
+		base_health = 1500,
+		max_health = 1500,
+		base_speed = 175,
+		run_speed = 175,
+		max_speed = 175,
+	} )
+
+	RegisterSCP( "SCP9571", "", "", {
+		no_spawn = true,
+		no_select = true,
+	}, {
+		base_health = 1000,
+		max_health = 1000,
+	}, function( ply, basestats )
+		if !ply.SetLastRole or !ply.SetLastTeam then
+			player_manager.RunClass( ply, "SetupDataTables" )
+		end
+
+		ply:SetHealth( basestats.base_health or 1000 )
+		ply:SetMaxHealth( basestats.max_health or 1000 )
+
+		ply:SetLastRole( ply:GetNClass() )
+		ply:SetLastTeam( ply:GTeam() )
+		ply:SetGTeam( TEAM_SCP )
+		ply:SetNClass( ROLES.ROLE_SCP9571 )
+		ply.canblink = false
+
+		net.Start( "RolesSelected" )
+		net.Send( ply )
+
+		return true
+	end )
+
+	RegisterSCP( "SCP966", "models/player/mishka/966_new.mdl", "weapon_scp_966", {
+		jump_power = 200,
+	}, {
+		base_health = 800,
+		max_health = 800,
+		base_speed = 140,
+		run_speed = 140,
+		max_speed = 140,
+	} )
+
+	RegisterSCP( "SCP999", "models/scp/999/jq/scp_999_pmjq.mdl", "weapon_scp_999", {
+		jump_power = 200,
+	}, {
+		base_health = 1000,
+		max_health = 1000,
+		base_speed = 150,
+		run_speed = 150,
+		max_speed = 150,
+	} )
+
+	RegisterSCP( "SCP1048A", "models/1048/tdyear/tdybrownearpm.mdl", "weapon_scp_1048A", {
+		jump_power = 200,
+		prep_freeze = true,
+	}, {
+		base_health = 1500,
+		max_health = 1500,
+		base_speed = 135,
+		run_speed = 135,
+		max_speed = 135,
+	} )
+
+	RegisterSCP( "SCP1048B", "models/player/teddy_bear/teddy_bear.mdl", "weapon_scp_1048B", {
+		jump_power = 200,
+		prep_freeze = true,
+	}, {
+		base_health = 2000,
+		max_health = 2000,
+		base_speed = 165,
+		run_speed = 165,
+		max_speed = 165,
+	} )
+
+	RegisterSCP( "SCP1471", "models/burd/scp1471/scp1471.mdl", "weapon_scp_1471", {
+		jump_power = 200,
+		prep_freeze = true,
+	}, {
+		base_health = 3000,
+		max_health = 3000,
+		base_speed = 160,
+		run_speed = 325,
+		max_speed = 160,
+	} )
+end )
 
 function SetupSCP0761( ply )
+	print( "setup" )
 	if !IsValid( SCP0761 ) then
-		cspawn076 = table.Random( SPAWN_076 )
+		cspawn076 = table.Random( SPAWN_SCP076 )
 		SCP0761 = ents.Create( "item_scp_0761" )
 		SCP0761:Spawn()
 		SCP0761:SetPos( cspawn076 )
 	end
 	ply:SetPos( cspawn076 )
-end
-
-function mply:DropWep(class, clip)
-	local wep = ents.Create( class )
-	if IsValid( wep ) then
-		wep:SetPos( self:GetPos() )
-		wep:Spawn()
-		if isnumber(clip) then
-			wep:SetClip1(clip)
-		end
-	end
 end
 
 function mply:SetSCP0082( hp, speed, spawn )
@@ -932,42 +588,6 @@ function mply:SetSCP0082( hp, speed, spawn )
 	net.Send(self)
 	self:Give("weapon_br_zombie_infect")
 	self:SelectWeapon("weapon_br_zombie_infect")
-	self.BaseStats = nil
-	self.UsingArmor = nil
-	self:SetupHands()
-end
-
-function mply:SetSCP0492()
-	self:Flashlight( false )
-	self.handsmodel = nil
-	self:UnSpectate()
-	self:GodDisable()
-	self:DropAllWeapons( true )
-	self:SetModel("models/player/zombie_classic.mdl")
-	self:SetGTeam(TEAM_SCP)
-	local hzom = math.Clamp(1000 - (#player.GetAll() * 14), 300, 800)
-	self:SetHealth(hzom)
-	self:SetMaxHealth(hzom)
-	self:SetArmor(0)
-	self:SetWalkSpeed(160)
-	self:SetRunSpeed(160)
-	self:SetMaxSpeed(160)
-	self:SetJumpPower(200)
-	self:SetNoDraw(false)
-	self:SetNClass(ROLES.ROLE_SCP0492)
-	self.Active = true
-	print("adding " .. self:Nick() .. " to zombies")
-	self:SetupHands()
-	WinCheck()
-	self.canblink = false
-	self.noragdoll = false
-	self:AllowFlashlight( false )
-	self.WasTeam = TEAM_SCP
-	self:SetNoTarget( true )
-	net.Start("RolesSelected")
-	net.Send(self)
-	self:Give("weapon_br_zombie")
-	self:SelectWeapon("weapon_br_zombie")
 	self.BaseStats = nil
 	self.UsingArmor = nil
 	self:SetupHands()
@@ -1082,6 +702,7 @@ function mply:SetupNormal()
 	self:StripWeapons()
 	self.canblink = true
 	self.noragdoll = false
+	self.scp1471stacks = 1
 end
 
 function mply:SetupAdmin()

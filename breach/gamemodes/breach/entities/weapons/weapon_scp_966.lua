@@ -1,56 +1,19 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.WepSelectIcon 		= surface.GetTextureID("breach/wep_966")
-	SWEP.BounceWeaponIcon 	= false
-end
-
-SWEP.ViewModelFOV	= 62
-SWEP.ViewModelFlip	= false
-SWEP.ViewModel		= "models/vinrax/props/keycard.mdl"
-SWEP.WorldModel	= "models/vinrax/props/keycard.mdl"
+SWEP.Base 			= "weapon_scp_base"
 SWEP.PrintName		= "SCP-966"
-SWEP.Slot			= 0
-SWEP.SlotPos			= 0
-SWEP.DrawAmmo		= false
+
 SWEP.DrawCrosshair	= true
 SWEP.HoldType		= "normal"
-SWEP.Spawnable		= false
-SWEP.AdminSpawnable	= false
 
-SWEP.ISSCP 					= true
-SWEP.droppable				= false
-SWEP.teams					= {1}
-SWEP.Primary.Ammo			= "none"
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic	= false
-
-SWEP.Secondary.Ammo			= "none"
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic		= false
-
-function SWEP:Deploy()
-	self.Owner:DrawViewModel( false )
+if CLIENT then
+	SWEP.WepSelectIcon = surface.GetTextureID("breach/wep_966")
 end
-function SWEP:DrawWorldModel()
-end
-
-SWEP.Lang = nil
 
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_966
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
-	self:SetHoldType(self.HoldType)
-end
+	self:InitializeLanguage( "SCP_966" )
 
-function SWEP:Reload()
+	self:SetHoldType(self.HoldType)
 end
 
 SWEP.NextSpec 	= 0
@@ -66,7 +29,7 @@ function SWEP:Think()
 		for k, v in pairs( player.GetAll() ) do
 			if v:IsPlayer() then 
 				if v.mblur == true then
-					if !isAny(v, ent) then
+					if !self:isAny(v, ent) then
 						v.mblur = false
 					end
 				end
@@ -92,7 +55,7 @@ function SWEP:Think()
 	end
 end
 
-function isAny(ittf, allit)
+function SWEP:isAny(ittf, allit)
 	for k, v in pairs( allit ) do
 		if (v == ittf) then return true end
 	end
@@ -133,11 +96,4 @@ function SWEP:PrimaryAttack()
 			--end
 		end
 	end
-end
-
-function SWEP:SecondaryAttack()
-end
-
-function SWEP:CanPrimaryAttack()
-	return false
 end

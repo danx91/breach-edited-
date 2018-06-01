@@ -1,56 +1,32 @@
 AddCSLuaFile()
 
-SWEP.Spawnable = false
-SWEP.AdminOnly = false
-
-SWEP.ViewModelFOV	= 62
-SWEP.ViewModelFlip	= false
-SWEP.ViewModel		= "models/vinrax/props/keycard.mdl"
-SWEP.WorldModel		= "models/vinrax/props/keycard.mdl"
-
+SWEP.Base 			= "weapon_scp_base"
 SWEP.PrintName		= "SCP-682"
-SWEP.Slot				= 0
-SWEP.SlotPos			= 0
-SWEP.HoldType			= "normal"
-SWEP.Spawnable		= true
-SWEP.AdminSpawnable	= true
 
-SWEP.Primary.Ammo		= "none"
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic	= false
+SWEP.HoldType			= "normal"
 
 SWEP.Roar 				= "scp/682/roar.ogg"
 
-SWEP.Secondary.Ammo		= "none"
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-
 SWEP.DrawCrosshair 			= true
-
-SWEP.ISSCP 		= true
-SWEP.Teams			= { 1 }
-SWEP.droppable		= false
 
 --SWEP.SantasHatPositionOffset = Vector( 16, -5, 3.5 )
 --SWEP.SantasHatAngleOffset = Angle( -10, 180, -20 )
 
 function SWEP:Deploy()
-	self.Owner:DrawViewModel( false )
+	self:HideModels()
+
+	if SERVER and !self.basespeed then
+		self.basespeed = self.Owner:GetWalkSpeed()
+		self.furyspeed = self.Owner:GetRunSpeed()
+		self.Owner:SetRunSpeed( self.basespeed )
+	end
+
 	self.Owner:SetModelScale( 0.75 )
 end
 
-SWEP.Lang = nil
-
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_682
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
+	self:InitializeLanguage( "SCP_682" )
+
 	self:SetHoldType(self.HoldType)
 	/*if CLIENT then
 		if !self.SantasHat then
@@ -59,10 +35,6 @@ function SWEP:Initialize()
 			self.SantasHat:SetNoDraw( true )
 		end
 	end*/
-end
-
-function SWEP:Holster()
-	return true
 end
 
 function SWEP:OnRemove()
@@ -126,34 +98,32 @@ function SWEP:SecondaryAttack()
 	end
 	self.NextSpeial = CurTime() + self.SpecialDelay
 	
-	local function applyEffect()
-		self.fury = true
-		self.NextAttackW = CurTime() + 0.5
-		self:EmitSound( self.Roar )
-		self.Owner:SetWalkSpeed(300)
-		self.Owner:SetRunSpeed(300)
-		self.Owner:SetMaxSpeed(300)
-		self.Owner:SetJumpPower(300)
-		local hp = self.Owner:Health()
-		self.Owner:SetHealth( 9999 )
-		return hp
+	if SERVER then
+		local hp = self:ApplyEffect()
+		timer.Create( "682BuffEnd"..self.Owner:SteamID64(), 7, 1, function()
+			self:RemoveEffect( hp, 0 )
+		end )
 	end
-	
-	local function removeEffect( hp, regen )
-		self.fury = false
-		self.Owner:SetWalkSpeed(115)
-		self.Owner:SetRunSpeed(115)
-		self.Owner:SetMaxSpeed(115)
-		self.Owner:SetJumpPower(200)
-		hp = hp + regen
-		if hp > self.Owner:GetMaxHealth() then hp = self.Owner:GetMaxHealth() end
-		self.Owner:SetHealth( hp )
-	end
-	
-	local hp = applyEffect()
-	timer.Create( "682BuffEnd"..self.Owner:SteamID64(), 7.5, 1, function()
-		removeEffect( hp, 0 )
-	end )
+end
+
+function SWEP:ApplyEffect()
+	self.fury = true
+	self.NextAttackW = CurTime() + 0.5
+	self:EmitSound( self.Roar )
+	self.Owner:SetWalkSpeed(self.furyspeed)
+	self.Owner:SetRunSpeed(self.furyspeed)
+	local hp = self.Owner:Health()
+	self.Owner:SetHealth( 9999 )
+	return hp
+end
+
+function SWEP:RemoveEffect( hp, regen )
+	self.fury = false
+	self.Owner:SetWalkSpeed(self.basespeed)
+	self.Owner:SetRunSpeed(self.basespeed)
+	hp = hp + regen
+	if hp > self.Owner:GetMaxHealth() then hp = self.Owner:GetMaxHealth() end
+	self.Owner:SetHealth( hp )
 end
 
 hook.Add("EntityTakeDamage", "AcidDamage", function(target, dmg)

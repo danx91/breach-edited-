@@ -1,43 +1,24 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.WepSelectIcon 	= surface.GetTextureID("breach/wep_106")
-	SWEP.BounceWeaponIcon = false
-end
+SWEP.Base 			= "weapon_scp_base"
+SWEP.PrintName		= "SCP-106"
 
-SWEP.ViewModelFOV	= 62
-SWEP.ViewModelFlip	= false
 SWEP.ViewModel		= "models/vinrax/props/keycard.mdl"
 SWEP.WorldModel		= "models/vinrax/props/keycard.mdl"
-SWEP.PrintName		= "SCP-106"
-SWEP.Slot			= 0
-SWEP.SlotPos		= 0
-SWEP.DrawAmmo		= false
-SWEP.DrawCrosshair	= false
+
 SWEP.HoldType		= "normal"
-SWEP.Spawnable		= false
-SWEP.AdminSpawnable	= false
 
-SWEP.AttackDelay			= 1.5
-SWEP.ISSCP = true
-SWEP.droppable				= false
-SWEP.teams					= {1}
+SWEP.Chase 			= "scp/106/chase.ogg"
+SWEP.Place 			= "scp/106/place.ogg"
+SWEP.Teleport 		= "scp/106/tp.ogg"
+SWEP.Disappear 		= "scp/106/disappear.ogg"
 
-SWEP.Chase = "scp/106/chase.ogg"
-SWEP.Place = "scp/106/place.ogg"
-SWEP.Teleport = "scp/106/tp.ogg"
-SWEP.Disappear = "scp/106/disappear.ogg"
+SWEP.NextAttackW	= 0
+SWEP.AttackDelay	= 1.5
 
-SWEP.Primary.Ammo			= "none"
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic		= false
-
-SWEP.Secondary.Ammo			= "none"
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-SWEP.NextAttackW			= 0
+if CLIENT then
+	SWEP.WepSelectIcon 	= surface.GetTextureID("breach/wep_106")
+end
 
 function SWEP:OnRemove()
 	if IsValid( self.Owner ) then
@@ -46,21 +27,15 @@ function SWEP:OnRemove()
 end
 
 function SWEP:Deploy()
-	self.Owner:DrawViewModel( false )
+	if IsValid( self.Owner ) then
+		self.Owner:SetCustomCollisionCheck( true )
+	end
+	self:HideModels()
 end
-
-function SWEP:DrawWorldModel()
-end
-SWEP.Lang = nil
 
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_106
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
+	self:InitializeLanguage( "SCP_106" )
+
 	self:SetHoldType(self.HoldType)
 
 	self:PrecacheSnd( {

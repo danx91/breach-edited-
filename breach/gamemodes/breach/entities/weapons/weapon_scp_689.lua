@@ -1,34 +1,13 @@
 AddCSLuaFile()
 
+SWEP.Base 			= "weapon_scp_base"
 SWEP.PrintName		= "SCP-689"
 
-SWEP.ViewModelFOV 		= 56
-SWEP.Spawnable 			= false
-SWEP.AdminOnly 			= false
+SWEP.Primary.Delay 	=  15
+SWEP.Sound			= "scp/689/689Attack.ogg"
 
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Delay       	=  15
-SWEP.Primary.Automatic	= false
-SWEP.Primary.Ammo			= "None"
-SWEP.Sound					= "scp/689/689Attack.ogg"
-
-SWEP.ISSCP 				= true
-SWEP.droppable			= false
-SWEP.CColor				= Color(0,255,0)
-SWEP.teams				= {1}
-
-SWEP.Weight				= 3
-SWEP.AutoSwitchTo		= false
-SWEP.AutoSwitchFrom	= false
-SWEP.Slot				= 0
-SWEP.SlotPos				= 4
-SWEP.DrawAmmo		= false
-SWEP.DrawCrosshair		= true
-SWEP.ViewModel			= ""
-SWEP.WorldModel		= ""
-SWEP.IconLetter			= "w"
-SWEP.HoldType 			= "normal"
+SWEP.DrawCrosshair	= true
+SWEP.HoldType 		= "normal"
 
 SWEP.Targets = {}
 
@@ -37,32 +16,13 @@ function SWEP:SetupDataTables()
 	self:SetNCurTarget( nil )
 end
 
-function SWEP:Deploy()
-	if self.Owner:IsValid() then
-		self.Owner:DrawWorldModel( false )
-		self.Owner:DrawViewModel( false )
-	end
-end
-
-SWEP.Lang = nil
-
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_689
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
-	self:SetHoldType(self.HoldType)
-end
+	self:InitializeLanguage( "SCP_689" )
 
-function SWEP:Holster()
-	return true
+	self:SetHoldType( self.HoldType )
 end
 
 SWEP.ntabupdate = 0
-
 function SWEP:Think()
 	if postround or preparing then return end
 	if self.ntabupdate < CurTime() then
@@ -225,11 +185,4 @@ function SWEP:DrawHUD()
 			yalign = TEXT_ALIGN_CENTER,
 		})
 	end
-end
-
-function isInTable( element, tab )
-	for k, v in pairs( tab ) do
-		if v == element then return true end
-	end
-	return false
 end

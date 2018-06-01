@@ -1,86 +1,47 @@
-SWEP.PrintName				= "SCP-082"
-SWEP.Slot					= 0	
-SWEP.SlotPos					= 25
-SWEP.DrawAmmo				= false
-SWEP.BounceWeaponIcon	= false
-SWEP.DrawCrosshair			= false
-SWEP.AutoSwitchTo			= false
-SWEP.AutoSwitchFrom		= false
-SWEP.HoldType 				= "melee"
+AddCSLuaFile()
 
-SWEP.ViewModelFOV			= 60
-SWEP.ViewModelFlip			= false
-SWEP.ViewModel				= "models/weapons/scp082/v_machete.mdl"
-SWEP.WorldModel			= "models/weapons/scp082/w_fc2_machete.mdl"
-SWEP.Spawnable				= false
-SWEP.AdminSpawnable		= false
+SWEP.Base 			= "weapon_scp_base"
+SWEP.PrintName		= "SCP-082"
 
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic	= false
-SWEP.Primary.Ammo			= ""
-
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic		= false
-SWEP.Secondary.Ammo			= ""
-
-SWEP.AttackDelay			= 5
-SWEP.ISSCP 					= true
-SWEP.droppable				= false
-SWEP.teams					= {1}
+SWEP.ViewModel		= "models/weapons/scp082/v_machete.mdl"
+SWEP.WorldModel		= "models/weapons/scp082/w_fc2_machete.mdl"
 
 SWEP.Primary.Sound	= Sound( "scp/082/woosh.mp3" )
-SWEP.KnifeShink = Sound( "scp/082/hitwall.mp3" )
-SWEP.KnifeSlash = Sound( "scp/082/slash.mp3" )
-SWEP.KnifeStab = Sound( "scp/082/nastystab.mp3" )
+SWEP.KnifeShink 	= Sound( "scp/082/hitwall.mp3" )
+SWEP.KnifeSlash 	= Sound( "scp/082/slash.mp3" )
+SWEP.KnifeStab 		= Sound( "scp/082/nastystab.mp3" )
 
-SWEP.NextPrimary = 0
-
-SWEP.Lang = nil
+SWEP.HoldType 		= "melee"
+SWEP.NextPrimary	= 0
+SWEP.NextIdle 		= 0
 
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_082
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
+	self:InitializeLanguage( "SCP_082" )
+
 	self:SetHoldType( self.HoldType )
+
 	self:SendWeaponAnim( ACT_VM_DRAW )
 	self.NextPrimary = CurTime() + 1.3
 	self:EmitSound( "scp/082/knife_draw_x.mp3", 50, 100 )
-	return true
 end
 
-SWEP.Freeze = false
+function SWEP:Deploy()
+end
 
 function SWEP:Think()
-	if !SERVER then return end
-	if preparing and (self.Freeze == false) then
-		self.Freeze = true
-		self.Owner:SetJumpPower(0)
-		self.Owner:SetCrouchedWalkSpeed(0)
-		self.Owner:SetWalkSpeed(0)
-		self.Owner:SetRunSpeed(0)
-	end
-	if preparing or postround then return end
-	if self.Freeze == true then
-		self.Freeze = false
-		self.Owner:SetCrouchedWalkSpeed(0.6)
-		self.Owner:SetJumpPower(200)
-		self.Owner:SetWalkSpeed(160)
-		self.Owner:SetRunSpeed(160)
-	end
+	self:PlayerFreeze()
+
+	if self.NextIdle > CurTime() then return end
+	self.NextIdle = CurTime() + self:SequenceDuration( ACT_VM_IDLE )
+	self:SendWeaponAnim( ACT_VM_IDLE )
 end
 
 function SWEP:PrimaryAttack()
 	if preparing or postround then return end
 	if self.NextPrimary > CurTime() then return end
-	self.NextPrimary = CurTime() + 1.5
+	self.NextPrimary = CurTime() + 1.75
 	vm = self.Owner:GetViewModel()
-	self:SendWeaponAnim( ACT_VM_IDLE )
+	self.NextIdle = CurTime() + vm:SequenceDuration( vm:LookupSequence( "stab" ) )
 	self.Owner:ViewPunch( Angle( -10,0,0 ) )
 	self:EmitSound( self.Primary.Sound )
 	if SERVER then
@@ -116,7 +77,7 @@ function SWEP:HackNSlash()
 					if target:GTeam() == TEAM_SPEC then return end
 					if target:GTeam() == TEAM_SCP then return end
 					self:EmitSound( self.KnifeSlash )
-					local dmg = math.random( 40, 75 )
+					local dmg = math.random( 30, 60 )
 					local paininfo = DamageInfo()
 						paininfo:SetDamage( dmg )
 						paininfo:SetDamageType( DMG_SLASH )
@@ -125,7 +86,6 @@ function SWEP:HackNSlash()
 						paininfo:SetDamageForce( slashtrace.Normal * 3500 )
 					target:TakeDamageInfo( paininfo )
 					if target:Health() < 0 then
-						print(target:Health(), dmg)
 						local hp = self.Owner:Health()
 						hp = hp + math.random( 150, 250 )
 						if hp > self.Owner:GetMaxHealth() then hp = self.Owner:GetMaxHealth() end
@@ -143,7 +103,4 @@ function SWEP:HackNSlash()
 		--end
 	end
 	self.Owner:LagCompensation(false)
-end
-
-function SWEP:SecondaryAttack()
 end

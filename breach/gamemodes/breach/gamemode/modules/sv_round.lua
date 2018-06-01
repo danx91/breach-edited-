@@ -2,6 +2,8 @@ activeRound = nil
 rounds = -1
 roundEnd = 0
 
+MAP_LOADED = MAP_LOADED or false
+
 function RestartGame()
 	game.ConsoleCommand("changelevel "..game.GetMap().."\n")
 end
@@ -54,6 +56,7 @@ function CleanUpPlayers()
 		v.MaxUses = nil
 		v.blinkedby173 = false
 		v.scp173allow = false
+		v.scp1471stacks = 1
 		v.usedeyedrops = false
 		v.isescaping = false
 		v:SendLua( "CamEnable = false" )
@@ -91,6 +94,9 @@ function RoundTypeUpdate()
 end
 
 function RoundRestart()
+	if !MAP_LOADED then
+		error( "Map config is not loaded!" )
+	end
 	print( debug.traceback() )  
 	print("round: starting")
 	CleanUp()
@@ -128,7 +134,7 @@ function RoundRestart()
 	BroadcastLua('gamestarted = true')
 	print("round: gamestarted")
 	timer.Create("966Debug", GetConVar("br_time_preparing"):GetInt() + 15, 1, function()
-		local fent = ents.FindInSphere(SPAWN_966, 250)
+		local fent = ents.FindInSphere(SPAWN_SCP966, 250)
 		for k, v in pairs(fent) do
 			if (v:IsPlayer()) then
 				if (v:GetNClass() == ROLES.ROLE_SCP966) then

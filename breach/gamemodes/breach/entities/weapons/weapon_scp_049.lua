@@ -1,69 +1,30 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.WepSelectIcon 	= surface.GetTextureID("breach/wep_049")
-	SWEP.BounceWeaponIcon = false
-end
-
-SWEP.Author		= ""
-SWEP.Contact		= ""
-SWEP.Purpose		= ""
-SWEP.Instructions	= ""
-
-SWEP.ViewModelFOV	= 62
-SWEP.ViewModelFlip	= false
-SWEP.ViewModel		= "models/vinrax/props/keycard.mdl"
-SWEP.WorldModel		= "models/vinrax/props/keycard.mdl"
-SWEP.PrintName		= "SCP-049"
-SWEP.Slot			= 0
-SWEP.SlotPos		= 0
-SWEP.DrawAmmo		= false
-SWEP.DrawCrosshair	= false
-SWEP.HoldType		= "normal"
-SWEP.Spawnable		= false
-SWEP.AdminSpawnable	= false
+SWEP.Base 		= "weapon_scp_base"
+SWEP.PrintName	= "SCP-049"
+SWEP.HoldType	= "normal"
 
 SWEP.AttackDelay			= 5
-SWEP.ISSCP = true
-SWEP.droppable				= false
-SWEP.teams					= {1}
-SWEP.Primary.Ammo			= "none"
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic		= false
-
-SWEP.Secondary.Ammo			= "none"
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.Automatic	= false
 SWEP.NextAttackW			= 0
+
+if CLIENT then
+	SWEP.WepSelectIcon 	= surface.GetTextureID("breach/wep_049")
+end
 
 --SWEP.SantasHatPositionOffset = Vector( 1.5, 2.2, 1.1 )
 --SWEP.SantasHatAngleOffset = Angle( -40, -90, -10 )
 
-function SWEP:Deploy()
-	self.Owner:DrawViewModel( false )
-	self.Owner:DrawWorldModel( false )
-end
-
-function SWEP:Remove()
-	/*if CLIENT and IsValid( self.SantasHat ) then
+/*function SWEP:Remove()
+	if CLIENT and IsValid( self.SantasHat ) then
 		self.SantasHat:Remove()
-	end*/
-end
-
-SWEP.Lang = nil
+	end
+end*/
 
 function SWEP:Initialize()
-	self:SetHoldType("normal")
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_049
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
+	self:InitializeLanguage( "SCP_049" )
+
+	self:SetHoldType( self.HoldType )
+
 	for i=0, 4 do
 		sound.Add( {
 			name = "attack"..i,
@@ -81,12 +42,6 @@ function SWEP:Initialize()
 			self.SantasHat:SetNoDraw( true )
 		end
 	end*/
-end
-
-function SWEP:Think()
-end
-
-function SWEP:Reload()
 end
 
 function SWEP:PrimaryAttack()
@@ -112,7 +67,11 @@ function SWEP:PrimaryAttack()
 				if ent:GTeam() == TEAM_SCP then return end
 				if ent:GTeam() == TEAM_SPEC then return end
 				if ent.Using714 then return end
-				ent:SetSCP0492()
+				local scp = GetSCP( "SCP0492" )
+				if scp then
+					scp:SetupPlayer( ent )
+				end
+				--ent:SetSCP0492()
 				self.Owner:AddExp(200, true)
 				roundstats.zombies = roundstats.zombies + 1
 			else
@@ -122,13 +81,6 @@ function SWEP:PrimaryAttack()
 			end
 		end
 	end
-end
-
-function SWEP:SecondaryAttack()
-end
-
-function SWEP:CanPrimaryAttack()
-	return true
 end
 
 function SWEP:DrawHUD()

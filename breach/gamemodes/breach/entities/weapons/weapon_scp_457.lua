@@ -1,52 +1,17 @@
 AddCSLuaFile()
 
+SWEP.Base 		= "weapon_scp_base"
+SWEP.PrintName	= "SCP-457"
+
+SWEP.HoldType	= "normal"
+
 if CLIENT then
 	SWEP.WepSelectIcon 	= surface.GetTextureID("breach/wep_457")
-	SWEP.BounceWeaponIcon = false
 end
-
-SWEP.ViewModelFOV	= 62
-SWEP.ViewModelFlip	= false
-SWEP.ViewModel		= "models/vinrax/props/keycard.mdl"
-SWEP.WorldModel		= "models/vinrax/props/keycard.mdl"
-SWEP.PrintName		= "SCP-457"
-SWEP.Slot			= 0
-SWEP.SlotPos		= 0
-SWEP.DrawAmmo		= false
-SWEP.DrawCrosshair	= true
-SWEP.HoldType		= "normal"
-SWEP.Spawnable		= false
-SWEP.AdminSpawnable	= false
-
-SWEP.ISSCP = true
-SWEP.droppable				= false
-SWEP.teams					= {1}
-SWEP.Primary.Ammo			= "none"
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic		= false
-
-SWEP.Secondary.Ammo			= "none"
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-
-function SWEP:Deploy()
-	self.Owner:DrawViewModel( false )
-end
-function SWEP:DrawWorldModel()
-end
-
-SWEP.Lang = nil
 
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_457
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
+	self:InitializeLanguage( "SCP_457" )
+
 	self:SetHoldType(self.HoldType)
 end
 
@@ -59,7 +24,7 @@ function SWEP:Think()
 					v:Ignite(2,250)
 					if self.Owner.nextexp == nil then self.Owner.nextexp = 0 end
 					if self.Owner.nextexp < CurTime() then
-						self.Owner:SetHealth(self.Owner:Health() + 20)
+						self.Owner:SetHealth( math.Clamp( self.Owner:Health() + 20, 0, self.Owner:GetMaxHealth() ) )
 						self.Owner:AddExp(5)
 						self.Owner.nextexp = CurTime() + 1
 					end
@@ -67,9 +32,6 @@ function SWEP:Think()
 			end
 		end
 	end
-end
-
-function SWEP:Reload()
 end
 
 function SWEP:PrimaryAttack()
@@ -91,11 +53,4 @@ function SWEP:PrimaryAttack()
 			end
 		end
 	end
-end
-
-function SWEP:SecondaryAttack()
-end
-
-function SWEP:CanPrimaryAttack()
-	return true
 end

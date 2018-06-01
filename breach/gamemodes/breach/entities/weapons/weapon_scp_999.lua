@@ -1,67 +1,18 @@
 AddCSLuaFile()
 
-SWEP.PrintName				= "SCP999"			
+SWEP.Base 				= "weapon_scp_base"
+SWEP.PrintName			= "SCP999"			
 
-SWEP.ViewModelFOV 		= 56
-SWEP.Spawnable 			= false
-SWEP.AdminOnly 			= false
+SWEP.Primary.Delay 		= 2
+SWEP.Secondary.Delay 	= 5
 
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Delay        = 2
-SWEP.Primary.Automatic	= false
-SWEP.Primary.Ammo		= "None"
-
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.Delay			= 5
-SWEP.Secondary.Ammo		= "None"
-
-SWEP.ISSCP 				= true
-SWEP.droppable				= false
-SWEP.CColor					= Color(0,255,0)
-SWEP.teams					= {1}
-
-SWEP.Weight				= 3
-SWEP.AutoSwitchTo		= false
-SWEP.AutoSwitchFrom		= false
-SWEP.Slot					= 0
-SWEP.SlotPos				= 4
-SWEP.DrawAmmo			= false
 SWEP.DrawCrosshair		= true
-SWEP.ViewModel			= ""
-SWEP.WorldModel			= ""
-SWEP.IconLetter			= "w"
 SWEP.HoldType 			= "normal"
 
-SWEP.Lang = nil
-
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_999
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
+	self:InitializeLanguage( "SCP_999" )
+
 	self:SetHoldType(self.HoldType)
-end
-
-function SWEP:Deploy()
-	if self.Owner:IsValid() then
-		self.Owner:DrawWorldModel( false )
-		self.Owner:DrawViewModel( false )
-	end
-end
-
-function SWEP:Holster()
-	return true;
-end
-
-function SWEP:Think()
-	if postround then return end
-	--
 end
 
 SWEP.NextPrimary = 0

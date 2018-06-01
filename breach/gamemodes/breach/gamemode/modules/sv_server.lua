@@ -37,6 +37,7 @@ util.AddNetworkString("689")
 util.AddNetworkString( "UpdateKeycard" )
 util.AddNetworkString( "SendSound" )
 util.AddNetworkString( "957Effect" )
+util.AddNetworkString( "SCPList" )
 
 net.Receive( "DropWeapon", function( len, ply )
 	local class = net.ReadString()
@@ -56,6 +57,7 @@ net.Receive( "PlayerReady", function( len, ply )
 	net.Start( "PlayerReady" )
 		net.WriteTable( { sR, sL } )
 	net.Send( ply )
+	SendSCPList( ply )
 end )
 
 net.Receive( "RecheckPremium", function( len, ply )
@@ -278,16 +280,17 @@ function SetupPlayers(pltab)
 	local allply = GetActivePlayers()
 	
 	// SCPS
-	local spctab = table.Copy(SPCS)
+	local spctab = table.Copy(SCPS)
 	for i=1, pltab[1] do
 		if #spctab < 1 then
-			spctab = table.Copy(SPCS)
+			spctab = table.Copy(SCPS)
 			//print("not enough scps, copying another table")
 		end
 		local pl = table.Random(allply)
 		if IsValid(pl) == false then continue end
 		local scp = table.Random(spctab)
-		scp["func"](pl)
+		--scp["func"](pl)
+		GetSCP( scp ):SetupPlayer( pl )
 		print("assigning " .. pl:Nick() .. " to scps")
 		table.RemoveByValue(spctab, scp)
 		table.RemoveByValue(allply, pl)

@@ -1,55 +1,20 @@
 AddCSLuaFile()
 
+SWEP.Base 				= "weapon_scp_base"
 SWEP.PrintName			= "SCP-066"			
 
-SWEP.ViewModelFOV 		= 56
-SWEP.Spawnable 			= false
-SWEP.AdminOnly 			= false
-
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
 SWEP.Primary.Delay0		= 3
 SWEP.Primary.Delay1		= 30
-SWEP.Primary.Automatic	= false
-SWEP.Primary.Ammo		= "None"
 
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.Delay			= 5
-SWEP.Secondary.Ammo		= "None"
+SWEP.Primary.Eric		= "scp/066/eric.ogg"
+SWEP.Primary.Beethoven	= "scp/066/beethoven.ogg"
 
-SWEP.Primary.Eric				= "scp/066/eric.ogg"
-SWEP.Primary.Beethoven		= "scp/066/beethoven.ogg"
-
-SWEP.ISSCP 				= true
-SWEP.droppable				= false
-SWEP.CColor					= Color(0,255,0)
-SWEP.teams					= {1}
-
-SWEP.Weight				= 3
-SWEP.AutoSwitchTo		= false
-SWEP.AutoSwitchFrom		= false
-SWEP.Slot					= 0
-SWEP.SlotPos				= 4
-SWEP.DrawAmmo			= false
-SWEP.DrawCrosshair		= true
-SWEP.ViewModel			= ""
-SWEP.WorldModel			= ""
-SWEP.IconLetter			= "w"
 SWEP.HoldType 			= "normal"
 
-SWEP.Lang = nil
-
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_066
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
-	self:SetHoldType(self.HoldType)
+	self:InitializeLanguage( "SCP_066" )
+
+	self:SetHoldType( self.HoldType )
 	
 	sound.Add( {
 		name = "eric",
@@ -69,38 +34,6 @@ function SWEP:Initialize()
 		sound = self.Primary.Beethoven
 	} )
 	
-end
-
-function SWEP:Deploy()
-	if self.Owner:IsValid() then
-		self.Owner:DrawWorldModel( false )
-		self.Owner:DrawViewModel( false )
-	end
-end
-
-function SWEP:Holster()
-	return true
-end
-
-SWEP.Freeze = false
-
-function SWEP:Think()
-if !SERVER then return end
-	if preparing and (self.Freeze == false) then
-		self.Freeze = true
-		self.Owner:SetJumpPower(0)
-		self.Owner:SetCrouchedWalkSpeed(0)
-		self.Owner:SetWalkSpeed(0)
-		self.Owner:SetRunSpeed(0)
-	end
-	if preparing or postround then return end
-	if self.Freeze == true then
-		self.Freeze = false
-		self.Owner:SetCrouchedWalkSpeed(0.6)
-		self.Owner:SetJumpPower(200)
-		self.Owner:SetWalkSpeed(160)
-		self.Owner:SetRunSpeed(160)
-	end
 end
 
 SWEP.Eric = false
@@ -159,12 +92,6 @@ function SWEP:SecondaryAttack()
 			ent:TakeDamage( 100, self.Owner, self.Owner )
 		end
 	end
-end
-
-function SWEP:Reload()
-	if preparing or postround then return end
-	if not IsFirstTimePredicted() then return end
-	--
 end
 
 function SWEP:DrawHUD()

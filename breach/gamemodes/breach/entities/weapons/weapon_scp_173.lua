@@ -1,60 +1,24 @@
 AddCSLuaFile()
 
-if CLIENT then
-	SWEP.WepSelectIcon 	= surface.GetTextureID("breach/wep_173")
-	SWEP.BounceWeaponIcon = false
-end
-
-SWEP.ViewModelFOV	= 62
-SWEP.ViewModelFlip	= false
-SWEP.ViewModel		= "models/vinrax/props/keycard.mdl"
-SWEP.WorldModel		= "models/vinrax/props/keycard.mdl"
+SWEP.Base 			= "weapon_scp_base"
 SWEP.PrintName		= "SCP-173"
-SWEP.Slot			= 0
-SWEP.SlotPos		= 0
-SWEP.DrawAmmo		= false
-SWEP.DrawCrosshair	= false
+
 SWEP.HoldType		= "normal"
-SWEP.Spawnable		= false
-SWEP.AdminSpawnable	= false
 
 SWEP.AttackDelay			= 0.25
-SWEP.ISSCP = true
-SWEP.droppable				= false
-SWEP.CColor					= Color(0,255,0)
-SWEP.SnapSound				= Sound( "snap.wav" )
-SWEP.teams					= {1}
-SWEP.Primary.Ammo			= "none"
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= 0
-SWEP.Primary.Automatic		= false
-
 SWEP.SpecialDelay			= 30
-SWEP.Secondary.Ammo			= "none"
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= 0
-SWEP.Secondary.Automatic	= false
 SWEP.NextAttackW			= 0
+
+if CLIENT then
+	SWEP.WepSelectIcon 	= surface.GetTextureID("breach/wep_173")
+end
  
 --SWEP.SantasHatPositionOffset = Vector( -3, 47, 1 )
 --SWEP.SantasHatAngleOffset = Angle( -90, -20, -20 )
 
-function SWEP:Deploy()
-	self.Owner:DrawViewModel( false )
-	self.Owner:SetJumpPower(175)
-	self.Owner:SetWalkSpeed(500)
-	self.Owner:SetRunSpeed(500)
-	self.Owner:SetMaxSpeed(500)
-end
-
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_173
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
+	self:InitializeLanguage( "SCP_173" )
+
 	self:SetHoldType(self.HoldType)
 	/*if CLIENT then
 		if !self.SantasHat then
@@ -65,11 +29,11 @@ function SWEP:Initialize()
 	end*/
 end
 
-function SWEP:Remove()
-	/*if CLIENT and IsValid( self.SantasHat ) then
+/*function SWEP:Remove()
+	if CLIENT and IsValid( self.SantasHat ) then
 		self.SantasHat:Remove()
-	end*/
-end
+	end
+end*/
 
 function SWEP:IsLookingAt( ply )
 	local yes = ply:GetAimVector():Dot( ( self.Owner:GetPos() - ply:GetPos() + Vector( 70 ) ):GetNormalized() )
@@ -146,7 +110,7 @@ function SWEP:PrimaryAttack()
 				ent:Kill()
 				self.Owner:AddExp(175, true)
 				roundstats.snapped = roundstats.snapped + 1
-				ent:EmitSound( self.SnapSound, 500, 100 )
+				ent:EmitSound( "snap.wav", 500, 100 )
 			else
 				if ent:GetClass() == "func_breakable" then
 					ent:TakeDamage( 100, self.Owner, self.Owner )
@@ -154,13 +118,6 @@ function SWEP:PrimaryAttack()
 			end
 		end
 	end
-end
-
-function SWEP:Holster()
-	self.Owner:SetWalkSpeed(1)
-	self.Owner:SetRunSpeed(1)
-	self.Owner:SetJumpPower(1)
-	return true
 end
 
 SWEP.NextSpecial = 0
@@ -213,10 +170,6 @@ function SWEP:SecondaryAttack()
 			end
 		end)
 	end
-end
-
-function SWEP:CanPrimaryAttack()
-	return true
 end
 
 function SWEP:DrawHUD()

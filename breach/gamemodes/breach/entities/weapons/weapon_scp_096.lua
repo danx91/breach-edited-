@@ -1,66 +1,32 @@
+AddCSLuaFile()
+
+SWEP.Base 				= "weapon_scp_base"
 SWEP.PrintName			= "SCP096"			
-SWEP.ViewModelFOV 		= 56
-SWEP.Spawnable 			= false
-SWEP.AdminOnly 			= false
 
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Delay         = 1
-SWEP.Primary.Automatic	= false
-SWEP.Primary.Ammo			= "None"
+SWEP.DrawCrosshair		= true
+SWEP.ViewModel			= "models/weapons/v_arms_scp096.mdl"
 
-SWEP.Secondary.ClipSize	= -1
-SWEP.Secondary.DefaultClip= -1
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.Delay		= 5
-SWEP.Secondary.Ammo		= "None"
+SWEP.Primary.Sound 		= "weapons/scp96/attack1.wav"
+SWEP.HoldType 			= "knife"
 
-SWEP.ISSCP 					= true
-SWEP.droppable				= false
-SWEP.CColor					= Color(0,255,0)
-SWEP.teams					= {1}
+SWEP.NextAttackW		= 0
 
-SWEP.NextAttackW			= 0
-
-SWEP.Weight					= 3
-SWEP.AutoSwitchTo			= false
-SWEP.AutoSwitchFrom		= false
-SWEP.Slot					= 0
-SWEP.SlotPos					= 4
-SWEP.DrawAmmo				= false
-SWEP.DrawCrosshair			= true
-SWEP.IdleAnim				= true
-SWEP.ViewModel				= "models/weapons/v_arms_scp096.mdl"
-SWEP.WorldModel			= ""
-SWEP.IconLetter				= "w"
-SWEP.Primary.Sound 		= ("weapons/scp96/attack1.wav") 
-SWEP.HoldType 				= "knife"
-
-if (CLIENT) then
+if CLIENT then
 	SWEP.WepSelectIcon	= surface.GetTextureID( "vgui/entities/weapon_scp096" )
-	SWEP.BounceWeaponIcon = false
-	killicon.Add( "kill_icon_scp096", "vgui/icons/kill_icon_scp096", Color( 255, 255, 255, 255 ) )
 end
 
-SWEP.Lang = nil
-
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_096
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
-    self:SetWeaponHoldType( self.HoldType )
+	self:InitializeLanguage( "SCP_096" )
+
+    self:SetHoldType( self.HoldType )
 		
 	sound.Add( { name = "096_1", channel = CHAN_STATIC, volume = 1.0, level = 80, pitch = { 95, 110 }, sound = "weapons/scp96/096_1.mp3" } )
 	sound.Add( { name = "096_2", channel = CHAN_STATIC, volume = 1.0, level = 80, pitch = { 95, 110 }, sound = "weapons/scp96/096_2.mp3" } )
 	sound.Add( { name = "096_3", channel = CHAN_STATIC, volume = 1.0, level = 80, pitch = { 95, 110 }, sound = "weapons/scp96/096_3.mp3" } )
 	
 	util.PrecacheSound("096_1")	
-	util.PrecacheSound("096_1")	
-	util.PrecacheSound("096_1")	
+	util.PrecacheSound("096_2")	
+	util.PrecacheSound("096_3")	
 	util.PrecacheSound("weapons/scp96/attack1.wav")
 	util.PrecacheSound("weapons/scp96/attack2.wav")
 	util.PrecacheSound("weapons/scp96/attack3.wav")
@@ -72,10 +38,15 @@ end
 
 function SWEP:IsLookingAt( ply )
 	local yes = ply:GetAimVector():Dot( ( self.Owner:GetPos() - ply:GetPos() + Vector( 70 ) ):GetNormalized() )
-	return (yes > 0.39)
+	return yes > 0.39
 end
 
+SWEP.NextIdle = 0
 function SWEP:Think()
+	if self.NextIdle < CurTime() then
+		self:SendWeaponAnim( ACT_VM_IDLE )
+		self.NextIdle = CurTime() + self:SequenceDuration( ACT_VM_IDLE )
+	end
 	if postround then return end
 	local watching = 0
 	for k,v in pairs(player.GetAll()) do
@@ -103,96 +74,67 @@ function SWEP:Think()
 			end
 		end
 	end
-	if watching > 0 then
-		self.Owner:SetRunSpeed(500)
-		self.Owner:SetWalkSpeed(500)
-	else
-		self.Owner:SetRunSpeed(125)
-		self.Owner:SetWalkSpeed(125)
+	if self.basestats then
+		if watching > 0 then
+			self.Owner:SetRunSpeed( self.basestats.fast )
+			self.Owner:SetWalkSpeed( self.basestats.fast )
+		else
+			self.Owner:SetRunSpeed( self.basestats.slow )
+			self.Owner:SetWalkSpeed( self.basestats.slow )
+		end
 	end
-end
-
-function SWEP:Reload()
-	if preparing or postround then return end
-	if not IsFirstTimePredicted() then return end
 end
 
 function SWEP:PrimaryAttack()
 	if preparing or postround then return end
-	if not IsFirstTimePredicted() then return end
 	if self.NextAttackW > CurTime() then return end
-	self.NextAttackW = CurTime() + self.Primary.Delay
+	self.NextAttackW = CurTime() + 1.25
+
+	self.Owner:SetAnimation( PLAYER_ATTACK1 )
+	self:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
+	self.NextIdle = CurTime() + 0.7
 	if SERVER then
-		local trace = self.Owner:GetEyeTrace();
-		if trace.HitPos:Distance(self.Owner:GetShootPos()) <= 75 then
-			self.Owner:SetAnimation( PLAYER_ATTACK1 );
-			self.Weapon:SendWeaponAnim( ACT_VM_PRIMARYATTACK );
-				
-			local ent = nil
-			local tr = util.TraceHull( {
-				start = self.Owner:GetShootPos(),
-				endpos = self.Owner:GetShootPos() + ( self.Owner:GetAimVector() * 100 ),
-				filter = self.Owner,
-				mins = Vector( -10, -10, -10 ),
-				maxs = Vector( 10, 10, 10 ),
-				mask = MASK_SHOT_HULL
-			} )
-			ent = tr.Entity
-			if IsValid(ent) then
-				if ent:IsPlayer() then
-					if ent:GTeam() == TEAM_SCP then return end
-					if ent:GTeam() == TEAM_SPEC then return end
-					ent:TakeDamage(math.random(30, 60), self.Owner, self.Owner)
-				else
-					if ent:GetClass() == "func_breakable" then
-						ent:TakeDamage( 100, self.Owner, self.Owner )
-						self.Owner:EmitSound("Damage4.ogg")
-					end
-				end
+		local trace = self.Owner:GetEyeTrace()
+		local tr = util.TraceHull( {
+			start = self.Owner:GetShootPos(),
+			endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 125,
+			filter = { self, self.Owner },
+			mins = Vector( -15, -15, -15 ),
+			maxs = Vector( 15, 15, 15 ),
+			mask = MASK_SHOT_HULL
+		} )
+
+		local ent = tr.Entity
+		if IsValid( ent ) then
+			if ent:IsPlayer() then
+				if ent:GTeam() == TEAM_SCP then return end
+				if ent:GTeam() == TEAM_SPEC then return end
+				ent:TakeDamage(math.random(60, 100), self.Owner, self.Owner)
+			elseif ent:GetClass() == "func_breakable" then
+				ent:TakeDamage( 100, self.Owner, self.Owner )
 			end
-				--bullet = {}
-				--bullet.Num    = 1
-				--bullet.Src    = self.Owner:GetShootPos()
-				--bullet.Dir    = self.Owner:GetAimVector()
-				--bullet.Spread = Vector(0, 0, 0)
-				--bullet.Tracer = 0
-				--bullet.Force  = 25
-				--bullet.Damage = 35
-				--self.Owner:FireBullets(bullet) 		
-		else
-			self.Owner:SetAnimation( PLAYER_ATTACK1 );
-			self.Weapon:SendWeaponAnim( ACT_VM_PRIMARYATTACK );
-			self.Weapon:EmitSound( "weapons/scp96/attack"..math.random(1,4)..".wav" )
 		end
 	end
 end
 
 function SWEP:Deploy()
 	if self.Owner:IsValid() then
+		if SERVER and !self.basestats then
+			self.basestats = {
+				slow = self.Owner:GetWalkSpeed(),
+				fast = self.Owner:GetRunSpeed()
+			}
+		end
+
+		self.Owner:SetRunSpeed( self.Owner:GetWalkSpeed() )
+
 		self.Owner:DrawWorldModel( false )
-		--self.Owner:SetViewOffset(Vector(0,0,90))
 		self.Weapon:EmitSound( "weapons/scp96/096_idle"..math.random(1,3)..".wav" )
 		
 		self:SendWeaponAnim( ACT_VM_DRAW )
-				self:SendWeaponAnim( ACT_VM_DRAW )
-		timer.Simple( 0.9, function(wep)
-			if !IsValid(self) or !IsValid(self.Owner) then return end
-			if self.Owner:Alive() then
-				self:SendWeaponAnim(ACT_VM_IDLE)
-			end
-		end )
-	end
-	return true;
-end
 
-function SWEP:Holster()
-	if self.Owner:IsValid() then
-		--self.Owner:SetViewOffset(Vector(0,0,60))
-		self.Owner:SetWalkSpeed(1)
-		self.Owner:SetRunSpeed(1)
-		self.Owner:SetJumpPower(1)
+		self.NextIdle = CurTime() + self:SequenceDuration( ACT_VM_DRAW )
 	end
-	return true;
 end
 
 SWEP.NextSpecial = 0
@@ -200,7 +142,7 @@ function SWEP:SecondaryAttack()
 	if preparing or postround then return end
 	if not IsFirstTimePredicted() then return end
 	if self.NextSpecial > CurTime() then return end
-	self.NextSpecial = CurTime() + self.Secondary.Delay
+	self.NextSpecial = CurTime() + 10
 
 	self.Owner:StopSound("096_1")
 	self.Owner:StopSound("096_2")

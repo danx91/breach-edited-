@@ -1,37 +1,12 @@
 AddCSLuaFile()
 
-SWEP.PrintName				= "SCP957"			
+SWEP.Base 			= "weapon_scp_base"
+SWEP.PrintName		= "SCP-957"
 
-SWEP.ViewModelFOV 		= 56
-SWEP.Spawnable 			= false
-SWEP.AdminOnly 			= false
+SWEP.Primary.Delay 	= 8
 
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Delay        = 8
-SWEP.Primary.Automatic	= false
-SWEP.Primary.Ammo		= "None"
-
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic	= false
-SWEP.Secondary.Delay			= 5
-SWEP.Secondary.Ammo		= "None"
-
-SWEP.ISSCP 				= true
-SWEP.droppable				= false
-SWEP.CColor					= Color(0,255,0)
-SWEP.teams					= {1}
-
-SWEP.Slot					= 0
-SWEP.SlotPos				= 4
-SWEP.DrawAmmo			= false
-SWEP.DrawCrosshair		= true
-SWEP.ViewModel			= ""
-SWEP.WorldModel			= ""
-SWEP.HoldType 			= "normal"
-
-SWEP.Lang = nil
+SWEP.DrawCrosshair	= true
+SWEP.HoldType 		= "normal"
 
 function SWEP:SetupDataTables()
 	self:NetworkVar( "Entity", 0, "SCPInstance" )
@@ -39,35 +14,20 @@ function SWEP:SetupDataTables()
 end
 
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_957
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
+	self:InitializeLanguage( "SCP_957" )
+
 	self:SetHoldType(self.HoldType)
 end
 
-function SWEP:Deploy()
-	if self.Owner:IsValid() then
-		self.Owner:DrawWorldModel( false )
-		self.Owner:DrawViewModel( false )
-	end
-end
-
-function SWEP:Holster()
-	return true
-end
-
 function SWEP:Think()
+	self:PlayerFreeze()
 	if preparing or postround then return end
 	if !self.NextSummon then
 		self.NextSummon = CurTime() + 60
 		self:SetNextSummon( CurTime() + 60 )
 	end
 	if SERVER and IsValid( self.Owner ) then
-		if !IsValid( self.Instance ) and self.NextSummon and self.NextSummon < CurTime() then
+		if !self.Instance and self.NextSummon and self.NextSummon < CurTime() then
 			local pos = self.Owner:GetPos()
 			local bestdist
 			local ply
@@ -82,20 +42,31 @@ function SWEP:Think()
 				end
 			end
 			if ply then
-				ply:SetSCP9571()
+				--ply:SetSCP9571()
+				local scp = GetSCP( "SCP9571" )
+				if scp then
+					scp:SetupPlayer( ply )
+				end
 				self.Instance = ply
 				self:SetSCPInstance( ply )
+				WinCheck()
 				return
 			end
 			self:SetNextSummon( CurTime() + 10 )
 			self.NextSummon = CurTime() + 10
 		end
 
+		if self.Instance and !IsValid( self.Instance ) then
+			self.NextSummon = CurTime() + 60
+			self:SetNextSummon( CurTime() + 60 )
+			self.Instance = nil			
+		end
+
 		if IsValid( self.Instance ) then
 			if self.Instance:GTeam() != TEAM_SCP then
-				self.Instance = nil
 				self.NextSummon = CurTime() + 60
 				self:SetNextSummon( CurTime() + 60 )
+				self.Instance = nil
 			end
 		end
 	end
@@ -151,11 +122,25 @@ function SWEP:PrimaryAttack()
 	end
 end
 
---SWEP.NextSecondary = 0
+SWEP.NSAttack = 0
 function SWEP:SecondaryAttack()
-	/*if preparing or postround then return end
-	if CurTime() < self.NextSecondary then return end
-	self.NextSecondary = CurTime() + self.Secondary.Delay*/
+	if CLIENT or preparing or postround then return end
+	if self.NSAttack > CurTime() then return end
+	self.NSAttack = CurTime() + 1
+	
+	local start = self.Owner:GetShootPos()
+	local trace = util.TraceLine( {
+		start = start,
+		endpos = start + self.Owner:GetAimVector() * 100,
+		filter = { self, self.Owner }
+	} )
+
+	if trace.Hit then
+		local ent = trace.Entity
+		if IsValid( ent ) and ent:GetClass() == "func_breakable" then
+			ent:TakeDamage( 100, self.Owner, self.Owner )
+		end
+	end
 end
 
 function SWEP:DrawHUD()

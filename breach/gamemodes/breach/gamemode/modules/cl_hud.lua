@@ -41,18 +41,20 @@ hook.Add( "HUDShouldDraw", "HideHUD", function( name )
 	if ( hide[ name ] ) then return false end
 end )
 */
-endmessages = {
-	{
-		main = clang.lang_end1,
-		txt = clang.lang_end2,
-		clr = gteams.GetColor(TEAM_SCP)
-	},
-	{
-		main = clang.lang_end1,
-		txt = clang.lang_end3,
-		clr = gteams.GetColor(TEAM_SCP)
+timer.Simple( 0, function()
+	endmessages = {
+		{
+			main = clang.lang_end1,
+			txt = clang.lang_end2,
+			clr = gteams.GetColor(TEAM_SCP)
+		},
+		{
+			main = clang.lang_end1,
+			txt = clang.lang_end3,
+			clr = gteams.GetColor(TEAM_SCP)
+		}
 	}
-}
+end )
 
 function DrawInfo(pos, txt, clr)
 	pos = pos:ToScreen()
@@ -201,6 +203,7 @@ hook.Add( "HUDPaint", "Breach_DrawHUD", function()
 		for k,v in pairs(ROLES) do
 			if v == getrl then
 				getrl = k
+				break
 			end
 		end
 		for k,v in pairs(clang.starttexts) do

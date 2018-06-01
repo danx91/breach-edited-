@@ -25,14 +25,23 @@ RESEARCHERMODELS = {
 	"models/scp/apsci_male_09.mdl",
 }
 CHAOSMODELS = {
-	"models/kerry/merriweather1.mdl",
+	/*"models/kerry/merriweather1.mdl",
 	"models/kerry/merriweather2.mdl",
 	"models/kerry/merriweather3.mdl",
 	"models/kerry/merriweather4.mdl",
 	"models/kerry/merriweather5.mdl",
 	"models/kerry/merriweather6.mdl",
 	"models/kerry/merriweather7.mdl",
-	"models/kerry/merriweather8.mdl",
+	"models/kerry/merriweather8.mdl",*/
+	"models/kerry/player/merriweather/male_01.mdl",
+	"models/kerry/player/merriweather/male_02.mdl",
+	"models/kerry/player/merriweather/male_03.mdl",
+	"models/kerry/player/merriweather/male_04.mdl",
+	"models/kerry/player/merriweather/male_05.mdl",
+	"models/kerry/player/merriweather/male_06.mdl",
+	"models/kerry/player/merriweather/male_07.mdl",
+	"models/kerry/player/merriweather/male_08.mdl",
+	"models/kerry/player/merriweather/male_09.mdl",
 }
 SECURITYMODELS = {
 	"models/npc/portal/Male_02_Garde.mdl",

@@ -1,92 +1,25 @@
 AddCSLuaFile()
 
-SWEP.PrintName			= "SCP-1048-A"			
+SWEP.Base 			= "weapon_scp_base"
+SWEP.PrintName		= "SCP-1048-A"
 
-SWEP.ViewModelFOV 		= 56
-SWEP.Spawnable 			= false
-SWEP.AdminOnly 			= false
+SWEP.DrawCrosshair	= true
+SWEP.HoldType 		= "melee"
 
-SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Delay        	= 8
-SWEP.Primary.Automatic	= false
-SWEP.Primary.Ammo			= "None"
-SWEP.Primary.Sound			= "scp/1048A/attack.ogg"
-
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
-SWEP.Secondary.Automatic		= false
-SWEP.Secondary.Delay			= 5
-SWEP.Secondary.Ammo			= "None"
-
-SWEP.ISSCP 					= true
-SWEP.droppable				= false
-SWEP.CColor					= Color(0,255,0)
-SWEP.teams					= {1}
-
-SWEP.Weight					= 3
-SWEP.AutoSwitchTo			= false
-SWEP.AutoSwitchFrom		= false
-SWEP.Slot					= 0
-SWEP.SlotPos					= 4
-SWEP.DrawAmmo				= false
-SWEP.DrawCrosshair			= true
-SWEP.ViewModel				= ""
-SWEP.WorldModel			= ""
-SWEP.IconLetter				= "w"
-SWEP.HoldType 				= "normal"
-
-SWEP.Lang = nil
 
 function SWEP:Initialize()
-	if CLIENT then
-		self.Lang = GetWeaponLang().SCP_1048A
-		self.Author		= self.Lang.author
-		self.Contact		= self.Lang.contact
-		self.Purpose		= self.Lang.purpose
-		self.Instructions	= self.Lang.instructions
-	end
-	self:SetHoldType(self.HoldType)
+	self:InitializeLanguage( "SCP_1048A" )
+
+	self:SetHoldType( self.HoldType )
+
 	sound.Add( {
 		name = "attack",
 		channel = CHAN_STATIC,
 		volume = 1.0,
 		level = 150,
 		pitch = 100,
-		sound = self.Primary.Sound
+		sound = "scp/1048A/attack.ogg"	
 	} )
-end
-
-function SWEP:Deploy()
-	if self.Owner:IsValid() then
-		self.Owner:DrawWorldModel( false )
-		self.Owner:DrawViewModel( false )
-	end
-end
-
-function SWEP:Holster()
-	return true
-end
-
-SWEP.Freeze = false
-
-function SWEP:Think()
-	if !SERVER then return end
-	if preparing and (self.Freeze == false) then
-		self.Freeze = true
-		self.Owner:SetJumpPower(0)
-		self.Owner:SetCrouchedWalkSpeed(0)
-		self.Owner:SetWalkSpeed(0)
-		self.Owner:SetRunSpeed(0)
-	end
-	if preparing or postround then return end
-	if self.Freeze == true then
-		self.Freeze = false
-		self.Owner:SetCrouchedWalkSpeed(0.6)
-		self.Owner:SetJumpPower(200)
-		self.Owner:SetWalkSpeed(130)
-		self.Owner:SetRunSpeed(130)
-	end
 end
 
 SWEP.NextPrimary = 0
@@ -95,7 +28,7 @@ function SWEP:PrimaryAttack()
 	if preparing or postround then return end
 	if not IsFirstTimePredicted() then return end
 	if self.NextPrimary > CurTime() then return end
-	self.NextPrimary = CurTime() + self.Primary.Delay
+	self.NextPrimary = CurTime() + 8
 	if SERVER then
 		self.Owner:EmitSound( "attack" )
 		timer.Create( "Attack1048A", 0.4, 15, function()
@@ -103,7 +36,7 @@ function SWEP:PrimaryAttack()
 				timer.Destroy( "Attack1048A" )
 				return
 			end
-			fent = ents.FindInSphere( self.Owner:GetPos(), 150 )
+			fent = ents.FindInSphere( self.Owner:GetPos(), 200 )
 			for k, v in pairs( fent ) do
 				if IsValid( v ) then
 					if v:IsPlayer() then
@@ -119,18 +52,6 @@ function SWEP:PrimaryAttack()
 			end
 		end )
 	end
-end
-
-function SWEP:SecondaryAttack()
-	if preparing or postround then return end
-	if not IsFirstTimePredicted() then return end
-	--
-end
-
-function SWEP:Reload()
-	if preparing or postround then return end
-	if not IsFirstTimePredicted() then return end
-	--
 end
 
 function SWEP:DrawHUD()
