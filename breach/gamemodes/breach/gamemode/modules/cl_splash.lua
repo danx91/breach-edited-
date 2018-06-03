@@ -1,8 +1,3 @@
---------------------------------------------------------------------
---You are NOT allowed to remove, modify or omit parts of code marked as credits!
---Removing/editing any credit code will be recognized as copyright infringement!
---------------------------CREDITS(whole file)--------------------------
-
 playing = false
 local sequence = 0
 

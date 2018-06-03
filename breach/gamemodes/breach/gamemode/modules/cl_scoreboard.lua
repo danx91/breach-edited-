@@ -5,10 +5,7 @@ if not Frame then
 end
 
 surface.CreateFont("sb_names", {font = "Trebuchet18", size = 14, weight = 700})
---------------------------------------------------------------------
---You are NOT allowed to remove, modify or omit parts of code marked as credits!
---Removing/editing any credit code will be recognized as copyright infringement!
------------------------------CREDITS--------------------------------
+
 helpers = {
 
 }
@@ -206,14 +203,14 @@ function ShowScoreBoard()
 	mainpanel:CenterHorizontal( 0.5 )
 	mainpanel:CenterVertical( 0.5 )
 	mainpanel.Paint = function( self, w, h )
-		//draw.RoundedBox( 0, 0, 0, w, h, Color( color_main, color_main, color_main, 240 ) )
+		--draw.RoundedBox( 0, 0, 0, w, h, Color( color_main, color_main, color_main, 240 ) )
 	end
 	
 	local panel_backg = vgui.Create( "DPanel", mainpanel )
 	panel_backg:Dock( FILL )
 	panel_backg:DockMargin( 8, 50, 8, 8 )
 	panel_backg.Paint = function( self, w, h )
-		//draw.RoundedBox( 0, 0, 0, w, h, Color( color_main, color_main, color_main, 180 ) )
+		--draw.RoundedBox( 0, 0, 0, w, h, Color( color_main, color_main, color_main, 180 ) )
 	end
 	
 	local DScrollPanel = vgui.Create( "DScrollPanel", panel_backg )

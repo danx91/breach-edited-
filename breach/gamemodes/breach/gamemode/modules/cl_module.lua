@@ -274,10 +274,6 @@ drawinfodelete = 0
 shoulddrawinfo = false
 drawendmsg = nil
 timefromround = 0
---------------------------------------------------------------------
---You are NOT allowed to remove, modify or omit parts of code marked as credits!
---Removing/editing any credit code will be recognized as copyright infringement!
------------------------------CREDITS--------------------------------
 
 timer.Create( "Credits", 180, 0, function() 
 	print("Breach(edited) by danx91 [ZGFueDkx] update "..VERSION.." [patch "..DATE.."]")
@@ -285,7 +281,6 @@ timer.Create( "Credits", 180, 0, function()
 		LocalPlayer():PrintMessage( HUD_PRINTTALK, clang.eq_open )
 	end
 end )
---------------------------------------------------------------------
 
 timer.Create("HeartbeatSound", 2, 0, function()
 	if not LocalPlayer().Alive then return end
