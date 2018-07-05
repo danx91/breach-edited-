@@ -197,13 +197,13 @@ _TimersCache = {}
 Timer = {}
 Timer.__index = Timer
 
-/*Timer.name = ""
+Timer.name = ""
 Timer.repeats = 0
 Timer.current = 0
 Timer.time = 0
 Timer.ncall = 0
 Timer.alive = false
-Timer.destroyed = false*/
+Timer.destroyed = false
 
 function Timer:Create( name, time, repeats, callback, endcallback, noactivete, nocache )
 	if !name or !time or !repeats or !callback then return end
@@ -213,10 +213,6 @@ function Timer:Create( name, time, repeats, callback, endcallback, noactivete, n
 	t.repeats = repeats
 	t.callback = callback
 	t.endcallback = endcallback
-	t.current = 0
-	t.ncall = 0
-	t.alive = false
-	t.destroyed = false
 
 	t.Create = function() end
 
@@ -244,7 +240,7 @@ end
 function Timer:Start()
 	if self.destroyed then return end
 	self.alive = true
-	self.ncall = CurTime()
+	self.ncall = CurTime() + self.time
 end
 
 function Timer:Reset()

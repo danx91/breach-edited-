@@ -89,6 +89,14 @@ cwlang = nil
 
 langtouse = CreateClientConVar( "br_language", "english", true, false ):GetString()
 
+local sv_lang = GetConVar( "br_defaultlanguage" )
+if sv_lang then
+	local sv_str = sv_lang:GetString()
+	if ALLLANGUAGES[sv_str] and WEPLANG[sv_str] then
+		langtouse = sv_str
+	end
+end
+
 cvars.AddChangeCallback( "br_language", function( convar_name, value_old, value_new )
 	langtouse = value_new
 	LoadLang( langtouse )
