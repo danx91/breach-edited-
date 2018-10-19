@@ -230,15 +230,17 @@ hook.Add( "HUDPaint", "Breach_DrawHUD", function()
 				yalign = TEXT_ALIGN_CENTER,
 			}, 2, 255 )
 		end
-		for i,txt in ipairs(getrl[2]) do
-			draw.TextShadow( {
-				text = txt,
-				pos = { ScrW() / 2, ScrH() / 15 + 10 + (align * i) },
-				font = "ImpactSmall",
-				color = Color(255,255,255),
-				xalign = TEXT_ALIGN_CENTER,
-				yalign = TEXT_ALIGN_CENTER,
-			}, 2, 255 )
+		if getrl[2] then
+			for i,txt in ipairs(getrl[2]) do
+				draw.TextShadow( {
+					text = txt,
+					pos = { ScrW() / 2, ScrH() / 15 + 10 + (align * i) },
+					font = "ImpactSmall",
+					color = Color(255,255,255),
+					xalign = TEXT_ALIGN_CENTER,
+					yalign = TEXT_ALIGN_CENTER,
+				}, 2, 255 )
+			end
 		end
 		if roundtype != nil then
 			draw.TextShadow( {

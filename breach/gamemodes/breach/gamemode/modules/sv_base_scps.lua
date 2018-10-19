@@ -36,7 +36,7 @@ Basic infotmations about RegisterSCP():
 		dynamic_stats (Table) - this table contains entries for your SCP that can be accessed and changed in
 			'garrysmod/data/breach/scp.txt' file. So everybody can customize them. These stats will be overwritten
 			by statc_stats. This table cotains keys and values(key = "value") or tables that contains value and
-			clamping info(num values only!)(key = "value" or key = { var = num_value, max = max_value, min_minimum value }).
+			clamping info(num values only!)(key = "value" or key = { var = num_value, max = max_value, min = minimum_value }).
 			List of valid keys is below. 
 
 					Valid entreis for static_stats and dynamic_stats:
@@ -80,7 +80,7 @@ To get registered SCP:
 
 	ObjectSCP:
 		functions:
-			SCPObject:SetCallback( callback, post ) - used internally by RegisterSCP. Sets callback, if post == true, sets post_callback
+			ObjectSCP:SetCallback( callback, post ) - used internally by RegisterSCP. Sets callback, if post == true, sets post_callback
 
 			ObjectSCP:SetupPlayer( ply, ... ) - use to set specified player as SCP.
 					ply - player who become SCP

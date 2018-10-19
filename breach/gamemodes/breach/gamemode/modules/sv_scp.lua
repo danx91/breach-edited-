@@ -23,6 +23,12 @@ SCP_VALID_ENTRIES = {
 
 SCP_DYNAMIC_VARS = SCP_DYNAMIC_VARS or {}
 
+local lua_override = false
+
+function SCP_DevMode()
+	lua_override = true
+end
+
 function UpdateDynamicVars()
 	print( "Updating SCPs dynamic vars" )
 	if !file.Exists( "breach", "DATA" ) then
@@ -32,7 +38,11 @@ function UpdateDynamicVars()
 		util.WriteINI( "breach/scp.txt", {} )
 	end
 
-	util.LoadINI( "breach/scp.txt", SCP_DYNAMIC_VARS )
+	if lua_override then
+		print( "Dev mode is enabled! Overwritting INI values..." )
+	else
+		util.LoadINI( "breach/scp.txt", SCP_DYNAMIC_VARS )
+	end
 end
 UpdateDynamicVars()
 
@@ -63,7 +73,7 @@ function RegisterSCP( name, model, weapon, static_stats, dynamic_stats, custom_c
 
 	local rolename = "ROLE_"..name
 	if !ALLLANGUAGES["english"]["ROLES"][rolename] or !ALLLANGUAGES["english"]["starttexts"][rolename] then
-		error( "Not complete language entry for: "..rolename )
+		error( "No language entry for: "..rolename )
 	end
 
 	local spawn = _G["SPAWN_"..name]
