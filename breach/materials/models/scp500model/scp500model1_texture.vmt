@@ -1,6 +1,0 @@
-"VertexlitGeneric"
-{
-	"$basetexture" "models/SCP500Model/SCP500Model1_texture.vtf"
-	"$surfaceprop" "plastic"
-	"$model" 1
-}
