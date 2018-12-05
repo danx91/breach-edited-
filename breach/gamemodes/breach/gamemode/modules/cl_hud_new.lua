@@ -28,6 +28,7 @@ local MATS = {
 }
 
 hook.Add( "HUDPaint", "Breach_HUD", function()
+	if disablehud then return end
 	if playing then return end
 	local scale = hudScale
 	local width = ScrW() * scale

@@ -19,6 +19,13 @@ polski.lang_secret_nfound = "Sekret nie został odnaleziony"
 
 polski.class_unknown = "Niezidentyfikowany"
 
+polski.NRegistry = {
+	scpready = "Możesz zostać wybrany jako SCP w następnej rundzie",
+	scpwait = "Musisz poczekać %s runde(y) aby móc zagrać jako SCP"
+}
+
+polski.NFailed = "Nie udało się uzyskać wartości NRegistry: %s"
+
 polski.votefail = "Już głosowałeś albo nie możesz głosować"
 polski.votepunish = "Zagłosuj czy gracz %s ma zostać ukarany"
 polski.voterules = [[

@@ -448,6 +448,33 @@ function GM:PlayerDeathSound()
 	return true
 end
 
+hook.Add( "PlayerSay", "SCPPenaltyShow", function( ply, msg, teamonly )
+	if msg == "!scp" then
+		if !ply.nscpcmdcheck or ply.nscpcmdcheck < CurTime() then
+			ply.nscpcmdcheck = CurTime() + 10
+
+			local r = tonumber( ply:GetPData( "scp_penalty", 0 ) ) - 1
+			r = math.max( r, 0 )
+
+			if r == 0 then
+				v:PrintTranslatedMessage( "scpready#50,200,50" )
+			else
+				v:PrintTranslatedMessage( "scpwait".."$"..r.."#200,50,50" )
+			end
+		end
+
+		return ""
+	end
+end )
+
+hook.Add( "SetupPlayerVisibility", "CCTVPVS", function( ply, viewentity )
+	local wep = ply:GetActiveWeapon()
+	if IsValid( wep ) and wep:GetClass() == "item_cameraview" then
+		if wep.Enabled and IsValid( CCTV[wep.CAM].ent ) then
+			AddOriginToPVS( CCTV[wep.CAM].pos )
+		end
+	end
+end )
 
 function GM:PlayerCanPickupWeapon( ply, wep )
 	//if ply.lastwcheck == nil then ply.lastwcheck = 0 end

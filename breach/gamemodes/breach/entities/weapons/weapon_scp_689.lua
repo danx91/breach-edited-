@@ -26,7 +26,7 @@ SWEP.ntabupdate = 0
 function SWEP:Think()
 	if postround or preparing then return end
 	if self.ntabupdate < CurTime() then
-		self.ntabupdate = CurTime() + 1 --delay for performance
+		self.ntabupdate = CurTime() + 3 --delay for performance
 		if SERVER then
 			net.Start( "689" )
 				net.WriteTable( self.Targets )

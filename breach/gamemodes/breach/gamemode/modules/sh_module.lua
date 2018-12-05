@@ -77,6 +77,10 @@ ROLES.ROLE_MTFCOM = "MTF Commander"
 ROLES.ROLE_SD = "Site Director"
 ROLES.ROLE_O5 = "O5 Council Member"
 
+// Infect round
+ROLES.ROLE_INFECTD = "Class D Presonnel"
+ROLES.ROLE_INFECTMTF = "MTF"
+
 // Chaos Insurgency
 ROLES.ROLE_CHAOSSPY = "Chaos Insurgency Spy"
 ROLES.ROLE_CHAOS = "Chaos Insurgency"
@@ -129,8 +133,10 @@ if !ConVarExists("br_allow_roaming_spectate") then CreateConVar("br_allow_roamin
 if !ConVarExists("br_scale_bullet_damage") then CreateConVar("br_scale_bullet_damage", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Bullet damage scale" ) end
 if !ConVarExists("br_new_eq") then CreateConVar("br_new_eq", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Enables new EQ" ) end
 if !ConVarExists("br_enable_warhead") then CreateConVar("br_enable_warhead", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "Enables OMEGA Warhead" ) end
-if !ConVarExists("br_scale_human_damage") then CreateConVar("br_scale_human_damage", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "Enables OMEGA Warhead" ) end
-if !ConVarExists("br_scale_scp_damage") then CreateConVar("br_scale_scp_damage", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "Enables OMEGA Warhead" ) end
+if !ConVarExists("br_scale_human_damage") then CreateConVar("br_scale_human_damage", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "Scales damage dealt by humans" ) end
+if !ConVarExists("br_scale_scp_damage") then CreateConVar("br_scale_scp_damage", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "Scales damage dealt by SCP" ) end
+if !ConVarExists("br_scp_penalty") then CreateConVar("br_scp_penalty", "3", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" ) end
+if !ConVarExists("br_premium_penalty") then CreateConVar("br_premium_penalty", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE }, "" ) end
 
 
 MINPLAYERS = GetConVar("br_min_players"):GetInt()
@@ -413,12 +419,12 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		dmginfo:ScaleDamage( scale )
 
 		if ply:GetNClass() == ROLES.ROLE_SCP957 then
-			dmginfo:ScaleDamage( 0.2 )
+			dmginfo:ScaleDamage( 0.1 )
 		end
 
 		if at:IsPlayer() then
 			if at:GetNClass() == ROLES.ROLE_SCP9571 then
-				dmginfo:ScaleDamage( 0.25 )
+				dmginfo:ScaleDamage( 0.2 )
 			end
 
 			if at:GetNClass() == ROLES.ROLE_SCP9571 and ply:GTeam() == TEAM_SCP then

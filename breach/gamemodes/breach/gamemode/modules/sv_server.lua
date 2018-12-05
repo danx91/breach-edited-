@@ -38,6 +38,8 @@ util.AddNetworkString( "UpdateKeycard" )
 util.AddNetworkString( "SendSound" )
 util.AddNetworkString( "957Effect" )
 util.AddNetworkString( "SCPList" )
+util.AddNetworkString( "TranslatedMessage" )
+util.AddNetworkString( "CameraDetect" )
 
 net.Receive( "DropWeapon", function( len, ply )
 	local class = net.ReadString()
@@ -211,14 +213,14 @@ net.Receive( "DropCurWeapon", function( len, ply )
 	end
 end )
 
-function dofloor(num, yes)
+/*function dofloor(num, yes)
 	if yes then
 		return math.floor(num)
 	end
 	return num
-end
+end*/
 
-function GetRoleTable(all)
+/*function GetRoleTable(all)
 	local classds = 0
 	local mtfs = 0
 	local researchers = 0
@@ -253,8 +255,8 @@ function GetRoleTable(all)
 	print("researchers: " .. researchers)
 	print("chaosinsurgency: " .. chaosinsurgency)
 	*/
-	return {scps, mtfs, classds, researchers}
-end
+	/*return {scps, mtfs, classds, researchers}
+end*/
 
 function GetRoleTableCustom(all, scps, p_mtf, p_res)
 	local classds = 0
@@ -276,7 +278,7 @@ cvars.AddChangeCallback( "br_roundrestart", function( convar_name, value_old, va
 	RunConsoleCommand("br_roundrestart", "0")
 end )
 
-function SetupPlayers(pltab)
+/*function SetupPlayers(pltab)
 	local allply = GetActivePlayers()
 	
 	// SCPS
@@ -418,7 +420,7 @@ function SetupPlayers(pltab)
 	
 	net.Start("RolesSelected")
 	net.Broadcast()
-end
+end*/
 
 function SetupAdmins( players )
 	for k, v in pairs( players ) do

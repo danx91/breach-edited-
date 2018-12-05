@@ -1,6 +1,12 @@
 
 local mply = FindMetaTable( "Player" )
 
+function mply:PrintTranslatedMessage( string )
+	net.Start( "TranslatedMessage" )
+		net.WriteString( string )
+		//net.WriteBool( center or false )
+	net.Send( self )
+end
 
 function mply:ForceDropWeapon( class )
 	if self:HasWeapon( class ) then

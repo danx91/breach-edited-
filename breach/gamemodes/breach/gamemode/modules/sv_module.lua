@@ -634,6 +634,19 @@ function SpawnAllItems()
 		table.RemoveByValue(resps_melee, spawn4)
 	end
 	
+	for i, v in ipairs( CCTV ) do
+		local cctv = ents.Create( "item_cctv" )
+
+		if IsValid( cctv ) then
+			cctv:Spawn()
+			cctv:SetPos( v.pos )
+
+			cctv:SetCam( i )
+		end
+
+		v.ent = cctv
+	end
+
 end
 
 function SpawnNTFS()
@@ -813,26 +826,44 @@ function GetAlivePlayers()
 	return plys
 end
 
+function BroadcastDetection( ply, tab )
+	local transmit = { ply }
+	local radio = ply:GetWeapon( "item_radio" )
+
+	if radio and radio.Enabled and radio.Channel > 4 then
+		local ch = radio.Channel
+
+		for k, v in pairs( player.GetAll() ) do
+			if v:GTeam() != TEAM_SCP and v:GTeam() != TEAM_SPEC and v != ply then
+				local r = v:GetWeapon( "item_radio" )
+
+				if r and r.Enabled and r.Channel == ch then
+					table.insert( transmit, v )
+				end
+			end
+		end
+	end
+
+	local info = {}
+
+	for k, v in pairs( tab ) do
+		table.insert( info, {
+			name = v:GetNClass(),
+			pos = v:GetPos() + v:OBBCenter()
+		} )
+	end
+
+	net.Start( "CameraDetect" )
+		net.WriteTable( info )
+	net.Send( transmit )
+end
+
 function GM:GetFallDamage( ply, speed )
 	return ( speed / 6 )
 end
 
 function PlayerCount()
 	return #player.GetAll()
-end
-
-function CheckPLAYER_SETUP()
-	local si = 1
-	for i=3, #PLAYER_SETUP do
-		local v = PLAYER_SETUP[si]
-		local num = v[1] + v[2] + v[3] + v[4]
-		if i != num then
-			print(tostring(si) .. " is not good: " .. tostring(num) .. "/" .. tostring(i))
-		else
-			print(tostring(si) .. " is good: " .. tostring(num) .. "/" .. tostring(i))
-		end
-		si = si + 1
-	end
 end
 
 function GM:OnEntityCreated( ent )

@@ -25,10 +25,6 @@ SCP_DYNAMIC_VARS = SCP_DYNAMIC_VARS or {}
 
 local lua_override = false
 
-function SCP_DevMode()
-	lua_override = true
-end
-
 function UpdateDynamicVars()
 	print( "Updating SCPs dynamic vars" )
 	if !file.Exists( "breach", "DATA" ) then

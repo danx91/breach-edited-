@@ -93,8 +93,48 @@ hook.Add( "Tick", "966check", function()
 	end
 end )
 
+SCPMarkers = {}
+
 local info1 = Material( "breach/info_mtf.png")
 hook.Add( "HUDPaint", "Breach_DrawHUD", function()
+	for i, v in ipairs( SCPMarkers ) do
+		local scr = v.data.pos:ToScreen()
+
+		if scr.visible then
+			surface.SetDrawColor( Color( 255, 100, 100, 200 ) )
+			//surface.DrawRect( scr.x - 5, scr.y - 5, 10, 10 )
+			surface.DrawPoly( {
+				{ x = scr.x, y = scr.y - 10 },
+				{ x = scr.x + 5, y = scr.y },
+				{ x = scr.x, y = scr.y + 10 },
+				{ x = scr.x - 5, y = scr.y },
+			} )
+
+			draw.Text( {
+				text = v.data.name,
+				font = "HUDFont",
+				color = Color( 255, 100, 100, 200 ),
+				pos = { scr.x, scr.y + 10 },
+				xalign = TEXT_ALIGN_CENTER,
+				yalign = TEXT_ALIGN_TOP,
+			} )
+
+			draw.Text( {
+				text = math.Round( v.data.pos:Distance( LocalPlayer():GetPos() ) * 0.019 ) .. "m",
+				font = "HUDFont",
+				color = Color( 255, 100, 100, 200 ),
+				pos = { scr.x, scr.y + 25 },
+				xalign = TEXT_ALIGN_CENTER,
+				yalign = TEXT_ALIGN_TOP,
+			} )
+		end
+
+		if v.time < CurTime() then
+			table.remove( SCPMarkers, i )
+		end
+	end
+
+	if disablehud then return end
 	//cam.Start3D()
 	//	for id, ply in pairs( player.GetAll() ) do
 	//		if ply:GetNClass() == ROLES.ROLE_SCP966 then
@@ -220,7 +260,7 @@ hook.Add( "HUDPaint", "Breach_DrawHUD", function()
 		
 		
 		
-		if getrl[1] != nil then
+		if getrl[1] then
 			draw.TextShadow( {
 				text = getrl[1],
 				pos = { ScrW() / 2, ScrH() / 15 },
@@ -230,7 +270,7 @@ hook.Add( "HUDPaint", "Breach_DrawHUD", function()
 				yalign = TEXT_ALIGN_CENTER,
 			}, 2, 255 )
 		end
-		if getrl[2] then
+		if type( getrl[2] ) == "table" then
 			for i,txt in ipairs(getrl[2]) do
 				draw.TextShadow( {
 					text = txt,

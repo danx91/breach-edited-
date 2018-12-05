@@ -87,20 +87,38 @@ cwlang = nil
 -- 	end
 -- end
 
-langtouse = CreateClientConVar( "br_language", "english", true, false ):GetString()
+langtouse = CreateClientConVar( "cvar_br_language", "english", true, false ):GetString()
 
 local sv_lang = GetConVar( "br_defaultlanguage" )
 if sv_lang then
 	local sv_str = sv_lang:GetString()
 	if ALLLANGUAGES[sv_str] and WEPLANG[sv_str] then
+		GetConVar( "cvar_br_language" ):SetString( sv_str )
 		langtouse = sv_str
 	end
 end
 
-cvars.AddChangeCallback( "br_language", function( convar_name, value_old, value_new )
+cvars.AddChangeCallback( "cvar_br_language", function( convar_name, value_old, value_new )
 	langtouse = value_new
 	LoadLang( langtouse )
 end )
+
+concommand.Add( "br_language", function( ply, cmd, args )
+	RunConsoleCommand( "cvar_br_language", args[1] )
+end, function( cmd, args )
+	args = string.Trim( args )
+	args = string.lower( args )
+
+	local tab = {}
+
+	for k, v in pairs( ALLLANGUAGES ) do
+		if string.find( string.lower( k ), args ) then
+			table.insert( tab, "br_language "..k )
+		end
+	end
+
+	return tab
+end, "Sets language", FCVAR_ARCHIVE )
 
 hudScale = CreateClientConVar( "br_hud_scale", 1, true, false ):GetFloat()
 
@@ -425,6 +443,52 @@ net.Receive( "PostStart", function( len )
 	StartTime()
 end)
 
+net.Receive( "TranslatedMessage", function( len )
+	local msg = net.ReadString()
+	//local center = net.ReadBool()
+
+	//print( msg )
+	local color = nil
+	local nmsg, cr, cg, cb = string.match( msg, "(.+)%#(%d+)%,(%d+)%,(%d+)$" )
+	if nmsg and cr and cg and cb then
+		msg = nmsg
+		color = Color( cr, cg, cb )
+	end
+
+	local name, func = string.match( msg, "^(.+)%$(.+)" )
+	
+	if name and func then
+		local args = {}
+
+		for v in string.gmatch( func, "%w+" ) do
+			table.insert( args, v )
+			//print( "splitted:", v )
+		end
+
+		local translated = clang.NRegistry[name] or string.format( clang.NFailed, name )
+		if color then
+			chat.AddText( color, string.format( translated, unpack( args ) ) )
+		else
+			chat.AddText( string.format( translated, unpack( args ) ) )
+		end
+	else
+		local translated = clang.NRegistry[msg] or string.format( clang.NFailed, msg )
+		if color then
+			chat.AddText( color, translated )
+		else
+			chat.AddText( translated )
+		end
+	end
+end )
+
+net.Receive( "CameraDetect", function( len )
+	local tab = net.ReadTable()
+
+	for i, v in ipairs( tab ) do
+		table.insert( SCPMarkers, { time = CurTime() + 7.5, data = v } )
+	end
+end )
+
 hook.Add( "OnPlayerChat", "CheckChatFunctions", function( ply, strText, bTeam, bDead )
 	strText = string.lower( strText )
 
@@ -480,6 +544,12 @@ function tick_flash()
 end
 hook.Add( "Tick", "htickflash", tick_flash )
 
+local dishudnf = false
+local wasdisabled = false
+function DisableHUDNextFrame()
+	dishudnf = true
+end
+
 function CLTick()
 	if postround == false and isnumber(drawendmsg) then
 		drawendmsg = nil
@@ -494,6 +564,17 @@ function CLTick()
 		blinkHUDTime = btime - CurTime()
 	end
 	if blinkHUDTime < 0 then blinkHUDTime = 0 end
+
+	if dishudnf then
+		if !disablehud then
+			wasdisabled = disablehud
+			disablehud = true
+		end
+
+		dishudnf = false
+	elseif disablehud and wasdisabled == false then
+		disablehud = false
+	end
 end
 hook.Add( "Tick", "client_tick_hook", CLTick )
 
@@ -747,12 +828,14 @@ function GM:CalcView( ply, origin, angles, fov )
 	local item = ply:GetActiveWeapon()
 	if IsValid( item ) then
 		if item.CalcView then
-			local vec, ang, ifov = item:CalcView( ply, origin, angles, fov )
+			local vec, ang, ifov, dw = item:CalcView( ply, origin, angles, fov )
 			if vec then data.origin = vec end
 			if ang then data.angles = ang end
 			if ifov then data.fov = ifov end
+			if dw != nil then data.drawviewer = dw end
 		end
 	end
+
 	if CamEnable then
 		--print( "enabled" )
 		if !timer.Exists( "CamViewChange" ) then
@@ -766,6 +849,7 @@ function GM:CalcView( ply, origin, angles, fov )
 		data.origin = ply:GetPos() - dir - dir:GetNormalized() * 30 + Vector( 0, 0, 80 )
 		data.angles = Angle( 10, dir:Angle().y, 0 )
 	end
+
 	return data
 end
 
@@ -785,7 +869,7 @@ function ClientsideSound( file, ent )
 		return sound
 	else
 		sound = PrecachedSounds[file]
-		sound:Stop()
+		--sound:Stop()
 		return sound
 	end
 end

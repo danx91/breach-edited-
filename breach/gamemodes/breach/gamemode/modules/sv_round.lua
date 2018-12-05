@@ -1,6 +1,6 @@
-activeRound = nil
-rounds = -1
-roundEnd = 0
+activeRound = activeRound
+rounds = rounds or -1
+roundEnd = roundEnd or 0
 
 MAP_LOADED = MAP_LOADED or false
 
@@ -398,7 +398,7 @@ function WinCheck()
 		roundEnd = 0
 	--	endround = true
 	--	why = "game ran out of time limit"
-		print( "Something went wrong!" )
+		print( "Something went wrong! Error code: 100" )
 		print( debug.traceback() )
 	end
 	/*if #GetActivePlayers() < 2 then 
@@ -411,7 +411,7 @@ function WinCheck()
 		print("Ending round because " .. why)
 		PrintMessage(HUD_PRINTCONSOLE, "Ending round because " .. why)
 		StopRound()
-		timer.Destroy("PostTime")
+		timer.Destroy("RoundTime")
 		preparing = false
 		postround = true
 		// send infos

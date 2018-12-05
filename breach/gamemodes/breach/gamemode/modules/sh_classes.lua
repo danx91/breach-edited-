@@ -103,7 +103,7 @@ ALLCLASSES = {
 			 level = 0,
 			 customcheck = nil,
 			 flashlight = false,
-			 max = 64
+			 max = 0
 			},
 			{name = ROLES.ROLE_CLASSD,
 			 team = TEAM_CLASSD,
@@ -122,7 +122,7 @@ ALLCLASSES = {
 			 level = 0,
 			 customcheck = nil,
 			 flashlight = false,
-			 max = 64
+			 max = 0
 			},
 			{name = ROLES.ROLE_VETERAN,
 			 team = TEAM_CLASSD,
@@ -182,7 +182,7 @@ ALLCLASSES = {
 			 showmodel = nil,
 			 flashlight = true,
 			 level = 0,
-			 max = 36
+			 max = 0
 			},
 			{name = ROLES.ROLE_MEDIC,
 			 team = TEAM_SCI,
@@ -200,7 +200,7 @@ ALLCLASSES = {
 			 showmodel = nil,
 			 flashlight = true,
 			 level = 1,
-			 max = 4
+			 max = 3
 			},
 			{name = ROLES.ROLE_NO3,
 			 team = TEAM_SCI,
@@ -243,9 +243,7 @@ ALLCLASSES = {
 			 pmcolor = nil,
 			 flashlight = true,
 			 level = 0,
-			 max = 24,
-			 sorting = 0,
-			 importancelevel = 1
+			 max = 0,
 			},
 			{name = ROLES.ROLE_MTFGUARD, 
 			 team = TEAM_GUARD,
@@ -264,9 +262,7 @@ ALLCLASSES = {
 			 pmcolor = nil,
 			 flashlight = true,
 			 level = 2,
-			 max = 12,
-			 sorting = 1,
-			 importancelevel = 1
+			 max = 10,
 			},
 			{name = ROLES.ROLE_CHAOSSPY, 
 			 team = TEAM_CHAOS,
@@ -286,8 +282,6 @@ ALLCLASSES = {
 			 flashlight = true,
 			 level = 3,
 			 max = 2,
-			 sorting = 2,
-			 importancelevel = 1
 			},
 			{name = ROLES.ROLE_MTFL, 
 			 team = TEAM_GUARD,
@@ -307,8 +301,6 @@ ALLCLASSES = {
 			 flashlight = true,
 			 level = 3,
 			 max = 2,
-			 sorting = 4,
-			 importancelevel = 1
 			},
 			{name = ROLES.ROLE_CSECURITY,
 			 team = TEAM_GUARD,
@@ -328,8 +320,6 @@ ALLCLASSES = {
 			 flashlight = true,
 			 level = 4,
 			 max = 1,
-			 sorting = 6,
-			 importancelevel = 2
 			},
 			{name = ROLES.ROLE_MTFMEDIC, 
 			 team = TEAM_GUARD,
@@ -349,8 +339,6 @@ ALLCLASSES = {
 			 flashlight = true,
 			 level = 5,
 			 max = 1,
-			 sorting = 3,
-			 importancelevel = 1
 			},
 			{name = ROLES.ROLE_MTFCOM, 
 			 team = TEAM_GUARD,
@@ -368,10 +356,8 @@ ALLCLASSES = {
 			 showmodel = "models/scp/captain.mdl",
 			 pmcolor = nil,
 			 flashlight = true,
-			 level = 5,
+			 level = 6,
 			 max = 1,
-			 sorting = 7,
-			 importancelevel = 3
 			},
 			{name = ROLES.ROLE_SD, 
 			 team = TEAM_GUARD,
@@ -391,13 +377,11 @@ ALLCLASSES = {
 			 flashlight = true,
 			 level = 6,
 			 max = 1,
-			 sorting = 8,
-			 importancelevel = 4
 			},
 			{name = ROLES.ROLE_HAZMAT, 
 			 team = TEAM_GUARD,
-			 weapons = {"br_holster", "br_id", "item_radio", "item_nvg", "item_cameraview", "weapon_stunstick", "cw_m14"},
-			 showweapons = {"MTF Keycard", "Radio", "NVG", "Camera View", "Stunstick", "M14 EBR"},
+			 weapons = {"br_holster", "br_id", "item_radio", "item_nvg", "weapon_stunstick", "cw_m14"},
+			 showweapons = {"MTF Keycard", "Radio", "NVG", "Stunstick", "M14 EBR"},
 			 keycard = "mtf",
 			 ammo = {},
 			 health = 125,
@@ -412,8 +396,6 @@ ALLCLASSES = {
 			 flashlight = true,
 			 level = 8,
 			 max = 1,
-			 sorting = 5,
-			 importancelevel = 1
 			},
 			{name = ROLES.ROLE_O5, 
 			 team = TEAM_GUARD,
@@ -433,8 +415,6 @@ ALLCLASSES = {
 			 flashlight = true,
 			 level = 10,
 			 max = 1,
-			 sorting = 9,
-			 importancelevel = 4
 			},
 		}
 	},

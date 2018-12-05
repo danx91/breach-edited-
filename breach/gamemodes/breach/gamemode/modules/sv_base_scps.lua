@@ -229,11 +229,11 @@ hook.Add( "RegisterSCP", "RegisterBaseSCPs", function()
 	RegisterSCP( "SCP689", "models/dwdarksouls/models/darkwraith.mdl", "weapon_scp_689", {
 		jump_power = 200,
 	}, {
-		base_health = 1500,
-		max_health = 1500,
-		base_speed = 75,
-		run_speed = 75,
-		max_speed = 75,
+		base_health = 1750,
+		max_health = 1750,
+		base_speed = 85,
+		run_speed = 85,
+		max_speed = 85,
 	} )
 
 	RegisterSCP( "SCP8602", "models/props/forest_monster/forest_monster2.mdl", "weapon_scp_8602", {
@@ -273,15 +273,15 @@ hook.Add( "RegisterSCP", "RegisterBaseSCPs", function()
 		no_spawn = true,
 		no_select = true,
 	}, {
-		base_health = 1000,
-		max_health = 1000,
+		base_health = 500,
+		max_health = 500,
 	}, function( ply, basestats )
 		if !ply.SetLastRole or !ply.SetLastTeam then
 			player_manager.RunClass( ply, "SetupDataTables" )
 		end
 
-		ply:SetHealth( basestats.base_health or 1000 )
-		ply:SetMaxHealth( basestats.max_health or 1000 )
+		ply:SetHealth( basestats.base_health or 500 )
+		ply:SetMaxHealth( basestats.max_health or 500 )
 
 		ply:SetLastRole( ply:GetNClass() )
 		ply:SetLastTeam( ply:GTeam() )

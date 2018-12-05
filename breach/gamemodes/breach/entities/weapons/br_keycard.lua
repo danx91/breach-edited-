@@ -370,7 +370,6 @@ function SWEP:SecondaryAttack()
 	if CLIENT then
 		self.DHUD = CurTime() + 0.01
 	end
-	return
 end
 
 function SWEP:PreDrawViewModel( vm, wep, ply )
@@ -420,33 +419,35 @@ function SWEP:DrawHUD()
 
 	local colors = { Color( 0, 255, 0 ), Color( 255, 0, 0 ) }
 	
-	local txw = draw.Text( {
-		text = self.AC_Doors[1],
-		pos = { ScrW() / 2, ScrH() / 3 },
-		font = "173font",
-		color = showcolor,
-		xalign = TEXT_ALIGN_CENTER,
-		yalign = TEXT_ALIGN_CENTER,
-	})
-
-	for i, v in ipairs( self.AC_Doors[2] ) do
-		local wid = draw.Text( {
-			text = v[1].." - ",
-			pos = { ScrW() / 2 - txw / 2, ScrH() / 3 + i * 25 },
+	if self.AC_Doors then
+		local txw = draw.Text( {
+			text = self.AC_Doors[1],
+			pos = { ScrW() / 2, ScrH() / 3 },
 			font = "173font",
-			color = Color( 255, 255, 255 ),
-			xalign = TEXT_ALIGN_LEFT,
+			color = showcolor,
+			xalign = TEXT_ALIGN_CENTER,
 			yalign = TEXT_ALIGN_CENTER,
 		})
 
-		local st = v[2]
-		draw.Text( {
-			text = self.Lang.STATUS[st],
-			pos = { ScrW() / 2 + wid - txw / 2, ScrH() / 3 + i * 25 },
-			font = "173font",
-			color = colors[st],
-			xalign = TEXT_ALIGN_LEFT,
-			yalign = TEXT_ALIGN_CENTER,
-		})
+		for i, v in ipairs( self.AC_Doors[2] ) do
+			local wid = draw.Text( {
+				text = v[1].." - ",
+				pos = { ScrW() / 2 - txw / 2, ScrH() / 3 + i * 25 },
+				font = "173font",
+				color = Color( 255, 255, 255 ),
+				xalign = TEXT_ALIGN_LEFT,
+				yalign = TEXT_ALIGN_CENTER,
+			})
+
+			local st = v[2]
+			draw.Text( {
+				text = self.Lang.STATUS[st],
+				pos = { ScrW() / 2 + wid - txw / 2, ScrH() / 3 + i * 25 },
+				font = "173font",
+				color = colors[st],
+				xalign = TEXT_ALIGN_LEFT,
+				yalign = TEXT_ALIGN_CENTER,
+			})
+		end
 	end
 end

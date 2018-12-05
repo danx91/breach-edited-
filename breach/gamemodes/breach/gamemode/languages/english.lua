@@ -19,6 +19,13 @@ english.lang_secret_nfound = "Secret has not been found"
 
 english.class_unknown = "Unknown"
 
+english.NRegistry = {
+	scpready = "You can be selected as SCP in next round",
+	scpwait = "You have to wait %s rounds to be able to play as SCP"
+}
+
+english.NFailed = "Filed to access NRegistry with key: %s"
+
 english.votefail = "You already voted or you are not allowed to vote!"
 english.votepunish = "Vote for punish or forgive %s"
 english.voterules = [[

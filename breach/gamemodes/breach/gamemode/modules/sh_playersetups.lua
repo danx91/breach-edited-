@@ -1,6 +1,3 @@
-ROLES.ROLE_INFECTD = "Class D Presonnel"
-ROLES.ROLE_INFECTMTF = "MTF"
-
 function SetupInfect( ply )
 	if !SERVER then return end
 	local roles = { }

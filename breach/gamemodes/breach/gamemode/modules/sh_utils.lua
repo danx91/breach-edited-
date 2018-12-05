@@ -1,4 +1,17 @@
 surface = surface or  {}
+math = math or {}
+
+function math.TimedSinWave( freq, min, max )
+	min = ( min + max ) / 2
+	local wave = math.SinWave( RealTime(), freq, min - max, min )
+	return wave
+end
+
+--based on wikipedia: f(x) = sin( angular frequency(in Hz) * x ) * amplitude + offset
+function math.SinWave( x, freq, amp, offset )
+	local wave = math.sin( 2 * math.pi * freq * x ) * amp + offset
+	return wave
+end
 
 function surface.DrawRing( x, y, radius, thick, angle, segments, fill, rotation )
 	angle = math.Clamp( angle or 360, 1, 360 )
