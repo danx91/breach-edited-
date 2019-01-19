@@ -502,50 +502,14 @@ end)
 
 // Blinking system
 
-local brightness = 0
-local f_fadein = 0.25
-local f_fadeout = 0.000075
-
-
-local f_end = 0
-local f_started = false
-function tick_flash()
-	if LocalPlayer().GTeam == nil then return end
-	/*
-	if LocalPlayer():GTeam() != TEAM_SPEC then
-		for k,v in pairs(ents.FindInSphere(OUTSIDESOUNDS, 300)) do
-			if v == LocalPlayer() then
-				StartOutisdeSounds()
-			end
-		end
-	end
-	*/
-	if shoulddrawinfo then
-		if CurTime() > drawinfodelete then
-			shoulddrawinfo = false
-			drawinfodelete = 0
-		end
-	end
-	if f_started then
-		if CurTime() > f_end then
-			brightness = brightness + f_fadeout
-			if brightness < 0 then
-				f_end = 0
-				brightness = 0
-				f_started = false
-				//print("blink end")
-			end
-		else
-			if brightness < 1 then
-				brightness = brightness - f_fadein
-			end
-		end
-	end
-end
-hook.Add( "Tick", "htickflash", tick_flash )
+blinkHUDTime = 0
+btime = 0
+blink_end = 0
+blink = false
 
 local dishudnf = false
 local wasdisabled = false
+
 function DisableHUDNextFrame()
 	dishudnf = true
 end
@@ -554,15 +518,19 @@ function CLTick()
 	if postround == false and isnumber(drawendmsg) then
 		drawendmsg = nil
 	end
+
 	if clang == nil then
 		clang = english
 	end
+
 	if cwlang == nil then
 		cwlang = english
 	end
+
 	if blinkHUDTime >= 0 then 
 		blinkHUDTime = btime - CurTime()
 	end
+
 	if blinkHUDTime < 0 then blinkHUDTime = 0 end
 
 	if dishudnf then
@@ -575,37 +543,30 @@ function CLTick()
 	elseif disablehud and wasdisabled == false then
 		disablehud = false
 	end
+
+	if shoulddrawinfo then
+		if CurTime() > drawinfodelete then
+			shoulddrawinfo = false
+			drawinfodelete = 0
+		end
+	end
+
+	if CurTime() > blink_end then
+		blink = false
+	end
 end
 hook.Add( "Tick", "client_tick_hook", CLTick )
 
+function Blink( time )
+	blink = true
+	blink_end = CurTime() + time
+	btime = CurTime() + GetConVar("br_time_blinkdelay"):GetFloat() + time
+end
+
 net.Receive("PlayerBlink", function(len)
 	local time = net.ReadFloat()
-	Blink(time)
+	Blink( time )
 end)
-
-net.Receive("SlowPlayerBlink", function(len)
-	local time = net.ReadFloat()
-	Blink(time)
-end)
-
-function SlowFadeBlink(time)
-	f_fadein = 0.0075
-	f_fadeout = 0.0075
-	f_started = true
-	f_end = CurTime() + time
-end
-
-blinkHUDTime = 0.0
-btime = 0.0
-
-function Blink(time)
-	btime = CurTime() + GetConVar("br_time_blinkdelay"):GetFloat() + time
-	f_fadein = 0.25
-	f_fadeout = 0.000075
-	f_started = true
-	f_end = CurTime() + time
-	//print("blink start")
-end
 
 net.Receive( "PlayerReady", function()
 	local tab = net.ReadTable()
@@ -629,9 +590,18 @@ net.Receive("Effect", function()
 	LocalPlayer().mblur = net.ReadBool()
 end )
 
+local mat_blink = CreateMaterial( "blink_material", "UnlitGeneric", {
+	["$basetexture"] = "models/debug/debugwhite",
+	["$color"] = "{ 0 0 0 }"
+} )
+
 local mat_color = Material( "pp/colour" ) -- used outside of the hook for performance
 hook.Add( "RenderScreenspaceEffects", "blinkeffects", function()
-	//if f_started == false then return end
+	if blink then
+		render.SetMaterial( mat_blink )
+		render.DrawScreenQuad()
+		return
+	end
 	
 	if LocalPlayer().mblur == nil then LocalPlayer().mblur = false end
 	if ( LocalPlayer().mblur == true ) then
@@ -685,7 +655,7 @@ hook.Add( "RenderScreenspaceEffects", "blinkeffects", function()
 	
 	mat_color:SetTexture( "$fbtexture", render.GetScreenEffectTexture() )
 	
-	mat_color:SetFloat( "$pp_colour_brightness", brightness + nvgbrightness )
+	mat_color:SetFloat( "$pp_colour_brightness", nvgbrightness )
 	mat_color:SetFloat( "$pp_colour_contrast", contrast)
 	mat_color:SetFloat( "$pp_colour_colour", colour )
 	mat_color:SetFloat( "$pp_colour_mulr", clr_r )

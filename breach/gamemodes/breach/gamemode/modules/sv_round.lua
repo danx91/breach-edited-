@@ -192,7 +192,7 @@ end
 canescortds = true
 canescortrs = true
 function CheckEscape()
-	for k,v in pairs(ents.FindInSphere(POS_GATEA, 250)) do
+	for k,v in pairs(ents.FindInSphere(POS_ESCAPE, 250)) do
 		if v:IsPlayer() == true then
 			if v:Alive() == false then return end
 			if v.isescaping == true then return end

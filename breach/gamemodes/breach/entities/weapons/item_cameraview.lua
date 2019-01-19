@@ -61,16 +61,25 @@ function SWEP:Initialize()
 	self:SetSkin( 1 )
 end
 
+function SWEP:SetupDataTables()
+	self:NetworkVar( "Bool", 0, "Enabled" )
+	self:NetworkVar( "Int", 0, "CAM" )
+
+	self:SetCAM( 1 )
+end
+
 function SWEP:CalcView( ply, pos, ang, fov )
 	if CCTV == nil then return end
-	if CCTV[self.CAM] == nil then return end
-	if !IsValid( self.CCTV[self.CAM] ) then return end
+
+	local CAM = self:GetCAM()
+	if CCTV[CAM] == nil then return end
+	if !IsValid( self.CCTV[CAM] ) then return end
 
 	local dw = false
 
-	if self.Enabled then
-		ang = CCTV[self.CAM].ang
-		pos = CCTV[self.CAM].pos - Vector( 0, 0, 10 )
+	if self:GetEnabled() then
+		ang = CCTV[CAM].ang
+		pos = CCTV[CAM].pos - Vector( 0, 0, 10 )
 		fov = 90
 		dw = true
 	end
@@ -89,34 +98,34 @@ function SWEP:Think()
 		end
 	end
 
-	if CLIENT then
-		if !self.snd then
-			sound.PlayFile( "sound/camera.ogg", "noplay", function( snd, err, e )
-				if !snd then
-					print( err, e )
-				else
-					self.snd = snd
-				end
-			end )
-		else
-			if self.Enabled and !self.snden then
-				self.snd:Play()
-				self.snd:EnableLooping( true )
-				self.snden = true
+	-- if CLIENT then
+	-- 	if !self.snd then
+	-- 		sound.PlayFile( "sound/camera.ogg", "noplay", function( snd, err, e )
+	-- 			if !snd then
+	-- 				print( err, e )
+	-- 			else
+	-- 				self.snd = snd
+	-- 			end
+	-- 		end )
+	-- 	else
+	-- 		if self.Enabled and !self.snden then
+	-- 			self.snd:Play()
+	-- 			self.snd:EnableLooping( true )
+	-- 			self.snden = true
 
-				timer.Create("CameraCheck", 1, 0, function()
-					if !IsValid( self.Owner ) then
-						self.snd:Pause()
-						self.Enabled = false
-					end
-				end )
-			elseif !self.Enabled and self.snden then
-				timer.Remove( "CameraCheck" )
-				self.snd:Pause()
-				self.snden = false
-			end
-		end
-	end
+	-- 			timer.Create("CameraCheck", 1, 0, function()
+	-- 				if !IsValid( self.Owner ) then
+	-- 					self.snd:Pause()
+	-- 					self.Enabled = false
+	-- 				end
+	-- 			end )
+	-- 		elseif !self.Enabled and self.snden then
+	-- 			timer.Remove( "CameraCheck" )
+	-- 			self.snd:Pause()
+	-- 			self.snden = false
+	-- 		end
+	-- 	end
+	-- end
 
 	if self.CurScan + 0.2 < CurTime() then
 		self.ScanEnd = 0
@@ -125,27 +134,29 @@ function SWEP:Think()
 end
 
 function SWEP:OnRemove()
-	timer.Remove( "CameraCheck" )
+	self:SetEnabled( false )
+	-- timer.Remove( "CameraCheck" )
 
-	if IsValid( self.snd ) then
-		self.snd:Stop()
-		self.snd = nil
-	end
+	-- if IsValid( self.snd ) then
+	-- 	self.snd:Stop()
+	-- 	self.snd = nil
+	-- end
 end
 
 function SWEP:Holster()
-	timer.Remove( "CameraCheck" )
-	self.Enabled = false
+	self:SetEnabled( false )
+	-- timer.Remove( "CameraCheck" )
+	-- self.Enabled = false
 
-	if IsValid( self.snd ) then
-		self.snd:Pause()
-	end
+	-- if IsValid( self.snd ) then
+	-- 	self.snd:Pause()
+	-- end
 
 	return true
 end
 
 function SWEP:OnDrop()
-	self.Enabled = false
+	self:SetEnabled( false )
 end
 
 SWEP.ScanCD = 0
@@ -153,7 +164,7 @@ SWEP.CurScan = 0
 SWEP.ScanEnd = 0
 
 function SWEP:Reload()
-	if !self.Enabled or !IsValid( self.CCTV[self.CAM] ) then return end
+	if !self:GetEnabled() or !IsValid( self.CCTV[self:GetCAM()] ) then return end
 	if self.ScanCD > CurTime() then return end
 	self.ScanCD = CurTime() + 0.1
 
@@ -176,15 +187,16 @@ function SWEP:Reload()
 end
 
 function SWEP:Scan()
-	if !IsValid( self.CCTV[self.CAM] ) then return end
+	local CAM = self:GetCAM()
+	if !IsValid( self.CCTV[CAM] ) then return end
 
 	local detected = {}
 
 	local scps = gteams.GetPlayers( TEAM_SCP )
-	print( #scps )
+	//print( #scps )
 	for k, v in pairs( scps ) do
 		local tr = util.TraceLine( {
-			start = CCTV[self.CAM].pos - Vector( 0, 0, 10 ),
+			start = CCTV[CAM].pos - Vector( 0, 0, 10 ),
 			endpos = v:GetPos() + v:OBBCenter(),
 			mask = MASK_SHOT_HULL,
 			filter = { v }
@@ -199,32 +211,37 @@ function SWEP:Scan()
 end
 
 function SWEP:PrimaryAttack()
-	if !self.Enabled then return end
+	if !SERVER then return end
+	if !self:GetEnabled() then return end
 	if self.NextChange > CurTime() then return end
 
-	self.CAM = self.CAM + 1
+	local CAM = self:GetCAM() + 1
 
-	if self.CAM > #CCTV then
-		self.CAM = 1
+	if CAM > #CCTV then
+		CAM = 1
 	end
+
+	self:SetCAM( CAM )
 
 	//chat.AddText( self.Lang.changed.." ".. CCTV[self.CAM].name )
 	self.NextChange = CurTime() + 0.1
 end
 
 function SWEP:SecondaryAttack()
-	//if SERVER then return end
+	if !SERVER then return end
 	if self.NextChange > CurTime() then return end
 
-	self.Enabled = !self.Enabled
+	self:SetEnabled( !self:GetEnabled() )
 	self.NextChange = CurTime() + 0.5
 end
 
 function SWEP:DrawHUD()
-	if self.Enabled then
+	if self:GetEnabled() then
 		DisableHUDNextFrame()
 
-		if !IsValid( self.CCTV[self.CAM] ) then
+		local CAM = self:GetCAM()
+
+		if !IsValid( self.CCTV[CAM] ) then
 			surface.SetDrawColor( 0, 0, 0 )
 			surface.DrawRect( 0, 0, ScrW(), ScrH() )
 
@@ -237,7 +254,7 @@ function SWEP:DrawHUD()
 			} )
 
 			draw.Text( {
-				text = "CAM "..self.CAM,
+				text = "CAM "..CAM,
 				font = "HUDFontBig",
 				pos = { ScrW() * 0.5, 50 },
 				xalign = TEXT_ALIGN_CENTER,
@@ -245,7 +262,7 @@ function SWEP:DrawHUD()
 			} )
 
 			draw.Text( {
-				text = CCTV[self.CAM].name,
+				text = CCTV[CAM].name,
 				font = "HUDFontBig",
 				pos = { ScrW() * 0.5, 100 },
 				xalign = TEXT_ALIGN_CENTER,
@@ -255,11 +272,11 @@ function SWEP:DrawHUD()
 			return
 		end
 
-		if blinkHUDTime < 5 then
+		if blinkHUDTime < GetConVar("br_time_blinkdelay"):GetFloat() then
 			surface.SetDrawColor( Color( 255, 255, 255, 255 ) )
 
 			draw.Text( {
-				text = "CAM "..self.CAM,
+				text = "CAM "..CAM,
 				font = "HUDFontBig",
 				pos = { ScrW() * 0.5, 50 },
 				xalign = TEXT_ALIGN_CENTER,
@@ -267,7 +284,7 @@ function SWEP:DrawHUD()
 			} )
 
 			draw.Text( {
-				text = CCTV[self.CAM].name,
+				text = CCTV[CAM].name,
 				font = "HUDFontBig",
 				pos = { ScrW() * 0.5, 100 },
 				xalign = TEXT_ALIGN_CENTER,

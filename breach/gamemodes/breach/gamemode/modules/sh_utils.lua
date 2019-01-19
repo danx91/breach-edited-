@@ -1,6 +1,11 @@
 surface = surface or  {}
 math = math or {}
 
+local vec = FindMetaTable( "Vector" )
+function vec:Copy()
+	return Vector( self.x, self.y, self.z )
+end
+
 function math.TimedSinWave( freq, min, max )
 	min = ( min + max ) / 2
 	local wave = math.SinWave( RealTime(), freq, min - max, min )

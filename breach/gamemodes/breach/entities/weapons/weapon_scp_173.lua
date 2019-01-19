@@ -35,33 +35,100 @@ end
 	end
 end*/
 
-function SWEP:IsLookingAt( ply )
+/*function SWEP:IsLookingAt( ply )
 	local yes = ply:GetAimVector():Dot( ( self.Owner:GetPos() - ply:GetPos() + Vector( 70 ) ):GetNormalized() )
 	return (yes > 0.39)
-end
+end*/
  
-SWEP.DrawRed = 0
+SWEP.Watching = 0
 function SWEP:Think()
 	if CLIENT then
-		self.DrawRed = CurTime() + 0.1
+		self.Watching = CurTime() + 0.1
 	end
+
 	if postround then return end
-	local watching = 0
+
+	local watching = false
+
+	local ply = self.Owner
+	local obb_bot, obb_top = ply:GetModelBounds()
+	local obb_mid = ( obb_bot + obb_top ) / 2
+
+	obb_bot.x = obb_mid.x
+	obb_bot.y = obb_mid.y
+	obb_bot.z = obb_bot.z + 10
+
+	obb_top.x = obb_mid.x
+	obb_top.y = obb_mid.y
+	obb_top.z = obb_bot.z - 10
+
+	local top, mid, bot = ply:LocalToWorld( obb_top ), ply:LocalToWorld( obb_mid ), ply:LocalToWorld( obb_bot )
+	local mask = MASK_BLOCKLOS_AND_NPCS
+
+	for k, v in pairs( player.GetAll() ) do
+		if IsValid( v ) and v:GTeam() != TEAM_SPEC and v:GTeam() != TEAM_SCP and v:Alive() and v.canblink and !v.scp173allow and !v.isblinking then
+			local eyepos = v:EyePos()
+			local eyevec = v:EyeAngles():Forward()
+
+			local mid_z = mid:Copy()
+			mid_z.z = mid_z.z + 17.5
+
+			local line = ( mid_z - eyepos ):GetNormalized()
+			local angle = math.acos( eyevec:Dot( line ) )
+
+			if angle <= 0.8 then
+				local trace_top = util.TraceLine( {
+					start = eyepos,
+					endpos = top,
+					filter = { ply, v },
+					mask = mask
+				} )
+
+				local trace_mid = util.TraceLine( {
+					start = eyepos,
+					endpos = mid,
+					filter = { ply, v },
+					mask = mask
+				} )
+
+				local trace_bot = util.TraceLine( {
+					start = eyepos,
+					endpos = bot,
+					filter = { ply, v },
+					mask = mask
+				} )
+
+				if !trace_top.Hit and !trace_mid.Hit and !trace_bot.Hit then
+					watching = true
+					break
+				end
+			end
+		end
+	end
+
+	if watching then
+		ply:Freeze( true )
+	else
+		ply:Freeze( false )
+	end
+	/*local watching = 0
 	for k,v in pairs(player.GetAll()) do
 		if IsValid(v) and v:GTeam() != TEAM_SPEC and v:Alive() and v != self.Owner and v.canblink then
 			local tr_eyes = util.TraceLine( {
-				start = v:EyePos() + v:EyeAngles():Forward() * 15,
+				start = v:EyePos() - v:EyeAngles():Forward() * 5,
 				//start = v:LocalToWorld( v:OBBCenter() ),
 				//start = v:GetPos() + (self.Owner:EyeAngles():Forward() * 5000),
-				endpos = self.Owner:EyePos(),
+				endpos = self.Owner:EyePos() - self.Owner:EyeAngles():Forward() * 5,
 				//filter = v
 			} )
-			local tr_center = util.TraceLine( {
+
+			/*local tr_center = util.TraceLine( {
 				start = v:LocalToWorld( v:OBBCenter() ),
 				endpos = self.Owner:LocalToWorld( self.Owner:OBBCenter() ),
 				filter = v
-			} )
-			if tr_eyes.Entity == self.Owner or tr_center.Entity == self.Owner then
+			} )*/
+
+			/*if tr_eyes.Entity == self.Owner then//tr_center.Entity == self.Owner then
 				//self.Owner:PrintMessage(HUD_PRINTTALK, tostring(tr_eyes.Entity) .. " : " .. tostring(tr_center.Entity) .. " : " .. tostring(tr_center.Entity))
 				if self:IsLookingAt( v ) and v.isblinking == false then
 					if v.scp173allow and self.Owner:GetPos():DistToSqr( v:GetPos() ) > 62500 then
@@ -79,20 +146,19 @@ function SWEP:Think()
 		self.Owner:Freeze(true)
 	else
 		self.Owner:Freeze(false)
-	end
-end
-
-function SWEP:Reload()
-	if preparing or postround then return end
-	if not IsFirstTimePredicted() then return end
+	end*/
 end
 
 function SWEP:PrimaryAttack()
 	if preparing or postround then return end
 	if not IsFirstTimePredicted() then return end
+
 	if self.NextAttackW > CurTime() then return end
 	self.NextAttackW = CurTime() + self.AttackDelay
+
 	if SERVER then
+		//if self.Owner:IsFlagSet( FL_FROZEN ) then return end
+
 		local ent = nil
 		local tr = util.TraceHull( {
 			start = self.Owner:GetShootPos(),
@@ -184,7 +250,7 @@ function SWEP:DrawHUD()
 	else
 		showtext = self.Lang.HUD.specReady
 	end
-	if self.DrawRed < CurTime() then
+	if self.Watching < CurTime() then
 		self.CColor = Color(255,0,0)
 		showtextlook = self.Lang.HUD.slook
 		lookcolor = Color(145, 17, 62)

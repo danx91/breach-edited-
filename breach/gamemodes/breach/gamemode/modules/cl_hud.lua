@@ -231,12 +231,12 @@ hook.Add( "HUDPaint", "Breach_DrawHUD", function()
 		return
 	end
 	*/
-	if OMEGA_DETONATION then
+	/*if OMEGA_DETONATION then
 		local dist = LocalPlayer():GetPos():DistToSqr( OMEGA_DETONATION )
 		if dist < 90000 and dist > 5625 then
 			DrawInfo( OMEGA_DETONATION + Vector( 0, 0, -5 ), "Remote OMEGA Warhead detonation", Color( 255, 255, 255 ) )
 		end
-	end
+	end*/
 
 	if shoulddrawinfo == true then
 		local getrl = LocalPlayer():GetNClass()

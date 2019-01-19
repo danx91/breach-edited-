@@ -4,8 +4,8 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
-VERSION = "0.3"
-DATE = "01/06/2018"
+VERSION = "0.31"
+DATE = "19/01/2019"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
@@ -241,10 +241,14 @@ end
 
 function GM:PlayerButtonDown( ply, button )
 	if CLIENT and IsFirstTimePredicted() then
-		local bind = _G[ "KEY_"..string.upper( input.LookupBinding( "+menu" ) ) ] or KEY_Q
-		if button == bind then
-			if CanShowEQ() then
-				ShowEQ()
+		//local bind = _G[ "KEY_"..string.upper( input.LookupBinding( "+menu" ) or "q" ) ] or 
+		local key = input.LookupBinding( "+menu" )
+
+		if key then
+			if input.GetKeyCode( key ) == button then
+				if CanShowEQ() then
+					ShowEQ()
+				end
 			end
 		end
 	end
@@ -252,9 +256,13 @@ end
 
 function GM:PlayerButtonUp( ply, button )
 	if CLIENT and IsFirstTimePredicted() then
-		local bind = _G[ "KEY_"..string.upper( input.LookupBinding( "+menu" ) ) ] or KEY_Q
-		if button == bind and IsEQVisible() then
-			HideEQ()
+		//local bind = _G[ "KEY_"..string.upper( input.LookupBinding( "+menu" ) ) ] or KEY_Q
+		local key = input.LookupBinding( "+menu" )
+
+		if key then
+			if input.GetKeyCode( key ) == button and IsEQVisible() then
+				HideEQ()
+			end
 		end
 	end
 end

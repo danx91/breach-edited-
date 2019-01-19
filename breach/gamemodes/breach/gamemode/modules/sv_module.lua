@@ -534,19 +534,23 @@ function SpawnAllItems()
 				max = n + dice[2],
 				ent = dice[1]
 			}
+			
 			table.insert( dices, d )
 			n = n + dice[2]
 		end
-		for i = 1, math.min( v.ammount, #spawns ) do
+
+		for i = 1, math.min( v.amount, #spawns ) do
 			local spawn = table.remove( spawns, math.random( 1, #spawns ) )
 			local dice = math.random( 0, n - 1 )
 			local ent
+
 			for _, d in pairs( dices ) do
 				if d.min <= dice and d.max > dice then
 					ent = d.ent
 					break
 				end
 			end
+
 			if ent then
 				local keycard = ents.Create( "br_keycard" )
 				if IsValid( keycard ) then
@@ -718,14 +722,6 @@ function ForceUse(ent, on, int) --this function is tottaly bullshit and shouldn'
 	for k,v in pairs(player.GetAll()) do
 		if v:Alive() then
 			ent:Use(v,v,on, int)
-		end
-	end
-end
-
-function OpenGateA()
-	for k, v in pairs( ents.FindByClass( "func_rot_button" ) ) do
-		if v:GetPos() == POS_GATEABUTTON then
-			ForceUse(v, 1, 1)
 		end
 	end
 end

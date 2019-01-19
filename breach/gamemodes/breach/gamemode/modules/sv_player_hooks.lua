@@ -449,7 +449,7 @@ function GM:PlayerDeathSound()
 end
 
 hook.Add( "PlayerSay", "SCPPenaltyShow", function( ply, msg, teamonly )
-	if msg == "!scp" then
+	if string.lower( msg ) == "!scp" then
 		if !ply.nscpcmdcheck or ply.nscpcmdcheck < CurTime() then
 			ply.nscpcmdcheck = CurTime() + 10
 
@@ -457,9 +457,9 @@ hook.Add( "PlayerSay", "SCPPenaltyShow", function( ply, msg, teamonly )
 			r = math.max( r, 0 )
 
 			if r == 0 then
-				v:PrintTranslatedMessage( "scpready#50,200,50" )
+				ply:PrintTranslatedMessage( "scpready#50,200,50" )
 			else
-				v:PrintTranslatedMessage( "scpwait".."$"..r.."#200,50,50" )
+				ply:PrintTranslatedMessage( "scpwait".."$"..r.."#200,50,50" )
 			end
 		end
 
@@ -470,8 +470,8 @@ end )
 hook.Add( "SetupPlayerVisibility", "CCTVPVS", function( ply, viewentity )
 	local wep = ply:GetActiveWeapon()
 	if IsValid( wep ) and wep:GetClass() == "item_cameraview" then
-		if wep.Enabled and IsValid( CCTV[wep.CAM].ent ) then
-			AddOriginToPVS( CCTV[wep.CAM].pos )
+		if wep:GetEnabled() and IsValid( CCTV[wep:GetCAM()].ent ) then
+			AddOriginToPVS( CCTV[wep:GetCAM()].pos )
 		end
 	end
 end )
