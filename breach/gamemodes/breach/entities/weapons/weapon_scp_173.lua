@@ -60,13 +60,17 @@ function SWEP:Think()
 
 	obb_top.x = obb_mid.x
 	obb_top.y = obb_mid.y
-	obb_top.z = obb_bot.z - 10
+	obb_top.z = obb_top.z - 10
 
 	local top, mid, bot = ply:LocalToWorld( obb_top ), ply:LocalToWorld( obb_mid ), ply:LocalToWorld( obb_bot )
 	local mask = MASK_BLOCKLOS_AND_NPCS
 
 	for k, v in pairs( player.GetAll() ) do
-		if IsValid( v ) and v:GTeam() != TEAM_SPEC and v:GTeam() != TEAM_SCP and v:Alive() and v.canblink and !v.scp173allow and !v.isblinking then
+		if IsValid( v ) and v:GTeam() != TEAM_SPEC and v:GTeam() != TEAM_SCP and v:Alive() and v.canblink and !v.isblinking then
+			if v.scp173allow and ply:GetPos():DistToSqr( v:GetPos() ) > 62500 then
+				continue
+			end
+
 			local eyepos = v:EyePos()
 			local eyevec = v:EyeAngles():Forward()
 
