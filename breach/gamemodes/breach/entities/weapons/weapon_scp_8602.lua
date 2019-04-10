@@ -64,10 +64,7 @@ function SWEP:NormalAttack( trace )
 		self.Owner:EmitSound( "npc/antlion/shell_impact3.wav" )
 		self.Owner:ViewPunch( table.Random( self.Angles ) )
 	else
-		if ent:GetClass() == "func_breakable" then
-			ent:TakeDamage( 100, self.Owner, self.Owner )
-			self.Owner:ViewPunch( table.Random( self.Angles ) )
-		end
+		self:SCPDamageEvent( ent, 10 )
 	end
 end
 

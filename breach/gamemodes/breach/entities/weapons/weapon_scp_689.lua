@@ -84,13 +84,13 @@ function SWEP:PrimaryAttack()
 		self.Owner:EmitSound(self.Sound)
 		at:EmitSound(self.Sound)
 		timer.Create("CheckTimer"..self.Owner:SteamID64(), 0.5, math.floor(self.Primary.Delay), function()
-			if !( IsValid( self.Owner ) and self.Owner:Alive() and IsValid( at ) and at:Alive() and at:GTeam() != TEAM_SPEC ) or at.Using714 then
+			if !( IsValid( self ) and IsValid( self.Owner ) and self.Owner:Alive() and IsValid( at ) and at:Alive() and at:GTeam() != TEAM_SPEC ) or at.Using714 then
 				timer.Destroy("CheckTimer")
 				timer.Destroy( "KillTimer"..self.Owner:SteamID64() )
 			end
 		end )
 		timer.Create("KillTimer"..self.Owner:SteamID64(), math.floor(self.Primary.Delay / 2), 1, function()
-			if IsValid(self.Owner) and self.Owner:Alive() and IsValid(at) and at:Alive() and at:GTeam() != TEAM_SPEC then
+			if IsValid( self ) and IsValid( self.Owner ) and self.Owner:Alive() and IsValid( at ) and at:Alive() and at:GTeam() != TEAM_SPEC then
 				local pos = at:GetPos()
 				at:Kill()
 				self.Owner:SetPos(pos)
@@ -117,9 +117,7 @@ function SWEP:SecondaryAttack()
 		} )
 		ent = tr.Entity
 		if !IsValid(ent) then return end
-		if ent:GetClass() == "func_breakable" then
-			ent:TakeDamage( 100, self.Owner, self.Owner )
-		end
+		self:SCPDamageEvent( ent, 10 )
 	end
 end
 

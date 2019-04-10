@@ -323,7 +323,7 @@ lang.KEYCARD = {
 		"KETER",
 		"Checkpoints",
 		"OMEGA Warhead",
-		"Portal Obs.",
+		"General Access",
 		"Gate A",
 		"Gate B",
 		"Armory",

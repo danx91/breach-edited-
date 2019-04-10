@@ -363,7 +363,6 @@ net.Receive( "OnEscaped", function( len )
 	esctime = CurTime() - timefromround
 	lastescapegot = CurTime() + 20
 	StartEndSound()
-	SlowFadeBlink(5)
 end)
 
 net.Receive( "ForcePlaySound", function( len )
@@ -839,7 +838,7 @@ function ClientsideSound( file, ent )
 		return sound
 	else
 		sound = PrecachedSounds[file]
-		--sound:Stop()
+		sound:Stop()
 		return sound
 	end
 end

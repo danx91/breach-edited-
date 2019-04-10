@@ -15,18 +15,26 @@ function SWEP:Initialize()
 	self:SetHoldType(self.HoldType)
 end
 
+SWEP.LastDMG = 0
 function SWEP:Think()
 	if SERVER then
-		self.Owner:Ignite(0.1,100)
-		for k,v in pairs(ents.FindInSphere( self.Owner:GetPos(), 125 )) do
-			if v:IsPlayer() then
-				if v:GTeam() != TEAM_SCP and v:GTeam() != TEAM_SPEC then
-					v:Ignite(2,250)
-					if self.Owner.nextexp == nil then self.Owner.nextexp = 0 end
-					if self.Owner.nextexp < CurTime() then
-						self.Owner:SetHealth( math.Clamp( self.Owner:Health() + 20, 0, self.Owner:GetMaxHealth() ) )
-						self.Owner:AddExp(5)
-						self.Owner.nextexp = CurTime() + 1
+		if self.Owner:WaterLevel() > 0 then
+			if self.LastDMG < CurTime() and self.Owner:Health() > 1 then
+				self.LastDMG = CurTime() + 0.1
+				self.Owner:SetHealth( math.max( 1, self.Owner:Health() - 20 ) )
+			end
+		else
+			self.Owner:Ignite(0.1,100)
+			for k,v in pairs(ents.FindInSphere( self.Owner:GetPos(), 125 )) do
+				if v:IsPlayer() then
+					if v:GTeam() != TEAM_SCP and v:GTeam() != TEAM_SPEC then
+						v:Ignite(2,250)
+						if self.Owner.nextexp == nil then self.Owner.nextexp = 0 end
+						if self.Owner.nextexp < CurTime() then
+							self.Owner:SetHealth( math.Clamp( self.Owner:Health() + 20, 0, self.Owner:GetMaxHealth() ) )
+							self.Owner:AddExp(5)
+							self.Owner.nextexp = CurTime() + 1
+						end
 					end
 				end
 			end
@@ -35,22 +43,12 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	//if ( !self:CanPrimaryAttack() ) then return end
 	if preparing or postround then return end
 	if not IsFirstTimePredicted() then return end
 	if SERVER then
 		local ent = self.Owner:GetEyeTrace().Entity
-		if(ent:GetPos():Distance(self.Owner:GetPos()) < 125) then
-			if ent:IsPlayer() then
-				if ent:GTeam() == TEAM_SCP then return end
-				if ent:GTeam() == TEAM_SPEC then return end
-				//ent:SetSCP0492()
-				//roundstats.zombies = roundstats.zombies + 1
-			else
-				if ent:GetClass() == "func_breakable" then
-					ent:TakeDamage( 1000, self.Owner, self.Owner )
-				end
-			end
+		if ent:GetPos():DistToSqr( self.Owner:GetPos() ) < 10000 then
+			self:SCPDamageEvent( ent, 10 )
 		end
 	end
 end

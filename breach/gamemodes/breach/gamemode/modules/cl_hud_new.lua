@@ -14,7 +14,7 @@ hook.Add( "HUDShouldDraw", "HideHUDElements", function( name )
 end )
 
 local MATS = {
-	menublack = Material("hud_scp/menublack.png"),
+	menublack = Material("hud_scp/menublack.png"),//Material("pp/blurscreen"),
 	blanc = Material("hud_scp/texture_blanc.png"),
 	meter = Material("hud_scp/meter.png"),
 	time = Material("hud_scp/timeicon.png"),
@@ -37,6 +37,11 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 	local ply = LocalPlayer()
 	if ply:Alive() == false then return end
 
+	//surface.SetMaterial( MATS.menublack )
+	//MATS.menublack:SetFloat("$blur", 5)
+	//MATS.menublack:Recompute()
+	//render.UpdateScreenEffectTexture()
+
 	if IsValid( ply ) then
 		--spect box
 		if ply:GTeam() == TEAM_SPEC then
@@ -58,6 +63,7 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 				end
 			end
 		end 
+
 		--Getting role and observer
 		local role = "none"
 		if not ply.GetNClass then
@@ -93,6 +99,9 @@ hook.Add( "HUDPaint", "Breach_HUD", function()
 		--main panel
 		surface.SetDrawColor(255, 255, 255, 255)
 		surface.SetMaterial(MATS.menublack)
+		//render.SetScissorRect( width * 0.016, height * 0.767 + offset, width * 0.016 + width * 0.198, height * 0.767 + offset + height * 0.071, true )
+		//surface.DrawTexturedRect( 0, 0, ScrW(), ScrH() )
+		//render.SetScissorRect( 0, 0, 0, 0, false )
 		surface.DrawTexturedRect( width * 0.016, height * 0.767 + offset, width * 0.198, height * 0.071)
 		
 		surface.SetDrawColor(255, 255, 255, 255)

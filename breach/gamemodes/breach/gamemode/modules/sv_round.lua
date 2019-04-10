@@ -151,6 +151,7 @@ function RoundRestart()
 	UseAll()
 	DestroyAll()
 	timer.Destroy("PostTime") -----?????
+	hook.Run( "BreachPreround" )
 	timer.Create("PreparingTime", GetPrepTime(), 1, function()
 		for k,v in pairs(player.GetAll()) do
 			v:Freeze(false)
@@ -163,6 +164,7 @@ function RoundRestart()
 		net.Broadcast()
 		print("round: started")
 		roundEnd = CurTime() + GetRoundTime() + 3
+		hook.Run( "BreachRound" )
 		timer.Create("RoundTime", GetRoundTime(), 1, function()
 			postround = false
 			postround = true	
@@ -181,6 +183,7 @@ function RoundRestart()
 			print( "data broadcast: good" )
 			roundEnd = 0
 			timer.Destroy("PunishEnd")
+			hook.Run( "BreachPostround" )
 			timer.Create("PostTime", GetPostTime(), 1, function()
 				print( "restarting round" )
 				RoundRestart()
@@ -347,7 +350,7 @@ function CheckEscortChaos(pl)
 	if pl:GTeam() != TEAM_CHAOS then return end
 	local foundpl = nil
 	local foundds = {}
-	for k,v in pairs(ents.FindInSphere(POS_ESCORT, 350)) do
+	for k,v in pairs(ents.FindInSphere(POS_ESCORT_CI or POS_ESCORT, 350)) do
 		if v:IsPlayer() then
 			if pl == v then
 				foundpl = v
@@ -473,6 +476,7 @@ function SetupCollide()
 					continue
 				end
 			end
+
 			local changed
 			for _, pos in pairs( DOOR_RESTRICT106 ) do
 				if v:GetPos():Distance( pos ) < 100 then
@@ -481,6 +485,7 @@ function SetupCollide()
 					break
 				end
 			end
+			
 			if !changed then
 				v.ignorecollide106 = true
 			end

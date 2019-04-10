@@ -86,11 +86,11 @@ function SWEP:SecondaryAttack()
 			maxs = Vector( 10, 10, 10 ),
 			mask = MASK_SHOT_HULL
 		} )
+
 		ent = tr.Entity
-		if !IsValid(ent) then return end
-		if ent:GetClass() == "func_breakable" then
-			ent:TakeDamage( 100, self.Owner, self.Owner )
-		end
+		if !IsValid( ent ) then return end
+
+		self:SCPDamageEvent( ent, 10 )
 	end
 end
 

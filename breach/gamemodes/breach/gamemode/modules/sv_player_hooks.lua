@@ -480,13 +480,19 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 	//if ply.lastwcheck == nil then ply.lastwcheck = 0 end
 	//if ply.lastwcheck > CurTime() then return end
 	//ply.lastwcheck = CurTime() + 0.5
-	if wep.IDK != nil then
-		for k,v in pairs(ply:GetWeapons()) do
-			if wep.Slot == v.Slot then return false end
-		end
-	end
+	-- if wep.IDK != nil then
+	-- 	for k,v in pairs(ply:GetWeapons()) do
+	-- 		if wep.Slot == v.Slot then return false end
+	-- 	end
+	-- end
+
 	if ply:GTeam() == TEAM_SCP and ply:GetNClass() != ROLES.ROLE_SCP9571 then
-		if not wep.ISSCP then
+		if wep.ISSCP then
+			return true
+		end
+
+		return false
+		/*if not wep.ISSCP then
 			return false
 		else
 			if wep.ISSCP == true then
@@ -494,8 +500,9 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 			else
 				return false
 			end
-		end
+		end*/
 	end
+
 	if ply:GTeam() != TEAM_SPEC then
 		if wep.teams then
 			local canuse = false
@@ -504,17 +511,23 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 					canuse = true
 				end
 			end
+
 			if canuse == false and ply:GetNClass() != ROLES.ROLE_SCP9571 then
 				return false
 			end
 		end
+
 		for k,v in pairs(ply:GetWeapons()) do
 			if v:GetClass() == wep:GetClass() then
 				return false
 			end
 		end
-		for k,v in pairs( ply:GetWeapons() ) do
-			if ( string.starts( v:GetClass(), "cw_" ) and string.starts( wep:GetClass(), "cw_" )) then return false end
+
+		if string.Left( wep:GetClass(), 3 ) == "cw_" then
+			for k, v in pairs( ply:GetWeapons() ) do
+				//if ( string.starts( v:GetClass(), "cw_" ) and string.starts( wep:GetClass(), "cw_" )) then return false end
+				if string.Left( v:GetClass(), 3 ) == "cw_" then return false end
+			end
 		end
 
 		if table.Count( ply:GetWeapons() ) >= 8 then
@@ -522,6 +535,7 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 		end
 
 		ply.gettingammo = wep.SavedAmmo
+
 		return true
 	else
 		if ply:GetNClass() == ROLES.ADMIN then
@@ -530,6 +544,7 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 			if wep:GetClass() == "gmod_tool" then return true end
 			if wep:GetClass() == "br_entity_remover" then return true end
 		end
+
 		return false
 	end
 end
@@ -570,18 +585,24 @@ function GM:PlayerUse( ply, ent )
 	if ply:GetNClass() == ROLES.ADMIN then return true end
 	if ply.lastuse == nil then ply.lastuse = 0 end
 	if ply.lastuse > CurTime() then return false end
+
 	for k, v in pairs( MAPBUTTONS ) do
 		if v.pos == ent:GetPos() or v.tolerance then
 			if v.tolerance and !IsInTolerance( v.pos, ent:GetPos(), v.tolerance ) then
 				continue
 			end
+
+			ply.lastuse = CurTime() + 1
+
 			if v.access then
 				if OMEGADoors then
 					return true
 				end
-				if v.levelOverride then
-					return v.levelOverride( ply )
+
+				if v.levelOverride and v.levelOverride( ply ) then
+					return true
 				end
+
 				local wep = ply:GetActiveWeapon()
 				if IsValid( wep ) and wep:GetClass() == "br_keycard" then
 					local keycard = wep
@@ -590,8 +611,9 @@ function GM:PlayerUse( ply, ent )
 							if !v.nosound then
 								ply:EmitSound( "KeycardUse1.ogg" )
 							end
-							ply.lastuse = CurTime() + 1
+
 							ply:PrintMessage( HUD_PRINTCENTER, v.custom_access or "Access granted to "..v.name )
+
 							if v.custom_access_granted then
 								return v.custom_access_granted( ply, ent ) or false
 							else
@@ -601,45 +623,46 @@ function GM:PlayerUse( ply, ent )
 							if !v.nosound then
 								ply:EmitSound( "KeycardUse2.ogg" )
 							end
-							ply.lastuse = CurTime() + 1
+
 							ply:PrintMessage( HUD_PRINTCENTER, v.custom_deny or "You cannot operate this door with this keycard" )
+
 							return false
 						end
 					end
 				else
-					ply.lastuse = CurTime() + 1
 					ply:PrintMessage( HUD_PRINTCENTER, v.custom_nocard or "A keycard is required to operate this door" )
 					return false
 				end
 			end
-			if v.canactivate != nil then
-				local canactivate = v.canactivate( ply, ent )
-				if canactivate then
-					if !v.nosound then
-						ply:EmitSound( "KeycardUse1.ogg" )
-					end
-					ply.lastuse = CurTime() + 1
-					if v.customaccessmsg then
-						ply:PrintMessage( HUD_PRINTCENTER, v.customaccessmsg )
-					else
-						ply:PrintMessage( HUD_PRINTCENTER, "Access granted to " .. v["name"] )
-					end
-					return true
-				else
-					if !v.nosound then
-						ply:EmitSound( "KeycardUse2.ogg" )
-					end
-					ply.lastuse = CurTime() + 1
-					if v.customdenymsg then
-						ply:PrintMessage( HUD_PRINTCENTER, v.customdenymsg )
-					else
-						ply:PrintMessage( HUD_PRINTCENTER, "Access denied" )
-					end
-					return false
+
+			if v.canactivate == nil or v.canactivate( ply, ent ) then
+				if !v.nosound then
+					ply:EmitSound( "KeycardUse1.ogg" )
 				end
+
+				if v.customaccessmsg then
+					ply:PrintMessage( HUD_PRINTCENTER, v.customaccessmsg )
+				else
+					ply:PrintMessage( HUD_PRINTCENTER, "Access granted to " .. v["name"] )
+				end
+
+				return true
+			else
+				if !v.nosound then
+					ply:EmitSound( "KeycardUse2.ogg" )
+				end
+
+				if v.customdenymsg then
+					ply:PrintMessage( HUD_PRINTCENTER, v.customdenymsg )
+				else
+					ply:PrintMessage( HUD_PRINTCENTER, "Access denied" )
+				end
+
+				return false
 			end
 		end
 	end
+
 	if ( GetConVar( "br_scp_cars" ):GetInt() == 0 ) then
 		if ( ply:GTeam() == TEAM_SCP and ply:GetNClass() != ROLES.ROLE_SCP9571 ) then
 			if ( ent:GetClass() == "prop_vehicle_jeep" ) then
@@ -647,11 +670,13 @@ function GM:PlayerUse( ply, ent )
 			end
 		end
 	end
+
 	if ply:GTeam() == TEAM_SCP and ply:GetNClass() != ROLES.ROLE_SCP9571 then
 		if ent:GetClass() == "cw_ammo_40mm" then
 			return false
 		end
 	end
+
 	return true
 end
 

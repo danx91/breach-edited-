@@ -75,9 +75,10 @@ function SWEP:PrimaryAttack()
 				self.Owner:AddExp(200, true)
 				roundstats.zombies = roundstats.zombies + 1
 			else
-				if ent:GetClass() == "func_breakable" then
-					ent:TakeDamage( 100, self.Owner, self.Owner )
-				end
+				self:SCPDamageEvent( ent, 10 )
+				--if ent:GetClass() == "func_breakable" then
+					--ent:TakeDamage( 100, self.Owner, self.Owner )
+				--end
 			end
 		end
 	end

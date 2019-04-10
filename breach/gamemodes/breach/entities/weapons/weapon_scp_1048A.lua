@@ -44,9 +44,7 @@ function SWEP:PrimaryAttack()
 							v:TakeDamage( 2, self.Owner, self.Owner )
 						end
 					else
-						if v:GetClass() == "func_breakable" then
-							v:TakeDamage( 10, self.Owner, self.Owner )
-						end
+						self:SCPDamageEvent( ent, 5 )
 					end
 				end
 			end

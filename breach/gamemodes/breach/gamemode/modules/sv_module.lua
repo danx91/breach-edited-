@@ -94,7 +94,7 @@ function GM:PlayerSpray( ply )
 		return true
 	end
 	if ply:GetPos():WithinAABox( POCKETD_MINS, POCKETD_MAXS ) then
-		ply:PrintMessage( HUD_PRINTCENTER, "You cant spray in the Pocket Dimension" )
+		ply:PrintMessage( HUD_PRINTCENTER, "You can't use spray in Pocket Dimension" )
 		return true
 	end
 end
@@ -197,7 +197,7 @@ timer.Create("EffectTimer", 0.3, 0, function()
 	end
 end )
 
-nextgateaopen = 0
+/*nextgateaopen = 0
 function RequestOpenGateA(ply)
 	if preparing or postround then return end
 	if !(ply:GTeam() == TEAM_GUARD or ply:GTeam() == TEAM_CHAOS) then return end
@@ -234,22 +234,13 @@ function RequestOpenGateA(ply)
 			end
 		end)
 	end
-end
+end*/
 
-local lastpocketd = 0
 function GetPocketPos()
-	if lastpocketd > #POS_POCKETD then
-		lastpocketd = 0
-	end
-	lastpocketd = lastpocketd + 1
-	return POS_POCKETD[lastpocketd]
-end
-
-function Kanade()
-	for k,v in pairs(player.GetAll()) do
-		if v:SteamID64() == "76561198156389563" then
-			return v
-		end
+	if istable( POS_POCKETD ) then
+		return table.Random( POS_POCKETD )
+	else
+		return POS_POCKETD
 	end
 end
 
@@ -352,92 +343,95 @@ function SpawnAllItems()
 		end
 	end
 	
-	for k,v in pairs(SPAWN_PISTOLS) do
-		local weps = {}		
-		weps[0] = ents.Create( "cw_deagle" )
-		weps[0].Damage_Orig = WEP_DMG.deagle
-		weps[0].DamageMult = 1
-		weps[1] = ents.Create( "cw_fiveseven" )
-		weps[1].Damage_Orig = WEP_DMG.fiveseven
-		weps[1].DamageMult = 1
-		local wep = table.Random( weps )
+	local pistols = {
+		{ "cw_deagle", WEP_DMG.deagle },
+		{ "cw_fiveseven", WEP_DMG.fiveseven },
+	}
+
+	for k,v in pairs( SPAWN_PISTOLS ) do
+		local selected = table.Random( pistols )
+		local wep = ents.Create( selected[1] )
 		if IsValid( wep ) then
+			wep.Damage_Orig = selected[2]
+			wep.DamageMult = 1
 			wep:recalculateDamage()
+
 			wep:Spawn()
 			wep:SetPos( v )
-			WakeEntity(wep)
+			WakeEntity( wep )
 		end
 	end
 	
-	for k,v in pairs(SPAWN_SMGS) do
-		local weps = {}		
-		weps[0] = ents.Create( "cw_g36c" )
-		weps[0].Damage_Orig = WEP_DMG.g36c
-		weps[0].DamageMult = 1
-		weps[1] = ents.Create( "cw_ump45" )
-		weps[1].Damage_Orig = WEP_DMG.ump45
-		weps[1].DamageMult = 1
-		weps[2] = ents.Create( "cw_mp5" )
-		weps[2].Damage_Orig = WEP_DMG.mp5
-		weps[2].DamageMult = 1
-		local wep = table.Random( weps )
+	local smgs = {
+		{ "cw_g36c", WEP_DMG.g36c },
+		{ "cw_ump45", WEP_DMG.ump45 },
+		{ "cw_mp5", WEP_DMG.mp5 },
+	}
+
+	for k,v in pairs( SPAWN_SMGS ) do
+		local selected = table.Random( smgs )
+		local wep = ents.Create( selected[1] )
 		if IsValid( wep ) then
+			wep.Damage_Orig = selected[2]
+			wep.DamageMult = 1
 			wep:recalculateDamage()
+
 			wep:Spawn()
 			wep:SetPos( v )
-			WakeEntity(wep)
+			WakeEntity( wep )
 		end
 	end
 	
-	for k,v in pairs(SPAWN_RIFLES) do
-		local weps = {}		
-		weps[0] = ents.Create( "cw_ak74" )
-		weps[0].Damage_Orig = WEP_DMG.ak74
-		weps[0].DamageMult = 1
-		weps[1] = ents.Create( "cw_ar15" )
-		weps[1].Damage_Orig = WEP_DMG.ar15
-		weps[1].DamageMult = 1
-		weps[2] = ents.Create( "cw_m14" )
-		weps[2].Damage_Orig = WEP_DMG.m14
-		weps[2].DamageMult = 1
-		weps[3] = ents.Create( "cw_scarh" )
-		weps[3].Damage_Orig = WEP_DMG.scarh
-		weps[3].DamageMult = 1
-		local wep = table.Random(weps)
+	local rifles = {
+		{ "cw_ak74", WEP_DMG.ak74 },
+		{ "cw_ar15", WEP_DMG.ar15 },
+		{ "cw_m14", WEP_DMG.m14 },
+		{ "cw_scarh", WEP_DMG.scarh },
+	}
+
+	for k,v in pairs( SPAWN_RIFLES ) do
+		local selected = table.Random( rifles )
+		local wep = ents.Create( selected[1] )
 		if IsValid( wep ) then
+			wep.Damage_Orig = selected[2]
+			wep.DamageMult = 1
 			wep:recalculateDamage()
+
 			wep:Spawn()
 			wep:SetPos( v )
-			WakeEntity(wep)
+			WakeEntity( wep )
 		end
 	end
 	
-	for k,v in pairs(SPAWN_SNIPER) do
-		local wep = ents.Create("cw_l115")
+	for k,v in pairs( SPAWN_SNIPER ) do
+		local wep = ents.Create( "cw_l115" )
 		if IsValid( wep ) then
 			wep.Damage_Orig = WEP_DMG.l115
 			wep.DamageMult = 1
 			wep:recalculateDamage()
+
 			wep:Spawn()
 			wep:SetPos( v )
-			WakeEntity(wep)
+			WakeEntity( wep )
 		end
 	end
 	
+	local pumps = {
+		{ "cw_shorty", WEP_DMG.shorty },
+		{ "cw_m3super90", WEP_DMG.super90 },
+	}
+
 	for k,v in pairs(SPAWN_PUMP) do
-		local weps = {}		
-		weps[0] = ents.Create( "cw_shorty" )
-		weps[0].Damage_Orig = WEP_DMG.shorty
-		weps[0].DamageMult = 1
-		weps[1] = ents.Create( "cw_m3super90" )
-		weps[1].Damage_Orig = WEP_DMG.super90
-		weps[1].DamageMult = 1
-		local wep = table.Random( weps )
+		local selected = table.Random( pumps )
+		local wep = ents.Create( selected[1] )
 		if IsValid( wep ) then
+			wep.Damage_Orig = selected[2]
+			wep.DamageMult = 1
 			wep:recalculateDamage()
+
 			wep:Spawn()
 			wep:SetPos( v )
-			WakeEntity(wep)
+			WakeEntity( wep )
 		end
 	end
 	
@@ -447,7 +441,7 @@ function SpawnAllItems()
 			wep.AmmoCapacity = 25
 			wep:Spawn()
 			wep:SetPos( v )
-			WakeEntity(wep)
+			WakeEntity( wep )
 		end
 	end
 	
@@ -471,9 +465,9 @@ function SpawnAllItems()
 				car:SetKeyValue("vehiclescript","scripts/vehicles/jeep_test.txt")
 			end
 			car:SetPos( v )
-			car:SetAngles( Angle(0, 90, 0) )
+			car:SetAngles( Angle( 0, 90, 0 ) )
 			car:Spawn()
-			WakeEntity(car)
+			WakeEntity( car )
 		end
 	
 		for k, v in ipairs(SPAWN_VEHICLE_NTF) do
@@ -489,9 +483,9 @@ function SpawnAllItems()
 				car:SetKeyValue("vehiclescript","scripts/vehicles/jeep_test.txt")
 			end
 			car:SetPos( v )
-			car:SetAngles( Angle(0, 270, 0) )
+			car:SetAngles( Angle( 0, 270, 0 ) )
 			car:Spawn()
-			WakeEntity(car)
+			WakeEntity( car )
 		end
 	end
 	
@@ -524,7 +518,7 @@ function SpawnAllItems()
 	
 	for k, v in pairs( KEYCARDS or {} ) do
 		local spawns = table.Copy( v.spawns )
-		local cards = table.Copy( v.ents )
+		//local cards = table.Copy( v.ents )
 		local dices = {}
 
 		local n = 0
@@ -562,80 +556,61 @@ function SpawnAllItems()
 		end
 	end
 	
-	local resps_items = table.Copy(SPAWN_MISCITEMS)
-	local resps_melee = table.Copy(SPAWN_MELEEWEPS)
-	local resps_medkits = table.Copy(SPAWN_MEDKITS)
+	local resps_items = table.Copy( SPAWN_MISCITEMS )
+	local resps_melee = table.Copy( SPAWN_MELEEWEPS )
+	local resps_medkits = table.Copy( SPAWN_MEDKITS )
 	
-	local item = ents.Create( "item_medkit" )
-	if IsValid( item ) then
-		local spawn4 = table.Random(resps_medkits)
-		item:Spawn()
-		item:SetPos( spawn4 )
-		table.RemoveByValue(resps_medkits, spawn4)
+	for i = 1, 2 do
+		local item = ents.Create( "item_medkit" )
+		if IsValid( item ) then
+			local spawn = table.remove( resps_medkits, math.random( 1, #resps_medkits ) )
+			item:Spawn()
+			item:SetPos( spawn )
+		end
 	end
-	
-	local item = ents.Create( "item_medkit" )
-	if IsValid( item ) then
-		local spawn4 = table.Random(resps_medkits)
-		item:Spawn()
-		item:SetPos( spawn4 )
-		table.RemoveByValue(resps_medkits, spawn4)
-	end
-	
+
 	local item = ents.Create( "item_radio" )
 	if IsValid( item ) then
-		local spawn4 = table.Random(resps_items)
+		local spawn = table.remove( resps_items, math.random( 1, #resps_items ) )
 		item:Spawn()
-		item:SetPos( spawn4 )
-		table.RemoveByValue(resps_items, spawn4)
+		item:SetPos( spawn )
 	end
 	
 	local item = ents.Create( "item_eyedrops" )
 	if IsValid( item ) then
-		local spawn4 = table.Random(resps_items)
+		local spawn = table.remove( resps_items, math.random( 1, #resps_items ) )
 		item:Spawn()
-		item:SetPos( spawn4 )
-		table.RemoveByValue(resps_items, spawn4)
+		item:SetPos( spawn )
 	end
 	
 	local item = ents.Create( "item_snav_300" )
 	if IsValid( item ) then
-		local spawn4 = table.Random(resps_items)
+		local spawn = table.remove( resps_items, math.random( 1, #resps_items ) )
 		item:Spawn()
-		item:SetPos( spawn4 )
-		table.RemoveByValue(resps_items, spawn4)
+		item:SetPos( spawn )
 	end
 	
 	local item = ents.Create( "item_snav_ultimate" )
 	if IsValid( item ) then
-		local spawn4 = table.Random(resps_items)
+		local spawn = table.remove( resps_items, math.random( 1, #resps_items ) )
 		item:Spawn()
-		item:SetPos( spawn4 )
-		table.RemoveByValue(resps_items, spawn4)
+		item:SetPos( spawn )
 	end
 	
 	local item = ents.Create( "item_nvg" )
 	if IsValid( item ) then
-		local spawn4 = table.Random(resps_items)
+		local spawn = table.remove( resps_items, math.random( 1, #resps_items ) )
 		item:Spawn()
-		item:SetPos( spawn4 )
-		table.RemoveByValue(resps_items, spawn4)
+		item:SetPos( spawn )
 	end
 	
-	local item = ents.Create( "weapon_crowbar" )
-	if IsValid( item ) then
-		local spawn4 = table.Random(resps_melee)
-		item:Spawn()
-		item:SetPos( spawn4 )
-		table.RemoveByValue(resps_melee, spawn4)
-	end
-	
-	local item = ents.Create( "weapon_crowbar" )
-	if IsValid( item ) then
-		local spawn4 = table.Random(resps_melee)
-		item:Spawn()
-		item:SetPos( spawn4 )
-		table.RemoveByValue(resps_melee, spawn4)
+	for i = 1, 2 do
+		local item = ents.Create( "weapon_crowbar" )
+		if IsValid( item ) then
+			local spawn = table.remove( resps_melee, math.random( 1, #resps_melee ) )
+			item:Spawn()
+			item:SetPos( spawn )
+		end
 	end
 	
 	for i, v in ipairs( CCTV ) do
@@ -658,6 +633,7 @@ function SpawnNTFS()
 
 	local usechaos = math.random( 1, 100 ) <= GetConVar("br_ci_percentage"):GetInt()
 	local roles = {}
+	local spawnpos = usechaos and SPAWN_OUTSIDE_CI or SPAWN_OUTSIDE
 
 	for k, v in pairs( ALLCLASSES.support.roles ) do
 		if usechaos then
@@ -711,27 +687,12 @@ function SpawnNTFS()
 	end
 end
 
-/*(function printMessage( num )
-	if num > 0 then
-		PrintMessage(HUD_PRINTTALK, "MTF Units NTF has entered the facility.")
-		BroadcastLua('surface.PlaySound("EneteredFacility.ogg")')
-	end
-end*/
-
-function ForceUse(ent, on, int) --this function is tottaly bullshit and shouldn't exist at all
-	for k,v in pairs(player.GetAll()) do
-		if v:Alive() then
-			ent:Use(v,v,on, int)
-		end
-	end
-end
-
 SCP914InUse = false
 function Use914( ent )
 	if SCP914InUse then return false end
 	SCP914InUse = true
 
-	if ent:GetPos() != SCP_914_BUTTON then
+	if SCP_914_BUTTON and ent:GetPos() != SCP_914_BUTTON then
 		for k, v in pairs( ents.FindByClass( "func_door" ) ) do
 			if v:GetPos() == SCP_914_DOORS[1] or v:GetPos() == SCP_914_DOORS[2] then
 				v:Fire( "Close" )
@@ -790,21 +751,22 @@ function OpenSCPDoors()
 	for k, v in pairs( ents.FindByClass( "func_door" ) ) do
 		for k0, v0 in pairs( POS_DOOR ) do
 			if ( v:GetPos() == v0 ) then
-				ForceUse(v, 1, 1)
+				v:Fire( "unlock" )
+				v:Fire( "open" )
 			end
 		end
 	end
 	for k, v in pairs( ents.FindByClass( "func_button" ) ) do
 		for k0, v0 in pairs( POS_BUTTON ) do
 			if ( v:GetPos() == v0 ) then
-				ForceUse(v, 1, 1)
+				v:Fire( "use" )
 			end
 		end
 	end
 	for k, v in pairs( ents.FindByClass( "func_rot_button" ) ) do
 		for k0, v0 in pairs( POS_ROT_BUTTON ) do
 			if ( v:GetPos() == v0 ) then
-				ForceUse(v, 1, 1)
+				v:Fire( "use" )
 			end
 		end
 	end
@@ -1202,6 +1164,15 @@ function WarheadDisabled( siren )
 		if IsInTolerance( OMEGA_GATE_A_DOORS[1], v:GetPos(), 100 ) or IsInTolerance( OMEGA_GATE_A_DOORS[2], v:GetPos(), 100 ) then
 			v:Fire( "Unlock" )
 			v:Fire( "Close" )
+		end
+	end
+end
+
+function GM:BreachSCPDamage( ply, ent, dmg )
+	if IsValid( ply ) and IsValid( ent ) then
+		if ent:GetClass() == "func_breakable" then
+			ent:TakeDamage( dmg, ply, ply )
+			return true
 		end
 	end
 end

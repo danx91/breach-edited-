@@ -47,13 +47,11 @@ function SWEP:PrimaryAttack()
 		if IsValid( ent ) then
 			if ent:IsPlayer() then
 				if ent:GTeam() != TEAM_SPEC and ent:GTeam() != TEAM_SCP then
-					print( ent.scp1471stacks )
+					//print( ent.scp1471stacks )
 					ent:TakeDamage( ent.scp1471stacks or 1, self.Owner, self.Owner )
 				end
 			else
-				if ent:GetClass() == "func_breakable" then
-					ent:TakeDamage( 10, self.Owner, self.Owner )
-				end
+				self:SCPDamageEvent( ent, 5 )
 			end	
 		end
 	end

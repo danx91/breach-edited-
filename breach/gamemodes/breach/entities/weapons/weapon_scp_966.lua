@@ -89,10 +89,7 @@ function SWEP:PrimaryAttack()
 				--	self.Owner:EmitSound("Damage4.ogg")
 			--end
 			--else
-				if ent:GetClass() == "func_breakable" and !ent:IsPlayer() then
-					ent:TakeDamage( 100, self.Owner, self.Owner )
-					self.Owner:EmitSound("Damage4.ogg")
-				end
+				self:SCPDamageEvent( ent, 10 )
 			--end
 		end
 	end

@@ -83,9 +83,10 @@ function SWEP:PrimaryAttack()
 			if ent:GTeam() == TEAM_SCP then return end
 			ent:TakeDamage( math.random( 10, 20 ), self.Owner, self.Owner )
 		else
-			if ent:GetClass() == "func_breakable" then
-				ent:TakeDamage( 100, self.Owner, self.Owner )
-			end
+			self:SCPDamageEvent( ent, 10 )
+			//if ent:GetClass() == "func_breakable" then
+				//ent:TakeDamage( 100, self.Owner, self.Owner )
+			//end
 		end
 	end
 end

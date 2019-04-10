@@ -89,6 +89,19 @@ ROLES.ROLE_CHAOSCOM = "CI Commander"
 // Other
 ROLES.ROLE_SPEC = "Spectator"
 
+--Keycard access help
+ACCESS_SAFE = bit.lshift( 1, 0 )
+ACCESS_EUCLID = bit.lshift( 1, 1 )
+ACCESS_KETER = bit.lshift( 1, 2 )
+ACCESS_CHECKPOINT = bit.lshift( 1, 3 )
+ACCESS_OMEGA = bit.lshift( 1, 4 )
+ACCESS_GENERAL = bit.lshift( 1, 5 )
+ACCESS_GATEA = bit.lshift( 1, 6 )
+ACCESS_GATEB = bit.lshift( 1, 7 )
+ACCESS_ARMORY = bit.lshift( 1, 8 )
+ACCESS_FEMUR = bit.lshift( 1, 9 )
+ACCESS_EC = bit.lshift( 1, 10 )
+
 --include( "sh_playersetups.lua" )
 
 if !ConVarExists("br_roundrestart") then CreateConVar( "br_roundrestart", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Restart the round" ) end

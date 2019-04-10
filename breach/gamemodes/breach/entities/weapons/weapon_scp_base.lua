@@ -89,6 +89,12 @@ function SWEP:Think()
 	self:PlayerFreeze()
 end
 
+function SWEP:SCPDamageEvent( ent, dmg )
+	if SERVER then
+		hook.Run( "BreachSCPDamage", self.Owner, ent, dmg )
+	end
+end
+
 function SWEP:PrimaryAttack()
 end
 

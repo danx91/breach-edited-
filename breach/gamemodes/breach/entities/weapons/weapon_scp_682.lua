@@ -78,10 +78,7 @@ function SWEP:PrimaryAttack()
 				self:EmitSound( self.Roar )
 			end
 		else
-			if ent:GetClass() == "func_breakable" then
-				ent:TakeDamage( 100, self.Owner, self.Owner )
-				self.NextAttackW = CurTime() + self.AttackDelay
-			end
+			self:SCPDamageEvent( ent, 10 )
 		end
 	end
 end

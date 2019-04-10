@@ -350,7 +350,6 @@ hook.Add( "RegisterSCP", "RegisterBaseSCPs", function()
 end )
 
 function SetupSCP0761( ply )
-	print( "setup" )
 	if !IsValid( SCP0761 ) then
 		cspawn076 = table.Random( SPAWN_SCP076 )
 		SCP0761 = ents.Create( "item_scp_0761" )

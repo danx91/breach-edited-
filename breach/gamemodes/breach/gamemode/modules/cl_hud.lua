@@ -524,7 +524,7 @@ net.Receive( "ShowText", function( len )
 			result = clang.forgive
 		end
 		local vp, vf = data.punishvotes, data.forgivevotes
-		print( vp, vf )
+		//print( vp, vf )
 		LocalPlayer():PrintMessage( HUD_PRINTTALK, string.format( clang.voteresult, data.punished, result ) )
 		LocalPlayer():PrintMessage( HUD_PRINTTALK, string.format( clang.votes, vp + vf, vp, vf ) )
 	elseif com == "text_punish_cancel" then

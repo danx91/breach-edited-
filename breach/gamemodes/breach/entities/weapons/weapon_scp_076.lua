@@ -70,11 +70,7 @@ function SWEP:PrimaryAttack()
 					ent:TakeDamageInfo( damage )
 				end
 			end
-		elseif ent:GetClass() == "func_breakable" then
-			if SERVER then
-				ent:TakeDamageInfo( damage )
-			end
-		else
+		elseif !self:SCPDamageEvent( ent, 10 ) then
 			local look = self.Owner:GetEyeTrace()
 			self:EmitSound( "weapons/rpg/shotdown.wav" )
 			util.Decal("ManhackCut", look.HitPos + look.HitNormal, look.HitPos - look.HitNormal )

@@ -41,9 +41,7 @@ function SWEP:PrimaryAttack()
 				ent:SetHealth(hp)
 			end
 		else
-			if ent:GetClass() == "func_breakable" then
-				ent:TakeDamage(100, self.Owner, self.Owner)
-			end
+			self:SCPDamageEvent( ent, 10 )
 		end
 	end
 end

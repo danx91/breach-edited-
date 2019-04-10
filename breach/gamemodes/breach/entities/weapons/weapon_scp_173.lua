@@ -182,9 +182,7 @@ function SWEP:PrimaryAttack()
 				roundstats.snapped = roundstats.snapped + 1
 				ent:EmitSound( "snap.wav", 500, 100 )
 			else
-				if ent:GetClass() == "func_breakable" then
-					ent:TakeDamage( 100, self.Owner, self.Owner )
-				end
+				self:SCPDamageEvent( ent, 10 )
 			end
 		end
 	end

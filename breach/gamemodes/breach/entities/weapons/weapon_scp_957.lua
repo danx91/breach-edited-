@@ -137,9 +137,7 @@ function SWEP:SecondaryAttack()
 
 	if trace.Hit then
 		local ent = trace.Entity
-		if IsValid( ent ) and ent:GetClass() == "func_breakable" then
-			ent:TakeDamage( 100, self.Owner, self.Owner )
-		end
+		self:SCPDamageEvent( ent, 10 )
 	end
 end
 

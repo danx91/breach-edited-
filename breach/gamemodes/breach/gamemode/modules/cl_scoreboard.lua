@@ -7,7 +7,9 @@ end
 surface.CreateFont("sb_names", {font = "Trebuchet18", size = 14, weight = 700})
 
 helpers = {
-
+	"76561198340681626",
+	"76561198179611206",
+	"76561198356377528",
 }
 
 originators = {
@@ -16,7 +18,6 @@ originators = {
 	"76561198358493307",
 	"76561198108330803",
 	"76561198337913733",
-	"76561198356377528",
 }
 ranks = {
 	author = {

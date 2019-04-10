@@ -47,10 +47,9 @@ function SWEP:PrimaryAttack()
 			if ent:GTeam() == TEAM_SCP then return end
 			self.Owner:EmitSound( self.Primary.Sound )
 			ent:TakeDamage( math.random( 20, 50 ), self.Owner, self.Owner )
+			self.Owner:SetHealth( math.Clamp( self.Owner:Health() + math.random( 30, 50 ), 0, self.Owner:GetMaxHealth() ) )
 		else
-			if ent:GetClass() == "func_breakable" then
-				ent:TakeDamage( 100, self.Owner, self.Owner )
-			end
+			self:SCPDamageEvent( ent, 10 )
 		end	
 	end
 end

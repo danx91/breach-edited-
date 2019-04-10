@@ -221,7 +221,7 @@ function SWEP:SetKeycardType( t )
 			self:SetNWInt( "SKIN", 2 )
 		end
 		self:SetSkin( 2 )
-		acc = "00000101111"
+		acc = "00000100111"
 	elseif t == "res" then
 		if CLIENT then
 			self.PrintName = self.Lang.NAMES[4]
@@ -275,7 +275,7 @@ function SWEP:SetKeycardType( t )
 			self:SetNWInt( "SKIN", 8 )
 		end
 		self:SetSkin( 8 )
-		acc = "10111011011"
+		acc = "10111111011"
 	else
 		if CLIENT then
 			self.PrintName = self.Lang.NAMES[1]

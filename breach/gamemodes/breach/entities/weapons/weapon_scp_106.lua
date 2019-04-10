@@ -119,17 +119,15 @@ function SWEP:PrimaryAttack()
 				ang.yaw = math.random( -180, 180 )
 				if pos then
 					roundstats.teleported = roundstats.teleported + 1
-					local health = math.Clamp( self.Owner:Health() + 100, self.Owner:Health(), self.Owner:GetMaxHealth() )
-					self.Owner:SetHealth( health )
-					ent:TakeDamage( math.random( 30, 50 ), self.Owner, self.Owner )
+					//local health = math.Clamp( self.Owner:Health() + 100, self.Owner:Health(), self.Owner:GetMaxHealth() )
+					//self.Owner:SetHealth( health )
+					ent:TakeDamage( math.random( 25, 50 ), self.Owner, self.Owner )
 					ent:SetPos(pos)
 					ent:SetAngles( ang )
 					self.Owner:AddExp(75, true)
 				end
 			else
-				if ent:GetClass() == "func_breakable" then
-					ent:TakeDamage( 100, self.Owner, self.Owner )
-				end
+				self:SCPDamageEvent( ent, 10 )
 			end
 		end
 	end
