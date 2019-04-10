@@ -171,7 +171,7 @@ SPAWN_420 = {
 
 OUTSIDE_966 = Vector( -710.00, 4138.00, -7157.00 )
 
-MTF_DEBUG = Vector( -266.00, -171.00, -6133.00 )
+MTF_DEBUG = Vector( 2223.00, 380.00, -6005.00 )
 
 SPAWN_CLASSD = {
 	Vector( -3817.00, 252.00, -8061.00 ),
