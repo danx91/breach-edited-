@@ -118,8 +118,9 @@ function mply:ApplyArmor(name)
 		wspeed = self:GetWalkSpeed(),
 		rspeed = self:GetRunSpeed(),
 		jpower = self:GetJumpPower(),
-		 model = self:GetModel()
+		model = self:GetModel()
 	}
+
 	local stats = 0.9
 	if name == "armor_ntf" then
 		self:SetModel("models/player/pmc_4/pmc__07.mdl")
@@ -155,6 +156,7 @@ function mply:ApplyArmor(name)
 		self:SetModel("models/scp/soldier_1.mdl")
 		stats = 0.91
 	end
+	
 	self:SetWalkSpeed(self.BaseStats.wspeed * stats)
 	self:SetRunSpeed(self.BaseStats.rspeed * stats)
 	self:SetJumpPower(self.BaseStats.jpower * stats)
@@ -314,22 +316,6 @@ function mply:SetInfectMTF()
 	self.BaseStats = nil
 	self.UsingArmor = nil
 	self:ApplyArmor("armor_mtfcom")
-	if ( self:GetWeapons() != nil ) then
-		for k, v in pairs( self:GetWeapons() ) do
-			if ( v:GetClass() == "cw_deagle" ) then v.Damage_Orig = WEP_DMG.deagle v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_fiveseven" ) then v.Damage_Orig = WEP_DMG.fiveseven v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_ak74 " ) then v.Damage_Orig = WEP_DMG.ak74 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_ar15" ) then v.Damage_Orig = WEP_DMG.ar15 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_g36c" ) then v.Damage_Orig = WEP_DMG.g36c v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_ump45" ) then v.Damage_Orig = WEP_DMG.ump45 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_mp5" ) then v.Damage_Orig = WEP_DMG.mp5 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_m14" ) then v.Damage_Orig = WEP_DMG.m14 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_scarh" ) then v.Damage_Orig = WEP_DMG.scarh v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_l115" ) then v.Damage_Orig = WEP_DMG.l115 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_shorty" ) then v.Damage_Orig = WEP_DMG.shorty v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_m3super90" ) then v.Damage_Orig = WEP_DMG.super90 v.DamageMult = 1 v:recalculateDamage() end	
-		end
-	end
 end
 
 function mply:SetupNormal()
@@ -374,6 +360,7 @@ function mply:SetupAdmin()
 	self:ConCommand( "noclip" )
 	self:Give( "br_holster" )
 	self:Give( "br_entity_remover" )
+	self:Give( "br_tool_teleporter" )
 	self:Give( "weapon_physgun" )
 end
 
@@ -391,22 +378,6 @@ function mply:ApplyRoleStats( role )
 			card:SetKeycardType( role.keycard )
 		end
 		self:SelectWeapon( "br_keycard" )
-	end
-	if ( self:GetWeapons() != nil ) then
-		for k, v in pairs( self:GetWeapons() ) do
-			if ( v:GetClass() == "cw_deagle" ) then v.Damage_Orig = WEP_DMG.deagle v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_fiveseven" ) then v.Damage_Orig = WEP_DMG.fiveseven v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_ak74 " ) then v.Damage_Orig = WEP_DMG.ak74 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_ar15" ) then v.Damage_Orig = WEP_DMG.ar15 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_g36c" ) then v.Damage_Orig = WEP_DMG.g36c v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_ump45" ) then v.Damage_Orig = WEP_DMG.ump45 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_mp5" ) then v.Damage_Orig = WEP_DMG.mp5 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_m14" ) then v.Damage_Orig = WEP_DMG.m14 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_scarh" ) then v.Damage_Orig = WEP_DMG.scarh v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_l115" ) then v.Damage_Orig = WEP_DMG.l115 v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_shorty" ) then v.Damage_Orig = WEP_DMG.shorty v.DamageMult = 1 v:recalculateDamage() end
-			if ( v:GetClass() == "cw_m3super90" ) then v.Damage_Orig = WEP_DMG.super90 v.DamageMult = 1 v:recalculateDamage() end	
-		end
 	end
 
 	for k, v in pairs( role.ammo ) do

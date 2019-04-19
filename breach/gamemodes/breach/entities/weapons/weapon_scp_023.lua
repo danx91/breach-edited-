@@ -70,11 +70,11 @@ function SWEP:PrimaryAttack()
 	if !SERVER then return end
 	local trace = util.TraceHull( {
 		start = self.Owner:GetShootPos(),
-		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 40,
+		endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 45,
 		filter = self.Owner,
 		mask = MASK_SHOT,
-		maxs = Vector( 5, 5, 5 ),
-		mins = Vector( -5, -5, -5 ),
+		maxs = Vector( 6, 6, 6 ),
+		mins = Vector( -6, -6, -6 ),
 	} )
 	local ent = trace.Entity
 	if IsValid( ent ) then

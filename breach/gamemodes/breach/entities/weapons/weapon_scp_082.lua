@@ -93,7 +93,7 @@ function SWEP:HackNSlash()
 					end
 					target:SendLua("LocalPlayer().Stamina = 10")
 				else
-					self:SCPDamageEvent( ent, 10 )
+					self:SCPDamageEvent( target, 10 )
 				end
 			elseif slashtrace.Hit then
 				self:EmitSound( self.KnifeShink )

@@ -102,9 +102,15 @@ end
 function GetActivePlayers()
 	local tab = {}
 	for k,v in pairs(player.GetAll()) do
-		if v.ActivePlayer == nil then v.ActivePlayer = true v:SetNActive( true ) end
-		if v.ActivePlayer == true then
-			table.ForceInsert(tab, v)
+		if IsValid( v ) then
+			if v.ActivePlayer == nil then
+				v.ActivePlayer = true
+				v:SetNActive( true )
+			end
+
+			if v.ActivePlayer == true then
+				table.ForceInsert(tab, v)
+			end
 		end
 	end
 	return tab
@@ -344,18 +350,14 @@ function SpawnAllItems()
 	end
 	
 	local pistols = {
-		{ "cw_deagle", WEP_DMG.deagle },
-		{ "cw_fiveseven", WEP_DMG.fiveseven },
+		"cw_deagle",
+		"cw_fiveseven",
 	}
 
 	for k,v in pairs( SPAWN_PISTOLS ) do
 		local selected = table.Random( pistols )
-		local wep = ents.Create( selected[1] )
+		local wep = ents.Create( selected )
 		if IsValid( wep ) then
-			wep.Damage_Orig = selected[2]
-			wep.DamageMult = 1
-			wep:recalculateDamage()
-
 			wep:Spawn()
 			wep:SetPos( v )
 			WakeEntity( wep )
@@ -363,19 +365,15 @@ function SpawnAllItems()
 	end
 	
 	local smgs = {
-		{ "cw_g36c", WEP_DMG.g36c },
-		{ "cw_ump45", WEP_DMG.ump45 },
-		{ "cw_mp5", WEP_DMG.mp5 },
+		"cw_g36c",
+		"cw_ump45",
+		"cw_mp5",
 	}
 
 	for k,v in pairs( SPAWN_SMGS ) do
 		local selected = table.Random( smgs )
-		local wep = ents.Create( selected[1] )
+		local wep = ents.Create( selected )
 		if IsValid( wep ) then
-			wep.Damage_Orig = selected[2]
-			wep.DamageMult = 1
-			wep:recalculateDamage()
-
 			wep:Spawn()
 			wep:SetPos( v )
 			WakeEntity( wep )
@@ -383,20 +381,16 @@ function SpawnAllItems()
 	end
 	
 	local rifles = {
-		{ "cw_ak74", WEP_DMG.ak74 },
-		{ "cw_ar15", WEP_DMG.ar15 },
-		{ "cw_m14", WEP_DMG.m14 },
-		{ "cw_scarh", WEP_DMG.scarh },
+		"cw_ak74",
+		"cw_ar15",
+		"cw_m14",
+		"cw_scarh",
 	}
 
 	for k,v in pairs( SPAWN_RIFLES ) do
 		local selected = table.Random( rifles )
-		local wep = ents.Create( selected[1] )
+		local wep = ents.Create( selected )
 		if IsValid( wep ) then
-			wep.Damage_Orig = selected[2]
-			wep.DamageMult = 1
-			wep:recalculateDamage()
-
 			wep:Spawn()
 			wep:SetPos( v )
 			WakeEntity( wep )
@@ -406,10 +400,6 @@ function SpawnAllItems()
 	for k,v in pairs( SPAWN_SNIPER ) do
 		local wep = ents.Create( "cw_l115" )
 		if IsValid( wep ) then
-			wep.Damage_Orig = WEP_DMG.l115
-			wep.DamageMult = 1
-			wep:recalculateDamage()
-
 			wep:Spawn()
 			wep:SetPos( v )
 			WakeEntity( wep )
@@ -417,18 +407,14 @@ function SpawnAllItems()
 	end
 	
 	local pumps = {
-		{ "cw_shorty", WEP_DMG.shorty },
-		{ "cw_m3super90", WEP_DMG.super90 },
+		"cw_shorty",
+		"cw_m3super90",
 	}
 
 	for k,v in pairs(SPAWN_PUMP) do
 		local selected = table.Random( pumps )
-		local wep = ents.Create( selected[1] )
+		local wep = ents.Create( selected )
 		if IsValid( wep ) then
-			wep.Damage_Orig = selected[2]
-			wep.DamageMult = 1
-			wep:recalculateDamage()
-
 			wep:Spawn()
 			wep:SetPos( v )
 			WakeEntity( wep )
@@ -621,9 +607,9 @@ function SpawnAllItems()
 			cctv:SetPos( v.pos )
 
 			cctv:SetCam( i )
-		end
 
-		v.ent = cctv
+			v.ent = cctv
+		end
 	end
 
 end
@@ -633,6 +619,8 @@ function SpawnNTFS()
 
 	local usechaos = math.random( 1, 100 ) <= GetConVar("br_ci_percentage"):GetInt()
 	local roles = {}
+	local plys = {}
+	local inuse = {}
 	local spawnpos = usechaos and SPAWN_OUTSIDE_CI or SPAWN_OUTSIDE
 
 	for k, v in pairs( ALLCLASSES.support.roles ) do
@@ -648,15 +636,17 @@ function SpawnNTFS()
 	end
 
 	for k, v in pairs( roles ) do
-		v.plys = {}
+		plys[v.name] = {}
+		inuse[v.name] = 0
 		for _, ply in pairs( player.GetAll() ) do
 			if ply:GTeam() == TEAM_SPEC and ply.ActivePlayer then
 				if ply:GetLevel() >= v.level and ( v.customcheck and c.customcheck( ply ) or true ) then
-					table.insert( v.plys, ply )
+					table.insert( plys[v.name], ply )
 				end
 			end
 		end
-		if #v.plys < 1 then
+
+		if #plys[v.name] < 1 then
 			roles[k] = nil
 		end
 	end
@@ -667,15 +657,18 @@ function SpawnNTFS()
 
 	for i = 1, 5 do
 		local role = table.Random( roles )
-		local ply = table.remove( role.plys, math.random( 1, #role.plys ) )
+		local ply = table.remove( plys[role.name], math.random( 1, #plys[role.name] ) )
 
 		ply:SetupNormal()
 		ply:ApplyRoleStats( role )
-		ply:SetPos( SPAWN_OUTSIDE[i] )
+		ply:SetPos( spawnpos[i] )
 
-		if #role.plys < 1 then
+		inuse[role.name] = inuse[role.name] + 1
+
+		if #plys[role.name] < 1 or inuse[role.name] >= role.max then
 			table.RemoveByValue( roles, role )
 		end
+
 		if #roles < 1 then
 			break
 		end

@@ -21,7 +21,7 @@ function SWEP:Deploy()
 		self.Owner:SetRunSpeed( self.basespeed )
 	end
 
-	self.Owner:SetModelScale( 0.75 )
+	//self.Owner:SetModelScale( 0.75 )
 end
 
 function SWEP:Initialize()
@@ -38,9 +38,9 @@ function SWEP:Initialize()
 end
 
 function SWEP:OnRemove()
-	if IsValid( self.Owner ) then
-		self.Owner:SetModelScale( 1 )
-	end
+	//if IsValid( self.Owner ) then
+		//self.Owner:SetModelScale( 1 )
+	//end
 	/*if CLIENT and IsValid( self.SantasHat ) then
 		self.SantasHat:Remove()
 	end*/

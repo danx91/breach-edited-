@@ -19,9 +19,10 @@ SCP_VALID_ENTRIES = {
 	no_swep = true,
 	no_strip = true,
 	no_select = true,
+	no_draw = true,
 }
 
-SCP_DYNAMIC_VARS = SCP_DYNAMIC_VARS or {}
+SCP_DYNAMIC_VARS = {}
 
 local lua_override = false
 
@@ -40,6 +41,7 @@ function UpdateDynamicVars()
 		util.LoadINI( "breach/scp.txt", SCP_DYNAMIC_VARS )
 	end
 end
+
 UpdateDynamicVars()
 
 function SaveDynamicVars()
@@ -241,7 +243,7 @@ function ObjectSCP:SetupPlayer( ply, ... )
 
 	ply:Flashlight( false )
 	ply:AllowFlashlight( false )
-	ply:SetNoDraw( false )
+	ply:SetNoDraw( self.basestats.no_draw == true )
 	ply:SetNoTarget( true )
 
 	ply.BaseStats = nil

@@ -55,4 +55,3 @@ function ENT:Draw()
 		cam.End2D()
 	end
 end
-

@@ -171,6 +171,8 @@ lang.SCP_957 = {
 		nattack = "Następny atak za",
 		nsummon = "Zamiana SCP-957-1 za",
 		asummon = "SCP-957-1 żyje",
+		buffd = "SCP-957-1 jest za daleko!",
+		buffe = "Wzmocnienie aktywne",
 	},
 }
 

@@ -32,7 +32,7 @@ local function PlayerLevelSorter(a, b)
 	if a:GetLevel() > b:GetLevel() then return true end
 end
 
-function SetupPlayers( tab )
+function SetupPlayers( tab, multibreach )
 	local players = GetActivePlayers()
 
 	//Send info about penalties
@@ -60,12 +60,15 @@ function SetupPlayers( tab )
 	local pp = GetConVar("br_premium_penalty"):GetInt() + 1
 
 	//Select SCPs
+	local SCP = table.Copy( SCPS )
+	local rSCP = SCP[math.random( #SCP )]
+
 	for i = 1, tab[1] do
 		if #scpply == 0 then
 			scpply = players
 		end
 
-		local scp = GetSCP( table.Random( SCPS ) )
+		local scp = multibreach and GetSCP( rSCP ) or GetSCP( table.remove( SCP, math.random( #SCP ) ) )
 		local ply = #scpply > 0 and table.remove( scpply, math.random( #scpply ) ) or table.Random( players )
 
 		ply:SetPData( "scp_penalty", ply.Premium and pp or p )
@@ -204,10 +207,63 @@ function SetupPlayers( tab )
 		ply:ApplyRoleStats( selected )
 		ply:SetPos( spawn )
 
-		print( "Assigning "..ply:Nick().." to role: "..selected.name.." [RESEARCHERS]" )
+		print( "Assigning "..ply:Nick().." to role: "..selected.name.." [CLASS D]" )
 	end
 
 	//Send info to everyone
+	net.Start("RolesSelected")
+	net.Broadcast()
+end
+
+function SetupInfect( ply )
+	if !SERVER then return end
+
+	local roles = {}
+
+	roles[1] = math.ceil( ply * 0.15 )
+	ply = ply - roles[1]
+	roles[2] = math.Round( ply * 0.333 )
+	ply = ply - roles[2]
+	roles[3] = ply
+
+	local players = GetActivePlayers()
+	local spawns = table.Copy( SPAWN_GUARD )
+	local ply, spawn = nil, nil
+
+	for i = 1, roles[1] do
+		ply = table.remove( players, math.random( 1, #players ) )
+		spawn = table.remove( spawns, math.random( 1, #spawns ) )
+
+		ply:SetSCP0082( 750, 250, true )
+		ply:SetPos( spawn )
+	end
+
+	spawns = table.Copy( SPAWN_CLASSD )
+
+	for i = 1, roles[2] do
+		if #spawns < 1 then
+			spawns = table.Copy( SPAWN_CLASSD )
+		end
+
+		ply = table.remove( players, math.random( 1, #players ) )
+		spawn = table.remove( spawns, math.random( 1, #spawns ) )
+
+		ply:SetInfectMTF()
+		ply:SetPos( spawn )
+	end
+
+	for i = 1, roles[3] do
+		if #spawns < 1 then
+			spawns = table.Copy( SPAWN_CLASSD )
+		end
+
+		ply = table.remove( players, math.random( 1, #players ) )
+		spawn = table.remove( spawns, math.random( 1, #spawns ) )
+
+		ply:SetInfectD()
+		ply:SetPos( spawn )
+	end
+
 	net.Start("RolesSelected")
 	net.Broadcast()
 end

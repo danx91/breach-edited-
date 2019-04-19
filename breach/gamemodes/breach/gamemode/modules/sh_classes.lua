@@ -439,7 +439,7 @@ ALLCLASSES = {
 			 pmcolor = nil,
 			 flashlight = true,
 			 level = 3,
-			 max = 3
+			 max = 5
 			},
 			{name = ROLES.ROLE_CHAOS, 
 			 team = TEAM_CHAOS,
@@ -458,7 +458,7 @@ ALLCLASSES = {
 			 pmcolor = nil,
 			 flashlight = true,
 			 level = 4,
-			 max = 3
+			 max = 5
 			}
 		}
 	}

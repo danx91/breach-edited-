@@ -44,7 +44,7 @@ function SWEP:PrimaryAttack()
 							v:TakeDamage( 2, self.Owner, self.Owner )
 						end
 					else
-						self:SCPDamageEvent( ent, 5 )
+						self:SCPDamageEvent( v, 5 )
 					end
 				end
 			end

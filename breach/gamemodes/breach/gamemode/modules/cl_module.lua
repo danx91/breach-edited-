@@ -285,7 +285,7 @@ concommand.Add( "br_livecolors", function( ply, cmd, args )
 	end
 end )
 
-/*concommand.Add( "br_weapon_info", function( ply, cmd, args )
+concommand.Add( "br_weapon_info", function( ply, cmd, args )
 	local wep = ply:GetActiveWeapon()
 	if IsValid( wep ) then
 		print( "Weapon name: "..wep:GetClass() )
@@ -293,7 +293,7 @@ end )
 		if wep.DamageMult then print( "Weapon damage multiplier: "..wep.DamageMult ) end
 		if wep.DamageMult then print( "Weapon final damage: "..wep.Damage ) end
 	end
-end )*/
+end )
 gamestarted = false
 cltime = 0
 drawinfodelete = 0

@@ -4,8 +4,8 @@ GM.Author 	= "Kanade, edited by danx91"
 GM.Email 	= ""
 GM.Website 	= ""
 
-VERSION = "0.31"
-DATE = "19/01/2019"
+VERSION = "0.32"
+DATE = "19/04/2019"
 
 function GM:Initialize()
 	self.BaseClass.Initialize( self )
@@ -112,7 +112,7 @@ if !ConVarExists("br_time_ntfenter") then CreateConVar( "br_time_ntfenter", "360
 if !ConVarExists("br_time_blink") then CreateConVar( "br_time_blink", "0.25", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Blink timer" ) end
 if !ConVarExists("br_time_blinkdelay") then CreateConVar( "br_time_blinkdelay", "5", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Delay between blinks" ) end
 if !ConVarExists("br_spawnzombies") then CreateConVar( "br_spawnzombies", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Do you want zombies?" ) end
-if !ConVarExists("br_scoreboardranks") then CreateConVar( "br_scoreboardranks", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
+if !ConVarExists("br_scoreboardranks") then CreateConVar( "br_scoreboardranks", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "" ) end
 if !ConVarExists("br_defaultlanguage") then CreateConVar( "br_defaultlanguage", "english", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
 if !ConVarExists("br_expscale") then CreateConVar( "br_expscale", "1", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "" ) end
 if !ConVarExists("br_scp_cars") then CreateConVar( "br_scp_cars", "0", {FCVAR_SERVER_CAN_EXECUTE, FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Allow SCPs to drive cars?" ) end
@@ -287,15 +287,13 @@ function GM:EntityTakeDamage( target, dmginfo )
 			target:PrintMessage( HUD_PRINTTALK, "Using SCP 500" )
 		end
 	end
+
 	local at = dmginfo:GetAttacker()
 	if at:IsVehicle() or ( at:IsPlayer() and at:InVehicle() ) then
 		dmginfo:SetDamage( 0 )
 	end
-	if at:IsNPC() then
-		if at:GetClass() == "npc_fastzombie" then
-			dmginfo:ScaleDamage( 4 )
-		end
-	elseif target:IsPlayer() then
+
+	if target:IsPlayer() then
 		if target:Alive() then
 			local dmgtype = dmginfo:GetDamageType()
 			if dmgtype == 268435464 or dmgtype == 8 then
@@ -303,17 +301,20 @@ function GM:EntityTakeDamage( target, dmginfo )
 					dmginfo:SetDamage( 0 )
 					return true
 				elseif target.UsingArmor == "armor_fireproof" then
-					dmginfo:ScaleDamage(0.75)
+					dmginfo:ScaleDamage( 0.25 )
 				end
 			end
+
 			if (dmgtype == DMG_SHOCK or dmgtype == DMG_ENERGYBEAM) and target.UsingArmor == "armor_electroproof" then
-				dmginfo:ScaleDamage(0.2)
+				dmginfo:ScaleDamage( 0.1 )
 			end
+
 			if dmgtype == DMG_VEHICLE then
 				dmginfo:SetDamage( 0 )
 			end
 		end
 	end
+
 	if at:IsPlayer() and target:IsPlayer() and at:GetNClass() == ROLES.ROLE_SCP9571 and target:GTeam() == TEAM_SCP then
 		return true
 	end
@@ -364,7 +365,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 					if dmginfo:IsDamageType( DMG_BULLET ) then
 						if ply.UsingArmor != nil then
 							if ply.UsingArmor != "armor_fireproof" and ply.UsingArmor != "armor_electroproof" then
-								armormul = 0.75
+								armormul = 0.5
 							end
 						end
 					end
@@ -377,7 +378,7 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 							end
 						elseif at:GTeam() == TEAM_CHAOS then
 							if ply:GTeam() == TEAM_CHAOS or ply:GTeam() == TEAM_CLASSD then
-								rdm = trueGTeam
+								rdm = true
 							end
 						elseif at:GTeam() == TEAM_SCP then
 							if ply:GTeam() == TEAM_SCP then
@@ -409,28 +410,19 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 	end
 	*/
 	
-	if (hitgroup == HITGROUP_HEAD) then
+	if hitgroup == HITGROUP_HEAD then
 		mul = 1.5
-	end
-	if (hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM) then
-		mul = 0.9
-	end
-	if (hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG) then
-		mul = 0.9
-	end
-	if (hitgroup == HITGROUP_GEAR) then
-		mul = 0
-	end
-	if (hutgroup == HITGROUP_STOMACH) then
+	elseif hitgroup == HITGROUP_CHEST then
 		mul = 1
+	elseif hitgroup == HITGROUP_STOMACH then
+		mul = 1
+	elseif hitgroup == HITGROUP_LEFTARM or hitgroup == HITGROUP_RIGHTARM then
+		mul = 0.9
+	elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+		mul = 0.8
 	end
-	if SERVER then
-		/*if at:IsPlayer() then -- GET THE FUCK OUT
-			if at.GetNKarma then -- GET THE FUCK OUT
-				mul = mul * (at:GetNKarma() / StartingKarma()) -- GET THE FUCK OUT
-			end -- GET THE FUCK OUT
-		end*/ -- GET THE FUCK OUT
 
+	if SERVER then
 		mul = mul * armormul
 		dmginfo:ScaleDamage(mul)
 		if ply:GTeam() == TEAM_SCP and OUTSIDE_BUFF( ply:GetPos() ) then
@@ -440,7 +432,10 @@ function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
 		dmginfo:ScaleDamage( scale )
 
 		if ply:GetNClass() == ROLES.ROLE_SCP957 then
-			dmginfo:ScaleDamage( 0.1 )
+			local wep = ply:GetActiveWeapon()
+			if wep and wep:BuffEnabled() then
+				dmginfo:ScaleDamage( 0.1 )
+			end
 		end
 
 		if at:IsPlayer() then

@@ -430,6 +430,7 @@ function WinCheck()
 		GiveExp()
 		endround = false
 		--print( debug.traceback() )  
+		hook.Run( "BreachPostround" )
 		timer.Create("PostTime", GetPostTime(), 1, function()
 			RoundRestart()
 		end)

@@ -471,7 +471,7 @@ hook.Add( "SetupPlayerVisibility", "CCTVPVS", function( ply, viewentity )
 	local wep = ply:GetActiveWeapon()
 	if IsValid( wep ) and wep:GetClass() == "item_cameraview" then
 		if wep:GetEnabled() and IsValid( CCTV[wep:GetCAM()].ent ) then
-			AddOriginToPVS( CCTV[wep:GetCAM()].pos )
+			AddOriginToPVS( CCTV[wep:GetCAM()].pos )// + Vector( 0, 0, -10 ) )
 		end
 	end
 end )
@@ -543,6 +543,7 @@ function GM:PlayerCanPickupWeapon( ply, wep )
 			if wep:GetClass() == "weapon_physgun" then return true end
 			if wep:GetClass() == "gmod_tool" then return true end
 			if wep:GetClass() == "br_entity_remover" then return true end
+			if wep:GetClass() == "br_tool_teleporter" then return true end
 		end
 
 		return false
@@ -687,5 +688,3 @@ end
 function string.starts( String, Start )
    return string.sub( String, 1, string.len( Start ) ) == Start
 end
-
-

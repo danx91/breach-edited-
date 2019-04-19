@@ -47,8 +47,10 @@ function SWEP:Think()
 				if scp then
 					scp:SetupPlayer( ply )
 				end
+
 				self.Instance = ply
 				self:SetSCPInstance( ply )
+
 				WinCheck()
 				return
 			end
@@ -59,7 +61,8 @@ function SWEP:Think()
 		if self.Instance and !IsValid( self.Instance ) then
 			self.NextSummon = CurTime() + 60
 			self:SetNextSummon( CurTime() + 60 )
-			self.Instance = nil			
+			self.Instance = nil
+			self:SetSCPInstance( nil )
 		end
 
 		if IsValid( self.Instance ) then
@@ -67,9 +70,11 @@ function SWEP:Think()
 				self.NextSummon = CurTime() + 60
 				self:SetNextSummon( CurTime() + 60 )
 				self.Instance = nil
+				self:SetSCPInstance( nil )
 			end
 		end
 	end
+
 	if CLIENT then
 		self.Instance = self:GetSCPInstance()
 		self.NextSummon = self:GetNextSummon()
@@ -100,14 +105,17 @@ function SWEP:PrimaryAttack()
 							return
 						end
 
-						local shp = math.Clamp( self.Owner:Health() + n, 0, self.Owner:GetMaxHealth() )
-						self.Owner:SetHealth( shp )
-						if IsValid( self.Instance ) then
-							local hp = math.Clamp( self.Instance:Health() + n, 0, self.Instance:GetMaxHealth() )
-							self.Instance:SetHealth( hp )
+
+						if self:BuffEnabled() then
+							local shp = math.Clamp( self.Owner:Health() + 2, 0, self.Owner:GetMaxHealth() )
+							self.Owner:SetHealth( shp )
+							if IsValid( self.Instance ) then
+								local hp = math.Clamp( self.Instance:Health() + 2, 0, self.Instance:GetMaxHealth() )
+								self.Instance:SetHealth( hp )
+							end
 						end
 
-						v:TakeDamage( n * 2, self.Owner, self )
+						v:TakeDamage( 3, self.Owner, self )
 					end, function()
 						v.scp173allow = false
 					end )
@@ -141,15 +149,23 @@ function SWEP:SecondaryAttack()
 	end
 end
 
+function SWEP:BuffEnabled()
+	if IsValid( self.Owner ) and IsValid( self.Instance ) then
+		if self.Owner:GetPos():DistToSqr( self.Instance:GetPos() ) < 62500 then
+			return true
+		end
+	end
+end
+
 function SWEP:DrawHUD()
 	if disablehud == true then return end
 	
 	local showtext2 = self.Lang.HUD.rattack
-	local showcolor2 = Color(0,255,0)
+	local showcolor2 = Color( 0, 255, 0 )
 	
 	if self.NextPrimary > CurTime() then
 		showtext2 = self.Lang.HUD.nattack.." "..math.Round(self.NextPrimary - CurTime()).."s"
-		showcolor2 = Color(255,0,0)
+		showcolor2 = Color( 255, 0, 0 )
 	end
 
 	if self.NextSummon and self.NextSummon > CurTime() or IsValid( self.Instance ) then
@@ -158,7 +174,24 @@ function SWEP:DrawHUD()
 
 		if self.NextSummon > CurTime() then
 			showtext = self.Lang.HUD.nsummon.." ".. math.Round(self.NextSummon - CurTime()).."s"
-			showcolor = Color(255,0,0)
+			showcolor = Color( 255, 0, 0 )
+		end
+
+		draw.Text( {
+			text = showtext,
+			pos = { ScrW() / 2, ScrH() - 60 },
+			font = "173font",
+			color = showcolor,
+			xalign = TEXT_ALIGN_CENTER,
+			yalign = TEXT_ALIGN_CENTER,
+		})
+
+		showtext = self.Lang.HUD.buffd
+		showcolor = Color( 255, 0, 0 )
+
+		if self:BuffEnabled() then
+			showtext = self.Lang.HUD.buffe
+			showcolor = Color( 0, 255, 0 )
 		end
 
 		draw.Text( {
@@ -173,7 +206,7 @@ function SWEP:DrawHUD()
 	
 	draw.Text( {
 		text = showtext2,
-		pos = { ScrW() / 2, ScrH() - 60 },
+		pos = { ScrW() / 2, ScrH() - 90 },
 		font = "173font",
 		color = showcolor2,
 		xalign = TEXT_ALIGN_CENTER,

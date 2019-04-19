@@ -128,7 +128,9 @@ ROUNDS = {
 		init = function()
 			SpawnAllItems()
 		end,
-		roundstart = function() end,
+		roundstart = function()
+			OpenSCPDoors()
+		end,
 		postround = function() end,
 		endcheck = function()
 			if #GetActivePlayers() < 2 then return end
@@ -154,10 +156,10 @@ ROUNDS = {
 		end,
 	},
 	multi = {
-		name = "MultiBreach",
+		name = "Multi Breach",
 		setup = function()
 			MAPBUTTONS = table.Copy(BUTTONS)
-			SetupMultiBreach( GetRoleTable( #GetActivePlayers() ) )
+			SetupPlayers( GetRoleTable( #GetActivePlayers() ), true )
 			disableNTF = false
 		end,
 		init = function()
@@ -186,7 +188,21 @@ ROUNDS = {
 		roundstart = function()
 			OpenSCPDoors()
 		end,
-		postround = function() end,
+		postround = function()
+			local plys = GetActivePlayers()
+			for k, v in pairs( plys ) do
+				local r = tonumber( v:GetPData( "scp_penalty", 0 ) ) - 1
+				r = math.max( r, 0 )
+
+				if r == 0 then
+					v:PrintTranslatedMessage( "scpready#50,200,50" )
+					//print( v, "can be scp" )
+				else
+					v:PrintTranslatedMessage( "scpwait".."$"..r.."#200,50,50" )
+					//dprint( v, "must wait", r )
+				end
+			end
+		end,
 		endcheck = function()
 			if #GetActivePlayers() < 2 then return end	
 			endround = false

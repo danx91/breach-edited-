@@ -34,6 +34,6 @@ function ENT:OnTakeDamage( dmg )
 		if attacker:GTeam() == TEAM_SCP or attacker:GTeam() == TEAM_SPEC then return end
 		self:Remove()
 		attacker:PrintMessage(HUD_PRINTTALK, "You've been awarded with 5 points for destroing an SCP!")
-		attacker:AddFrags(5)
+		attacker:AddFrags( 5 )
 	end
 end
